@@ -1,5 +1,5 @@
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/home/guillaume/.scripts/bin:/usr/games:/snap/bin:$HOME/bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/home/guillaume/.scripts/bin:/usr/games:/snap/bin:$HOME/.bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
@@ -124,7 +124,7 @@ export PAGER='most'
 #
 SPACESHIP_PROMPT_ORDER=(
   time          # Time stamps section
-  battery       # Battery level and status
+#  battery       # Battery level and status
   user          # Username section
   host          # Hostname section
   git           # Git section (git_branch + git_status)
@@ -173,8 +173,8 @@ SPACESHIP_DIR_PREFIX=""
 SPACESHIP_DIR_COLOR="045"
 SPACESHIP_DIR_TRUNC="3"
 SPACESHIP_EXEC_TIME_PREFIX="ça a pris "
-SPACESHIP_BATTERY_SHOW="true"
-SPACESHIP_BATTERY_THRESHOLD="60"
+# SPACESHIP_BATTERY_SHOW="true"
+# SPACESHIP_BATTERY_THRESHOLD="60"
 SPACESHIP_JOBS_SHOW="true"
 SPACESHIP_EXIT_CODE_SHOW="true"
 
@@ -613,7 +613,7 @@ alias now='date +"%T"'
 
 #############################################################
 # Des commandes vers mes propres scripts, ou personnalisées :
-#############################################################
+#########
 
 # Mes scripts de session byobu :
 alias hop='bash ~/.scripts/byobu-opensession.sh 2>/dev/null'

@@ -1,0 +1,24 @@
+#!/bin/bash
+# sshfs guillaume@syno:/sauvegardes /mnt/syno/sauvegardes
+# sshfs guillaume@syno:/MesDocs /mnt/syno/MesDocs
+# sshfs guillaume@syno:/musique /mnt/syno/musique
+# sshfs guillaume@syno:/IT /mnt/syno/IT
+
+#!/bin/bash
+
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+# 
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+# 
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+# 
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
+# 
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other
+#
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/usbshare1 /mnt/syno/tizzbird -o allow_other 2>/dev/null # films
+
+df -h | grep syno | lolcat
+exit
+
+

@@ -1,0 +1,3 @@
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@chambre:/ /mnt/chambre -o allow_other
+df -h | grep chambre | lolcat
+exit

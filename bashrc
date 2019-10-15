@@ -2,7 +2,7 @@
 # Le Path et les variables système :
 #####################################
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:/home/guillaume/.scripts/bin:/home/guillaume/.bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
@@ -102,12 +102,11 @@ export FZF_COMPLETION_TRIGGER='²²'
 	On_ICyan="\033[0;106m"    # Color Cyan - Intense BackGround
 	On_IWhite="\033[0;107m"   # Color White - Intense BackGround
 
-
 # Paramètres de l'historique des commandes :
 #
 # Nombre d'entrées dans l'historique :
-export HISTORY=10000
-export SAVEHIST=10000
+export HISTORY=100000
+export SAVEHIST=100000
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
@@ -177,10 +176,10 @@ extract () {
           *.zip)       unzip $1       ;;
           *.Z)         uncompress $1  ;;
           *.7z)        7z x $1        ;;
-          *)           echo "don't know how to extract '$1'..." ;;
+          *)           echo "Je ne sais pas comment extraire '$1'..." ;;
       esac
   else
-      echo "'$1' is not a valid file!"
+      echo "'$1' n est pas un fichier valide !"
   fi
 }
 
@@ -288,11 +287,6 @@ servedir() {
 
 # Voir la liste des services lancés lisiblement :
 function services() { printf "$(service --status-all 2>&1|sed -e 's/ + /\\E42m + \\E0m/g' -e 's/ - /\\E41m - \\E0m/g' -e 's/ ? /\\E43m ? \\E0m/g')\n"; }
-
-# Interroger le serveur LDAP de la salle de formation :
-function ldapfind() {
-	        ldapsearch -x -h annuaire.capen.sis -b dc=capen,dc=sis uid=$1
-	}
 
 #  Lancer une appli indépendamment du shell d'origine et sans sortie :
 function nh() {
@@ -457,6 +451,7 @@ alias vf="cd"
 alias see="most"
 alias mpv="mpv --no-audio-display"
 alias couleurs="grep  '# Color' ~/.bashrc"
+alias cls="sync; clear"
 
 # Des gadgets rigolos ( il en faut ;-) ) :
 #
@@ -511,6 +506,8 @@ alias ram='sudo smem --userfilter="$USER" --pie name -s pss'
 alias close='eject -t /dev/sr0'
 alias open='eject /dev/sr0'
 
+sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
+
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
 
@@ -532,11 +529,11 @@ alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/
 # Arrêt / Reboot :
 #
 # (à combiner avec quelques binaires autorisés en NOPASSWD dans la conf de sudo)
-alias dodo='tiretoi ; sudo /sbin/poweroff'
-alias reboot='tiretoi ; sudo /sbin/reboot'
-alias poweroff='tiretoi ; sudo /sbin/poweroff'
-alias halt='tiretoi ; sudo /sbin/poweroff'
-alias shutdown='tiretoi ; sudo /sbin/shutdown'
+alias dodo='sudo /sbin/poweroff'
+alias reboot='tsudo /sbin/reboot'
+alias poweroff='sudo /sbin/poweroff'
+alias halt='sudo /sbin/poweroff'
+alias shutdown='sudo /sbin/shutdown'
 
 # Date et Heure :
 alias stamp='date "+%A_%d/%m/%Y_%Hh%M"'
@@ -558,7 +555,7 @@ alias hop='bash ~/.scripts/byobu-opensession.sh 2>/dev/null'
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
 
 # Youtube-dl avec les bonnes options :
-alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
+alias youtube-dl="/usr/local/bin/youtube-dl -f 'bestaudio[ext=m4a]'"
 
 
 ################
