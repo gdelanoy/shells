@@ -1,0 +1,4 @@
+#!/bin/bash
+sync
+rsync -vuz /tmp/T1r3l1r3 /home/guillaume/safe-in-cloud/Tirelire/ && sudo veracrypt -d
+

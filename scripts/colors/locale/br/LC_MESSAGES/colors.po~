@@ -1,0 +1,50 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Voyager colors\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-27 01:30+0100\n"
+"PO-Revision-Date: 2016-01-27 01:30+0100\n"
+"Last-Translator: Metalux\n"
+"Language-Team: Breton <no_adress@http://voyagerlive.org/index.php/contact/>\n"
+"Language: br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Breton\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: colors:41
+msgid "Green"
+msgstr "Gwer"
+
+#: colors:41
+msgid "Red"
+msgstr "Ruz"
+
+#: colors:41
+msgid "Blue"
+msgstr "Glaz"
+
+#: colors:41
+msgid "Grey"
+msgstr "Gris"
+
+#: colors:41
+msgid "Yellow"
+msgstr "Melen"
+
+#: colors:41
+msgid "Orange"
+msgstr "Oranjez"
+
+#: colors:57
+msgid ""
+"<b><big>Choose a color\\n"
+"</big></b>"
+msgstr ""
+"<b><big>Dibab ul liv\\n"
+"</big></b>"
+
+#~ msgid "Exit:1"
+#~ msgstr "Monet kuit:1"

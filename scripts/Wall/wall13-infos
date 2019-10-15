@@ -1,0 +1,7 @@
+#!/bin/bash
+# License GPL
+# by rodofr Live Voyager
+# Voyager 16.04
+# Display the action selector
+
+pgrep -f /opt/extras.ubuntu.com/cpu-g/bin/cpu-g && pkill -f /opt/extras.ubuntu.com/cpu-g/bin/cpu-g || /opt/extras.ubuntu.com/cpu-g/bin/cpu-g &

@@ -1,0 +1,30 @@
+#!/bin/bash
+voix="/usr/lib/x86_64-linux-gnu/espeak-data/voices/mb"
+# mpg123 /home/guillaume/Musique/Sons/Love_you_to_death.mp3
+clear
+cd $voix
+
+
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour $USER, nous sommes "`date +%A`" "`date +%d`" "`date +%B`". Il est "`date +%H`" heure "`date +%M`". Bienvenue pour 30 minutes de yoga."
+# espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour $USER, Bienvenue dans ta séance de yoga."
+sleep 10
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Prends place, on y va."
+sleep 10
+
+for i in {1..30}
+do
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Prépare-toi pour la posture numéro"
+espeak -s 110 -p 0.000000001 -v mb-fr1  $i
+sleep 10
+aplay /home/guillaume/Musique/Sons/Om.wav 
+sleep 60
+espeak -s 110 -p 0.000000001 -v mb-fr1 "C'est très bien... Relâche la posture, et détends-toi."
+sleep 10
+done
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Bravo, tes assana sont terminés. Félicitations, tu as fai une belle séance." 
+sleep 5
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est maintenant "`date +%H`" heure "`date +%M`"... ... Au revoir, $USER ... Namasté."
+# espeak -s 110 -p 0.000000001 -v mb-fr1 "Et voilà... ... Au revoir, $USER ... Namasté."
+sleep 20
+aplay /home/guillaume/Musique/Sons/Om.wav 
+exit
