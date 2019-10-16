@@ -10,7 +10,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'sudo su' 'C-m' 
  byobu-tmux send-keys -t 1 'glances' 'C-m'
 
-
 # Tiens, une autre :
 
  byobu-tmux new-window
@@ -19,7 +18,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'sudo su' 'C-m' 
  byobu-tmux send-keys -t 0 'lnav /var/log/ /var/log/*/' 'C-m' 
  sleep 2
-# byobu-tmux send-keys -t 1 ":filter-out [27506]" 'C-m'
  byobu-tmux send-keys -t 0 ":filter-out may be a replay" 'C-m'
  byobu-tmux send-keys -t 0 ':save-config' 'C-m' 
  byobu-tmux send-keys -t 1 'sudo su' 'C-m' 
@@ -32,6 +30,14 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'ranger' 'C-m'
  byobu-tmux send-keys -t 0 'tue' 'C-m'
+
+ # Une nouvelle fenêtre pour vim avec son explorateur ...
+ 
+ byobu-tmux new-window
+ byobu-tmux rename-window 'VIM'
+ byobu-tmux send-keys 'vim' 'C-m'
+ sleep 1
+ byobu-tmux send-keys 'C-a' 'C-m'
 
 # On crée une autre fenêtre ( Un shell zsh, un autre en fish )...
 
@@ -63,7 +69,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Deux'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'ping -c1 chambre && ssh chambre || ssh serveur || ssh -X aureo@localhost' 'C-m'
+ byobu-tmux send-keys -t 1 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'ping -c1 syno && ssh syno' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
