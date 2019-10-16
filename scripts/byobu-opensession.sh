@@ -70,7 +70,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Deux'
  byobu split-window -v
  byobu-tmux send-keys -t 1 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
+ byobu-tmux send-keys -t 1 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'toilet -f smblock --filter border:metal $(hostname)' 'C-m'
  byobu-tmux send-keys -t 0 'ping -c1 syno && ssh syno' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
 
