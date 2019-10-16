@@ -1,0 +1,72 @@
+
+
+# Crontab de Guillaume :
+
+#
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# Truc pour le dernier jour du mois : 0 0 28-31 * * [ "date +%m" != "date --date=tomorrow +%m" ] && command
+#
+# Toutes les 5 minutes : */5 * * * *  /home/eazylinux/script.sh
+# Toutes les 2 heures de 9h à 17h : 00 9-17/2 * * * ls /etc
+# 
+# @yearly will run at 00:00 on Jan 1st for every year.
+# @monthly will run at 00:00 on 1st of every month.
+# @weekly will run at 00:00 on starting of every week.
+# @daily will run at 00:00 on every day.
+# @reboot will run on each boot.
+#
+# MAILTO : If we set the variable, the cron will send the comamnd output to the mail account set in.
+# +------------ Minute (0 - 59)
+# | +---------- Heure (0 - 23)
+# | | +-------- Jour du Mois (1 - 31)
+# | | | +------ Mois (1 - 12)
+# | | | | +---- Jour de la semaine (0 - 7) (Dimanche est 0 ou 7)
+# | | | | |
+# * * * * * commande
+
+20 23 * * 0-4   espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est l'heure d'aller faire dodo, on coupe dans dix minutes !"
+25 23 * * 0-4   espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est l'heure d'aller faire dodo, on coupe dans cinq minutes !"
+20 01 * * 5-6   espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est l'heure d'aller faire dodo, on coupe dans dix minutes !"
+25 01 * * 5-6   espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est l'heure d'aller faire dodo, on coupe dans cinq minutes !"
+05 08 * * 1-5   espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est l'heure d'aller bosser, tu vas être en retard ! Coupure dans cinq minutes !"
+
+30 23 * * 0-4   sudo poweroff
+30 01 * * 5-6   sudo poweroff
+*/5 02-06 * * * sudo poweroff
+10 08 * * 1-5 sudo poweroff
+
+# Passer une journée sans être scotché au nain ternet, c'est posible :
+
+*/2 08-18 * * * kill $(pidof firefox)  1&2>/dev/null; kill $(pidof opera)  1&2>/dev/null; ps aux | grep chromium-browser | awk ' { print $2 } ' | xargs kill 1&2>/dev/null
+
+
+
+
+
+
+
+
+
+
+
+# Crontab de root :
+
+#
+# MAILTO : If we set the variable, the cron will send the comamnd output to the mail account set in.
+# +------------ Minute (0 - 59)
+# | +---------- Heure (0 - 23)
+# | | +-------- Jour du Mois (1 - 31)
+# | | | +------ Mois (1 - 12)
+# | | | | +---- Jour de la semaine (0 - 7) (Dimanche est 0 ou 7)
+# | | | | |
+# * * * * * commande
+
+*/15 * * * *    updatedb &
+
+*/2 2-6 * * * /sbin/poweroff
+
+
+
+
+

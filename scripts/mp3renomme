@@ -1,0 +1,8 @@
+sudo chown -R guillaume:guillaume *.mp3
+sudo chmod 644 *.mp3
+find . -type d -exec chmod 755 {} \:
+find . -type f -iname "*.mp3" -exec sed -i 's/\ //g' {} \:
+
+# find . -type d -exec chmod 755 {} \:
+# find . -type d -exec chmod 755 {} \:
+# find . -type d -exec chmod 755 {} \:
