@@ -1,0 +1,4 @@
+#!/bin/bash
+while true; do clear; echo "$(date '+%A %d %B %Y, il est %T' | toilet -f term -F border --gay)"; sleep 1; clear; done
+
+ 
