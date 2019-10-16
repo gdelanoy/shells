@@ -798,7 +798,7 @@ export FZF_DEFAULT_OPTS="--height 20% --border --layout=reverse --multi --exact 
 export FZF_CTRL_T_OPTS="--prompt='(⊃｡•́‿•̀｡)⊃ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"
 export FZF_CTRL_R_OPTS="--prompt='( ͡ಠ ʖ̯ ͡ಠ) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 export FZF_ALT_C_OPTS="--prompt='( ͡° ͜ʖ ͡°) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'tree -C {} | head -200'"
-export FZF_COMPLETION_TRIGGER='²²'
+export FZF_COMPLETION_TRIGGER='²'
 
 look()
 	{

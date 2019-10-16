@@ -27,7 +27,7 @@ export FZF_DEFAULT_OPTS="--height 20% --border --layout=reverse --multi --exact 
 export FZF_CTRL_T_OPTS="--prompt='(⊃｡•́‿•̀｡)⊃ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"
 export FZF_CTRL_R_OPTS="--prompt='( ͡ಠ ʖ̯ ͡ಠ) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 export FZF_ALT_C_OPTS="--prompt='( ͡° ͜ʖ ͡°) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'tree -C {} | head -200'"
-export FZF_COMPLETION_TRIGGER='²²'
+export FZF_COMPLETION_TRIGGER='²'
 
 
 # Color - Couleurs (à utiliser avec echo -e $Couleur "msg") :
@@ -460,7 +460,7 @@ alias wesh="espeak -s 1 -p 0.0001 'wesh'; clear"
 alias kikoo="fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat"
 alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Loos'
-alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
+alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "PAN ! T' es mort !" || echo "clic ...."'
 
 # Administration :
 #
@@ -549,7 +549,7 @@ alias safecloud='encfs "/home/guillaume/Cloud/MEGAsync/Cloud Drive/Safe/" /home/
 alias safeusb='encfs /media/$USER/USBPRO/Coffre-fort ~/safe-on-usb && df -h | grep safe-on'
 
 # Mes scripts de session byobu :
-alias hop='bash ~/.scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash ~/.shells/scripts/byobu-opensession.sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
