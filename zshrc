@@ -1,5 +1,5 @@
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/home/guillaume/.scripts/bin:/usr/games:/snap/bin:$HOME/.bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/home/guillaume/.scripts/bin:/usr/games:/snap/bin:$HOME/.bin:$HOME/.shells/bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"

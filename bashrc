@@ -2,7 +2,7 @@
 # Le Path et les variables système :
 #####################################
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:/home/guillaume/.scripts/bin:/home/guillaume/.bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:/home/guillaume/.scripts/bin:/home/guillaume/.shells/bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
