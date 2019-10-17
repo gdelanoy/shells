@@ -124,7 +124,7 @@ export PAGER='most'
 #
 SPACESHIP_PROMPT_ORDER=(
   time          # Time stamps section
-#  battery       # Battery level and status
+  battery       # Battery level and status
   user          # Username section
   host          # Hostname section
   git           # Git section (git_branch + git_status)
@@ -666,7 +666,7 @@ alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
 alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
 
 # Git :
-alias yolo='git commit --allow-empty-message -m "" && git push origin master'
+alias yolo='t add . ; git commit --allow-empty-message -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
 alias gitar="git ls-files -d -m -o -z --exclude-standard | xargs -0 git update-index --add --remove"
 alias gpd='git push origin develop'
 alias gpm='git push origin master'

@@ -1,0 +1,53 @@
+ # Des Couleurs
+
+        bold=$(tput bold)
+        underline=$(tput sgr 0 1)
+        reset=$(tput sgr0)
+        purple=$(tput setaf 171)
+        red=$(tput setaf 1)
+        green=$(tput setaf 76)
+        tan=$(tput setaf 3)
+        blue=$(tput setaf 38)
+        #
+        # En-têtes et Logs
+        #
+        e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@" 
+        }
+        e_arrow() { printf "➜ $@\n"
+        }
+        e_success() { printf "${green}✔ %s${reset}\n" "$@" }
+        e_error() { printf "${red}✖ %s${reset}\n" "$@" }
+        e_warning() { printf "${tan}➜ %s${reset}\n" "$@" }
+        e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' 
+        } 
+        e_bold() { printf "${bold}%s${reset}\n" "$@"
+        }
+        e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' 
+        }   
+
+bold=$(tput bold)
+underline=$(tput sgr 0 1)
+reset=$(tput sgr0)
+
+rouge=$(tput setaf 1)
+orange=$(tput setaf 209)
+jaune=$(tput setaf 3)
+vert=$(tput setaf 2)
+bleu=$(tput setaf 6)
+mauve=$(tput setaf 5)
+violet=$(tput setaf 4)
+blanc=$(tput setaf 7)
+
+e_rouge() { printf "${rouge} ${@} $reset\n" }
+e_orange() { printf "${orange} $@ $reset\n" }
+e_jaune() { printf "${jaune} $@ $reset\n" }
+e_vert() { printf "${vert} $@ $reset\n" }
+e_bleu() { printf "${bleu} $@ $reset\n" }
+e_mauve() { printf "${mauve} $@ $reset\n" }
+e_violet() { printf "${violet} $@ $reset\n" }
+e_blanc() { printf "${blanc} $@ $reset\n" }
+
+
+
+e_rouge() { ${rouge} "${@}" ; $reset }
+
