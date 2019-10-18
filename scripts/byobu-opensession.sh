@@ -15,13 +15,13 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Logs'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'sudo su' 'C-m' 
- byobu-tmux send-keys -t 0 'lnav /var/log/ /var/log/*/' 'C-m' 
- sleep 2
- byobu-tmux send-keys -t 0 ":filter-out may be a replay" 'C-m'
- byobu-tmux send-keys -t 0 ':save-config' 'C-m' 
  byobu-tmux send-keys -t 1 'sudo su' 'C-m' 
- byobu-tmux send-keys -t 1 'whowatch' 'C-m'
+ byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m' 
+ sleep 2
+ byobu-tmux send-keys -t 1 ":filter-out may be a replay" 'C-m'
+ byobu-tmux send-keys -t 1 ':save-config' 'C-m' 
+ byobu-tmux send-keys -t 0 'sudo su' 'C-m' 
+ byobu-tmux send-keys -t 0 'whowatch' 'C-m'
 
 # On crée une nouvelle fenêtre et on la renomme ...
 
@@ -47,7 +47,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'bash' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'fish' 'C-m'
- byobu-tmux send-keys -t 0 'cd ~/.git' 'C-m'
+ byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'll' 'C-m'
 
@@ -72,7 +72,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
  byobu-tmux send-keys -t 1 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'toilet -f smblock --filter border:metal $(hostname)' 'C-m'
+ byobu-tmux send-keys -t 1 'figlet $(hostname) | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'ping -c1 syno && ssh syno' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
 
@@ -121,4 +121,3 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 fi
 # Enter Byobu
  byobu-tmux attach -t $USER
-
