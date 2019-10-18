@@ -661,7 +661,7 @@ ouvre () {
 # FZF : The Fuzzy Finder :
 #
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f $HOME/.shells/.fzf.bash ] && source $HOME/.shells/.fzf.bash
 #
 # Des fonctions qui vont bien pour fzf :
 #
@@ -698,7 +698,6 @@ fh() {
   ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
 }
 
-
 # fcd : cd with a menu :
 
 function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;     fi;     while true; do         local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;');         local dir="$(printf '%s\n' "${lsd[@]}" |
@@ -709,9 +708,6 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
                 echo;
                 ls -p --color=always "${__cd_path}";
         ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
-
-
-
 
 alias son="pulseaudio -k && pulseaudio -D"
 

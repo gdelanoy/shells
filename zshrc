@@ -17,7 +17,7 @@ autoload -U promptinit; promptinit
 # prompt spaceship
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$HOME/.shells/oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -194,9 +194,9 @@ HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
 if [ -x /usr/bin/dircolors ]
 then
-  if [ -r ~/.dircolors ]
+  if [ -r $HOME/.shells/dircolors ]
   then
-    eval "`dircolors ~/.dircolors`"
+    eval "`dircolors $HOME/.shells/dircolors`"
   elif [ -r /etc/dir_colors ]
   then
     eval "`dircolors /etc/dir_colors`"
@@ -208,6 +208,7 @@ fi
 ###########################
 #
 autoload colors ; colors
+
 # Quel programme employer selon la terminaison d'un fichier que je nommme :
 #
 alias -s txt=vim
@@ -477,7 +478,7 @@ alias ......="cd ../../../../.."
 # Raccourcis de répertoires :
 #
 alias home='cd ~/'
-alias documents='cd ~/Documents'
+alias docs='cd ~/Documents'
 alias downloads='cd ~/Downloads'
 alias books='cd ~/eBooks'
 alias images='cd ~/Images'
@@ -613,10 +614,10 @@ alias now='date +"%T"'
 
 #############################################################
 # Des commandes vers mes propres scripts, ou personnalisées :
-#########
+##############################################################
 
 # Mes scripts de session byobu :
-alias hop='bash ~/.scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash $HOME/.shells/scripts/byobu-opensession.sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
@@ -655,7 +656,7 @@ alias sud='sudo su'
 #
 alias vi='vim'
 alias edit='vim'
-# alias emacs='vim'
+alias emacs='vim'
 
 # IPtables :
 #
@@ -666,7 +667,7 @@ alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
 alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
 
 # Git :
-alias yolo='t add . ; git commit --allow-empty-message -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
+alias yolo='t add . ; git commit -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
 alias gitar="git ls-files -d -m -o -z --exclude-standard | xargs -0 git update-index --add --remove"
 alias gpd='git push origin develop'
 alias gpm='git push origin master'
@@ -718,73 +719,10 @@ ouvre () {
 }
 
 #
-# Générer des Shell Scripts avec de bonnes options de départ :
-#
-
-shscr(){
-        echo "#!/bin/bash" > ${1}
-        echo "#####################################################" >> ${1}
-        echo "# Nom du script : $(basename $1)" >> ${1}
-        echo "# Utilité: Ce script sert à faire pousser des fleurs" >> ${1}
-        echo "# Usage: ... (le cas échéant)" >> ${1}
-        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com" >> ${1}
-        echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
-        echo "#####################################################" >> ${1}
-        echo "#" >> ${1}
-        echo "set -o errexit" >> ${1}
-        echo "set -o nounset" >> ${1}
-        echo "#" >> ${1}
-        echo "# VARIABLES :" >> ${1}
-        echo "#" >> ${1}
-        echo '# Des Couleurs ' >> ${1}
-        echo '# ' >> ${1}
-        echo 'bold=$(tput bold) ' >> ${1}
-        echo 'underline=$(tput sgr 0 1) ' >> ${1}
-        echo 'reset=$(tput sgr0) ' >> ${1}
-        echo 'purple=$(tput setaf 171) ' >> ${1}
-        echo 'red=$(tput setaf 1) ' >> ${1}
-        echo 'green=$(tput setaf 76) ' >> ${1}
-        echo 'tan=$(tput setaf 3) ' >> ${1}
-        echo 'blue=$(tput setaf 38) ' >> ${1}
-        echo '# ' >> ${1}
-        echo '# En-têtes et Logs' >> ${1}
-        echo '# ' >> ${1}
-        echo 'e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_arrow() { printf "➜ $@\n" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_success() { printf "${green}✔ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_error() { printf "${red}✖ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_warning() { printf "${tan}➜ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_bold() { printf "${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo "#" >> ${1}
-        echo "# FONCTIONS :" >> ${1}
-        echo "#" >> ${1}
-        echo "source /etc/skel/.scripts/functions.sh" >> ${1}
-        echo "#" >> ${1}
-        echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
-        echo "#" >> ${1}
-        echo "" >> ${1}
-        echo "e_header $(basename ${1})" >> ${1}
-        echo "" >> ${1}
-        echo "" >> ${1}
-        chmod 750 ${1}
-        vim ${1}
-}
-
-#
 # FZF : The Fuzzy Finder :
 #
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f $HOME/.shells/fzf.zsh ] && source $HOME/.shells/fzf.zsh
 #
 # Des fonctions qui vont bien pour fzf :
 #
