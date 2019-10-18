@@ -2,21 +2,22 @@
 # Le Path et les variables système :
 #####################################
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:/home/guillaume/.scripts/bin:/home/guillaume/.shells/bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
 INFODIR="/usr/share/info:/usr/local/share/info"
 PAGER="/usr/bin/most"
-EDITOR="/usr/bin/nvim"
+EDITOR="/usr/bin/vim"
+SELECTED_EDITOR="/usr/bin/vim"
 BROWSER="/usr/bin/firefox"
 umask 022
 export PATH PS1
 
 # Mon prompt est complexe, je le définis dans des fichiers à part :
-PS1=`cat ~/.ps1.txt`
-PS2=`cat ~/.ps2.txt`
-PROMPT_COMMAND=$(cat ~/.pscmd.txt)
+PS1=$(cat $HOME/.shells/ps1.txt)
+PS2=$(cat $HOME/.shells/ps2.txt)
+PROMPT_COMMAND=$(cat $HOME/.shells/pscmd.txt)
 
 # Un charset français :
 export LESSCHARSET="latin1"
@@ -28,7 +29,6 @@ export FZF_CTRL_T_OPTS="--prompt='(⊃｡•́‿•̀｡)⊃ ' --preview-window
 export FZF_CTRL_R_OPTS="--prompt='( ͡ಠ ʖ̯ ͡ಠ) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 export FZF_ALT_C_OPTS="--prompt='( ͡° ͜ʖ ͡°) ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'tree -C {} | head -200'"
 export FZF_COMPLETION_TRIGGER='²'
-
 
 # Color - Couleurs (à utiliser avec echo -e $Couleur "msg") :
 #
@@ -130,11 +130,6 @@ shopt -s histappend histreedit histverify
 shopt -s extglob
 shopt -s nullglob
 
-# Tabulation améliorée :
-# bind "set completion-ignore-case on" # note: bind used instead of sticking these in .inputrc
-# bind "set bell-style none" # no bell
-# bind "set show-all-if-ambiguous On" # show list automatically, without double tab
-
 # Allumer le pavé numérique au login :
 case "`tty`" in /dev/tty[0-6]*)
         setleds +num
@@ -143,7 +138,7 @@ esac
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
 if [ -x /usr/bin/dircolors ]
 then
-  if [ -r ~/.dircolors ]
+  if [ -r $HOME/.shells/dircolors ]
   then
     eval "`dircolors ~/.dircolors`"
   elif [ -r /etc/dir_colors ]
@@ -253,7 +248,7 @@ myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
 pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
 # Faire répéter une commande n fois :
-function repeat()       # Repeat n times command.
+function repeat()       
 {
     local i max
     max=$1; shift;
@@ -400,8 +395,8 @@ alias ......="cd ../../../../.."
 
 # Raccourcis de répertoires :
 #
-alias home='cd ~/'
-alias documents='cd ~/Documents'
+alias home='cd ~'
+alias docs='cd ~/Documents'
 alias downloads='cd ~/Downloads'
 alias books='cd ~/eBooks'
 alias images='cd ~/Images'
@@ -545,18 +540,17 @@ alias now='date +"%T"'
 #############################################################
 
 # Mes montages chiffrés :
-alias safecloud='encfs "/home/guillaume/Cloud/MEGAsync/Cloud Drive/Safe/" /home/guillaume/safe-in-cloud/ && df -h | grep -i cloud'
+alias safecloud='encfs "$HOME/Cloud/MEGAsync/Cloud Drive/Safe/" $HOME/safe-in-cloud/ && df -h | grep -i cloud'
 alias safeusb='encfs /media/$USER/USBPRO/Coffre-fort ~/safe-on-usb && df -h | grep safe-on'
 
 # Mes scripts de session byobu :
-alias hop='bash ~/.shells/scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash ~$HOME/.shells/scripts/byobu-opensession.sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
 
 # Youtube-dl avec les bonnes options :
 alias youtube-dl="/usr/local/bin/youtube-dl -f 'bestaudio[ext=m4a]'"
-
 
 ################
 # à peaufiner :
@@ -589,9 +583,9 @@ alias us="su"
 
 # VIM : 
 #
-alias vi='nvim'
-alias edit='nvim'
-# alias emacs='nvim'
+alias vi='vim'
+alias edit='vim'
+alias emacs='vim'
 
 # IPtables :
 #
@@ -644,8 +638,6 @@ dockb() { docker build -t="$1" .; }		# docker build
 dockri() { docker rmi $(docker images -q); }	# rm image
 dockrm() { docker rm $(docker ps -q -a); }	# rm container
 
-
-
 # Ouvre tout ce que je te donne :                                                                                                          
 ouvre () {
   if [ -f $1 ] ; then
@@ -663,70 +655,6 @@ ouvre () {
   else
       echo "'$1' n'est pas un fichier valide !"
   fi
-}
-
-
-#
-# Générer des Shell Scripts avec de bonnes options de départ :
-#
-
-shscr(){
-        echo "#!/bin/bash" > ${1}
-        echo "#####################################################" >> ${1}
-        echo "# Nom du script : $(basename $1)" >> ${1}
-        echo "# Utilité: Ce script sert à faire pousser des fleurs" >> ${1}
-        echo "# Usage: ... (le cas échéant)" >> ${1}
-        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com" >> ${1}
-        echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
-        echo "#####################################################" >> ${1}
-        echo "#" >> ${1}
-        echo "set -o errexit" >> ${1}
-        echo "set -o nounset" >> ${1}
-        echo "#" >> ${1}
-        echo "# VARIABLES :" >> ${1}
-        echo "#" >> ${1}
-        echo '#Des Couleurs ' >> ${1}
-        echo '# ' >> ${1}
-        echo 'bold=$(tput bold) ' >> ${1}
-        echo 'underline=$(tput sgr 0 1) ' >> ${1}
-        echo 'reset=$(tput sgr0) ' >> ${1}
-        echo 'purple=$(tput setaf 171) ' >> ${1}
-        echo 'red=$(tput setaf 1) ' >> ${1}
-        echo 'green=$(tput setaf 76) ' >> ${1}
-        echo 'tan=$(tput setaf 3) ' >> ${1}
-        echo 'blue=$(tput setaf 38) ' >> ${1}
-        echo '# ' >> ${1}
-        echo '# En-têtes et Logs' >> ${1}
-        echo '# ' >> ${1}
-        echo 'e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_arrow() { printf "➜ $@\n" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_success() { printf "${green}✔ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_error() { printf "${red}✖ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_warning() { printf "${tan}➜ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_bold() { printf "${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo "#" >> ${1}
-        echo "# FONCTIONS :" >> ${1}
-        echo "#" >> ${1}
-        echo "source /etc/skel/.scripts/functions.sh" >> ${1}
-        echo "#" >> ${1}
-        echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
-        echo "#" >> ${1}
-        echo "" >> ${1}
-        echo "e_header $(basename ${1})" >> ${1}
-        echo "" >> ${1}
-        echo "" >> ${1}
-        chmod 750 ${1}
-        vim ${1}
 }
 
 #

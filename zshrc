@@ -1,5 +1,5 @@
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/home/guillaume/.scripts/bin:/usr/games:/snap/bin:$HOME/.bin:$HOME/.shells/bin"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
@@ -17,7 +17,7 @@ autoload -U promptinit; promptinit
 # prompt spaceship
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/guillaume/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -839,4 +839,4 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
 
 alias son="pulseaudio -k && pulseaudio -D"
 
-# source /home/guillaume/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
