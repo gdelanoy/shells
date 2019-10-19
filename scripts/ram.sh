@@ -51,5 +51,5 @@ e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n"
 # LE SCRIPT PROPREMENT DIT : 
 #
 
-ps aux | awk '{print $6/1024 " MB\t\t" $11}' | sort -rn | head -25
+ps aux | awk '{print $6 "\t" $11}' | sort -rn | head -25 | awk '{print $1/1024 " MB\t\t" $2}'
 

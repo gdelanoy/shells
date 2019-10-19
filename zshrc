@@ -577,7 +577,8 @@ alias ipinfo='curl ipinfo.io'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
-alias ram='sudo smem --userfilter="$USER" --pie name -s pss'
+# alias ram='sudo smem --userfilter="$USER" --pie name -s pss'
+
 alias close='eject -t /dev/sr0'
 alias open='eject /dev/sr0'
 
