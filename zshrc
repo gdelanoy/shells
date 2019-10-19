@@ -17,7 +17,8 @@ autoload -U promptinit; promptinit
 # prompt spaceship
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.shells/.oh-my-zsh"
+# 
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -617,7 +618,7 @@ alias now='date +"%T"'
 ##############################################################
 
 # Mes scripts de session byobu :
-alias hop='bash $HOME/.shells/scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash $HOME/.scripts/byobu-opensession.sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
@@ -667,7 +668,7 @@ alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
 alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
 
 # Git :
-alias yolo='t add . ; git commit -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
+alias yolo='git add . ; git commit -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
 alias gitar="git ls-files -d -m -o -z --exclude-standard | xargs -0 git update-index --add --remove"
 alias gpd='git push origin develop'
 alias gpm='git push origin master'

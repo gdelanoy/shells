@@ -3,7 +3,7 @@
 # Nom du script : shscr
 # Utilité: Ce script sert à créer des shells scripts pré-formatés, avec les bons droits
 # Usage: ... (le cas échéant)
-# Auteur: Guillaume Delanoy <gdelanoy@gmail.com
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # Créé le: vendredi_18/10/2019 à 22h40
 #####################################################
 #
@@ -54,7 +54,7 @@ e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n"
         echo "# Nom du script : $(basename $1)" >> ${1}
         echo "# Utilité: Ce script sert à faire pousser des fleurs" >> ${1}
         echo "# Usage: ... (le cas échéant)" >> ${1}
-        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com" >> ${1}
+        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>" >> ${1}
         echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
         echo "#####################################################" >> ${1}
         echo "#" >> ${1}
