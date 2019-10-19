@@ -160,12 +160,6 @@ alias ff='find / -type f -name $1'
 # alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
 
-# Générateur de mots de passe (indiquer un chiffre pour la longueur) :
-genpasswd() { 
-	local l=$1
-   	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
-	}
 
 # Améliorer l'appel des pages de man :
 function man()
@@ -175,16 +169,6 @@ function man()
         command man -a "$i"
     done
 }
-
-# Déboguage en http :
-hthead () { /usr/bin/curl -I -L $@ ; }
-htdebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
-
-# Créer une archive (*.tar.gz) à partir d'un répertoire donné :
-function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-
-# Créer une archive ZIP archive d'un fichier ou d'un répertoire :
-function makezip() { zip -r "${1%%/}.zip" "$1" ; }
 
 # Rigoler un peu à l'ouverture de session ... ;-)
 # Désactivé au boot (trop envahissant), transformé en fonction pour le fun :
@@ -196,7 +180,7 @@ fi
 
 # Gestion des processus :
 myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
-pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+pp() { myps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
 # Faire répéter une commande n fois :
 function repeat()       
@@ -206,12 +190,6 @@ function repeat()
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
         eval "$@";
     done
-}
-
-# Montrer tous les paquetages installés :
-showpkg () {
-  apt-cache pkgnames | grep -i "$1" | sort
-  return;
 }
 
 # Pour Noël :
