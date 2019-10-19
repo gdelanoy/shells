@@ -1,0 +1,6 @@
+_ [!] console/shell
+_ [/] console/cd $browser_root
+_ [:] console
+_ [q] quit
+_ [~] console/cd $HOME
+_ [-] console/cd $OLDPWD
