@@ -263,49 +263,6 @@ zstyle ':completion:*' squeeze-slashes true
 # Fonctions :
 ##############
 
-# Extraction facile :
-extract () {
-  if [ -f $1 ] ; then
-      case $1 in
-          *.tar.bz2)   tar xvjf $1    ;;
-          *.tar.gz)    tar xvzf $1    ;;
-          *.bz2)       bunzip2 $1     ;;
-          *.rar)       rar x $1       ;;
-          *.gz)        gunzip $1      ;;
-          *.tar)       tar xvf $1     ;;
-          *.tbz2)      tar xvjf $1    ;;
-          *.tgz)       tar xvzf $1    ;;
-          *.zip)       unzip $1       ;;
-          *.Z)         uncompress $1  ;;
-          *.7z)        7z x $1        ;;
-          *)           echo "Je ne sais pas comment extraire '$1'..." ;;
-      esac
-  else
-      echo "'$1' n est pas un fichier valide !"
-  fi
-}
-
-# Créer une archive à partir d'un répertoire donné :
-mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
-mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
-
-# Créer un répertoire ET cd dedans :
-function mkcd() {
-    mkdir -p -v $1
-    cd $1
-}
-
-# Chiffrement / Déchiffrement :
-encrypt ()
-{
-gpg -ac --no-options "$1"
-}
-decrypt ()
-{
-gpg --no-options "$1"
-}
-
 # Chercher, trouver :
 function findc()
    {
@@ -317,13 +274,6 @@ alias ff='find / -type f -name $1'
 # alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
 
-# Générateur de mots de passe (indiquer un chiffre pour la longueur) :
-genpasswd() { 
-	local l=$1
-   	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
-	}
-
 # Améliorer l'appel des pages de man :
 function man()
 {
@@ -332,16 +282,6 @@ function man()
         command man -a "$i"
     done
 }
-
-# Déboguage en http :
-hthead () { /usr/bin/curl -I -L $@ ; }
-htdebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
-
-# Créer une archive (*.tar.gz) à partir d'un répertoire donné :
-function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-
-# Créer une archive ZIP archive d'un fichier ou d'un répertoire :
-function makezip() { zip -r "${1%%/}.zip" "$1" ; }
 
 # Rigoler un peu à l'ouverture de session ... ;-)
 # Désactivé au boot (trop envahissant), transformé en fonction pour le fun :
@@ -363,12 +303,6 @@ function repeat()       # Repeat n times command.
     for ((i=1; i <= max ; i++)); do  # --> C-like syntax
         eval "$@";
     done
-}
-
-# Montrer tous les paquetages installés :
-showpkg () {
-  apt-cache pkgnames | grep -i "$1" | sort
-  return;
 }
 
 # Pour Noël :
@@ -648,7 +582,7 @@ alias grep='grep --color=auto'
 # Raccourcis pour 'sudo' :
 #
 alias please='sudo $(history -p \!\!)'
-alias sduo='sudo'
+# alias sduo='sudo'
 alias suod='sudo'
 alias sud='sudo su'
 # sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
