@@ -200,17 +200,11 @@ snow() {
 # Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
 function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
 
-# Serve a directory on a given port
-# https://davidwalsh.name/serve-directory-python
-# $1 = port
-# Example: servedir 8080
-servedir() {
-  # Allow myself to change the port ($1)
-  python -m SimpleHTTPServer "$1"
-}
 
-# Voir la liste des services lancés lisiblement :
-function services() { printf "$(service --status-all 2>&1|sed -e 's/ + /\\E42m + \\E0m/g' -e 's/ - /\\E41m - \\E0m/g' -e 's/ ? /\\E43m ? \\E0m/g')\n"; }
+
+
+
+
 
 #  Lancer une appli indépendamment du shell d'origine et sans sortie :
 function nh() {
@@ -239,7 +233,7 @@ function up() {
 
 # L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
 
-function safevi() {
+function svi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
 }
 
@@ -417,7 +411,7 @@ alias srestart="sudo systemctl restart"
 alias tue="sudo fk"
 alias mem="free -h"
 alias cdtmp="cd $(mktemp -d)"
-alias top-commands='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
+# alias top-commands='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
 alias neo='su -c cmatrix guillaume'
 alias cputemp='sensors | grep Core'
 alias chx='sudo chmod 755'

@@ -263,33 +263,10 @@ zstyle ':completion:*' squeeze-slashes true
 # Fonctions :
 ##############
 
-# Chercher, trouver :
-function findc()
-   {
-      find . -type f | xargs grep -nHi "${1}"
-   }
-
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
 # alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
-
-# Améliorer l'appel des pages de man :
-function man()
-{
-    for i ; do
-        xtitle The $(basename $1|tr -d .[:digit:]) manual
-        command man -a "$i"
-    done
-}
-
-# Rigoler un peu à l'ouverture de session ... ;-)
-# Désactivé au boot (trop envahissant), transformé en fonction pour le fun :
-bofh() {
-if [ -x /usr/games/fortune ]; then
- 	fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat
-fi
-}
 
 # Gestion des processus :
 myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
