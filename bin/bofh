@@ -11,7 +11,5 @@
 #
 if [ -x /usr/games/fortune ]; then
                 fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat
-        fi
 fi
-
 
