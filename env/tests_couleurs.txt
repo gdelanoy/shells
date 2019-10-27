@@ -25,9 +25,21 @@
         e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' 
         }   
 
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#!/bin/bash
+
+# Poser les variables de base :
+
 bold=$(tput bold)
 underline=$(tput sgr 0 1)
 reset=$(tput sgr0)
+
+# Poser les variables des 7 couleurs de l'arc-en-ciel + noir & blanc :
 
 rouge=$(tput setaf 1)
 orange=$(tput setaf 209)
@@ -37,17 +49,298 @@ bleu=$(tput setaf 6)
 mauve=$(tput setaf 5)
 violet=$(tput setaf 4)
 blanc=$(tput setaf 7)
+noir=$(tput setaf 0)
 
-e_rouge() { printf "${rouge} ${@} $reset\n" }
-e_orange() { printf "${orange} $@ $reset\n" }
-e_jaune() { printf "${jaune} $@ $reset\n" }
-e_vert() { printf "${vert} $@ $reset\n" }
-e_bleu() { printf "${bleu} $@ $reset\n" }
-e_mauve() { printf "${mauve} $@ $reset\n" }
-e_violet() { printf "${violet} $@ $reset\n" }
-e_blanc() { printf "${blanc} $@ $reset\n" }
+# "Stabilo" :
+
+stablanc=$(tput setab 7) 
+stabrouge=$(tput setab 1) 
+staborange=$(tput setab 209) 
+stabjaune=$(tput setab 3) 
+stabvert=$(tput setab 2) 
+stableu=$(tput setab 6) 
+stabmauve=$(tput setab 5) 
+stabviolet=$(tput setab 4) 
+
+# Écrire dans ces 7 couleurs + noir & blanc :
+
+e_rouge()
+{
+ALL="${@}"
+printf "${rouge} $ALL $reset\n"
+}
+
+e_orange()
+{
+ALL="${@}"
+printf "${orange} $ALL $reset\n"
+}
+
+e_jaune()
+{
+ALL="${@}"
+printf "${jaune} $ALL $reset\n"
+}
+
+e_vert()
+{
+ALL="${@}"
+printf "${vert} $ALL $reset\n"
+}
+
+e_bleu()
+{ 
+ALL="${@}"
+printf "${bleu} $ALL $reset\n"
+}
+
+e_mauve()
+{
+ALL="${@}"
+printf "${mauve} $ALL $reset\n"
+}
+
+e_violet()
+{
+ALL="${@}"
+printf "${violet} $ALL $reset\n"
+}
+
+e_blanc()
+{
+ALL="${@}"
+printf "${blanc} $ALL $reset\n"
+}
+
+e_noir()
+{
+ALL="${@}"
+printf "${noir} $ALL $reset\n"
+}
+
+# Écrire en gras dans ces 7 couleurs + noir & blanc :
+
+eb_rouge()
+{
+ALL="${@}"
+printf "${rouge}${bold} $ALL $reset\n"
+}
+
+eb_orange()
+{
+ALL="${@}"
+printf "${orange}${bold} $ALL $reset\n"
+}
+
+eb_jaune()
+{
+ALL="${@}"
+printf "${jaune}${bold} $ALL $reset\n"
+}
+
+eb_vert()
+{
+ALL="${@}"
+printf "${vert}${bold} $ALL $reset\n"
+}
+
+eb_bleu()
+{ 
+ALL="${@}"
+printf "${bleu}${bold} $ALL $reset\n"
+}
+
+eb_mauve()
+{
+ALL="${@}"
+printf "${mauve}${bold} $ALL $reset\n"
+}
+
+eb_violet()
+{
+ALL="${@}"
+printf "${violet}${bold} $ALL $reset\n"
+}
+
+eb_blanc()
+{
+ALL="${@}"
+printf "${blanc}${bold} $ALL $reset\n"
+}
+
+eb_noir()
+{
+ALL="${@}"
+printf "${noir}${bold} $ALL $reset\n"
+}
+
+# Écrire en souligné dans ces 7 couleurs + noir & blanc :
+
+eu_rouge()
+{
+ALL="${@}"
+printf "${underline}${rouge} $ALL $reset\n"
+}
+
+eu_orange()
+{
+ALL="${@}"
+printf "${underline}${orange} $ALL $reset\n"
+}
+
+eu_jaune()
+{
+ALL="${@}"
+printf "${underline}${jaune} $ALL $reset\n"
+}
+
+eu_vert()
+{
+ALL="${@}"
+printf "${underline}${vert} $ALL $reset\n"
+}
+
+eu_bleu()
+{ 
+ALL="${@}"
+printf "${underline}${bleu} $ALL $reset\n"
+}
+
+eu_mauve()
+{
+ALL="${@}"
+printf "${underline}${mauve} $ALL $reset\n"
+}
+
+eu_violet()
+{
+ALL="${@}"
+printf "${underline}${violet} $ALL $reset\n"
+}
+
+eu_blanc()
+{
+ALL="${@}"
+printf "${underline}${blanc} $ALL $reset\n"
+}
+
+eu_noir()
+{
+ALL="${@}"
+printf "${underline}${noir} $ALL $reset\n"
+}
+
+# Écrire en gras et souligné dans ces 7 couleurs + noir & blanc :
+
+ebu_rouge()
+{
+ALL="${@}"
+printf "${underline}${bold}${rouge} $ALL $reset\n"
+}
+
+ebu_orange()
+{
+ALL="${@}"
+printf "${underline}${bold}${orange} $ALL $reset\n"
+}
+
+ebu_jaune()
+{
+ALL="${@}"
+printf "${underline}${bold}${jaune} $ALL $reset\n"
+}
+
+ebu_vert()
+{
+ALL="${@}"
+printf "${underline}${bold}${vert} $ALL $reset\n"
+}
+
+ebu_bleu()
+{ 
+ALL="${@}"
+printf "${underline}${bold}${bleu} $ALL $reset\n"
+}
+
+ebu_mauve()
+{
+ALL="${@}"
+printf "${underline}${bold}${mauve} $ALL $reset\n"
+}
+
+ebu_violet()
+{
+ALL="${@}"
+printf "${underline}${bold}${violet} $ALL $reset\n"
+}
+
+ebu_blanc()
+{
+ALL="${@}"
+printf "${underline}${bold}${blanc} $ALL $reset\n"
+}
+
+ebu_noir()
+{
+ALL="${@}"
+printf "${underline}${bold}${noir} $ALL $reset\n"
+}
+
+
+# Écrire en stabiloté blanc dans ces 7 couleurs + noir  :
+
+steb_rouge()
+{
+ALL="${@}"
+printf "${stablanc}${rouge}${bold} $ALL $reset\n"
+}
+
+steb_orange()
+{
+ALL="${@}"
+printf "${stablanc}${orange}${bold} $ALL $reset\n"
+}
+
+steb_jaune()
+{
+ALL="${@}"
+printf "${stablanc}${jaune}${bold} $ALL $reset\n"
+}
+
+steb_vert()
+{
+ALL="${@}"
+printf "${stablanc}${vert}${bold} $ALL $reset\n"
+}
+
+steb_bleu()
+{ 
+ALL="${@}"
+printf "${stablanc}${bleu}${bold} $ALL $reset\n"
+}
+
+steb_mauve()
+{
+ALL="${@}"
+printf "${stablanc}${mauve}${bold} $ALL $reset\n"
+}
+
+steb_violet()
+{
+ALL="${@}"
+printf "${stablanc}${violet}${bold} $ALL $reset\n"
+}
+
+
+steb_noir()
+{
+ALL="${@}"
+printf "${stablanc}${noir}${bold} $ALL $reset\n"
+}
 
 
 
-e_rouge() { ${rouge} "${@}" ; $reset }
+
+
+
 
