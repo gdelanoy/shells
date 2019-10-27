@@ -190,7 +190,8 @@ HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
 HISTCONTROL="ignorespace"
 HISTCONTROL="ignoredups"
 HISTCONTROL="ignoreboth"
-HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
+
+alias history='fc -il 1'
 
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
 if [ -x /usr/bin/dircolors ]
