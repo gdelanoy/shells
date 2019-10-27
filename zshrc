@@ -559,11 +559,12 @@ alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
 #
-alias please='sudo $(history -p \!\!)'
+alias please='sudo $(fc -ln -1)'
+
 # alias sduo='sudo'
 alias suod='sudo'
 alias sud='sudo su'
-# sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
+sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 # sudo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 
 # VIM : 
