@@ -1,4 +1,17 @@
 #!/bin/bash
+######################################
+# Nom du script : couleurs.shell
+# Utilité: ce script sert à écrire en couleurs, dans son shell comme dans des scripts.
+# Usage: (par ex. : $ eb_violet kikoo lol
+# ... écrira kikoo lol en gras et violet (les guillemets ne sont pas nécessiares).
+# Pour l'utiliser dans un script, il suffit de le sourcer via son chemin absolu :
+# source /chemin/vers/couleurs.shell
+#
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com
+# Inspiré des scripts de Nataniel Landau, que je remercie !
+# Créé le: lundi_28/10/2019 à 16h54
+######################################
+#
 
 # Poser les variables de base :
 
@@ -40,14 +53,20 @@ e_header() { printf "\n${bold}${rose}==========  %s  ==========${reset}\n" "$@"
         }
 e_arrow() { printf "➜ $@\n"
         }
-e_success() { printf "${green}✔ %s${reset}\n" "$@" }
-e_error() { printf "${red}✖ %s${reset}\n" "$@" }
-e_warning() { printf "${tan}➜ %s${reset}\n" "$@" }
-e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' 
+e_success() {
+        printf "${green}✔ %s${reset}\n" "$@"
+        }
+e_error() {
+        printf "${red}✖ %s${reset}\n" "$@"
+        }
+e_warning() {
+        printf "${tan}➜ %s${reset}\n" "$@"
+        }
+e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" 
 } 
 e_bold() { printf "${bold}%s${reset}\n" "$@"
 }
-e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' 
+e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"  
 }
 
 
@@ -729,9 +748,4 @@ printf "${stabviolet}${noir}${bold} $ALL $reset\n"
 }
 
 # Fini.
-
-
-
-
-
 

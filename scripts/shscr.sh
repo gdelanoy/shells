@@ -14,36 +14,10 @@ set -o nounset
 #
 # VARIABLES :
 #
-#Des Couleurs 
-# 
-bold=$(tput bold) 
-underline=$(tput sgr 0 1) 
-reset=$(tput sgr0) 
-purple=$(tput setaf 171) 
-red=$(tput setaf 1) 
-green=$(tput setaf 76) 
-tan=$(tput setaf 3) 
-blue=$(tput setaf 38) 
-# 
-# En-têtes et Logs
-# 
-e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  
-} 
-e_arrow() { printf "➜ $@\n" 
-} 
-e_success() { printf "${green}✔ %s${reset}\n" "$@" 
-} 
-e_error() { printf "${red}✖ %s${reset}\n" "$@" 
-} 
-e_warning() { printf "${tan}➜ %s${reset}\n" "$@" 
-} 
-e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" 
-} 
-e_bold() { printf "${bold}%s${reset}\n" "$@" 
-} 
-e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" 
-} 
-#
+#Des Couleurs :
+
+source /home/guillaume/.shells/scripts/couleurs.shell
+
 # FONCTIONS :
 #
 # source /etc/skel/.scripts/functions.sh
@@ -59,6 +33,9 @@ e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n"
         echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>" >> ${1}
         echo "# License: Ce script est sous license GPL v3." >> ${1}
         echo "# Veuillez consulter https://www.gnu.org/licenses/quick-guide-gplv3.fr.html" >> ${1}
+        echo "# La licence GPLv3 vous autorise à faire commerce des produits sous licence." >> ${1}
+        echo "# Si toutefois vous y parvenez avec l'un de mes scripts, vous êtes soit " >> ${1}
+        echo "# un vendeur de génie, soit un grippe-sou de classe mondiale ! " >> ${1}
         echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
         echo "#####################################################" >> ${1}
         echo "#" >> ${1}
@@ -69,33 +46,7 @@ e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n"
         echo "#" >> ${1}
         echo '#Des Couleurs ' >> ${1}
         echo '# ' >> ${1}
-        echo 'bold=$(tput bold) ' >> ${1}
-        echo 'underline=$(tput sgr 0 1) ' >> ${1}
-        echo 'reset=$(tput sgr0) ' >> ${1}
-        echo 'purple=$(tput setaf 171) ' >> ${1}
-        echo 'red=$(tput setaf 1) ' >> ${1}
-        echo 'green=$(tput setaf 76) ' >> ${1}
-        echo 'tan=$(tput setaf 3) ' >> ${1}
-        echo 'blue=$(tput setaf 38) ' >> ${1}
-        echo '# ' >> ${1}
-        echo '# En-têtes et Logs' >> ${1}
-        echo '# ' >> ${1}
-        echo 'e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_arrow() { printf "➜ $@\n" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_success() { printf "${green}✔ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_error() { printf "${red}✖ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_warning() { printf "${tan}➜ %s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_bold() { printf "${bold}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
-        echo 'e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' >> ${1}
-        echo '} ' >> ${1}
+        echo 'source /home/guillaume/.shells/scripts/couleurs.shell' >> ${1}
         echo "#" >> ${1}
         echo "# FONCTIONS :" >> ${1}
         echo "#" >> ${1}
