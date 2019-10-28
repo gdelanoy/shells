@@ -49,26 +49,38 @@ rose=$(tput setaf 171)
 tan=$(tput setaf 3)
 blue=$(tput setaf 38)
                       
-e_header() { printf "\n${bold}${rose}==========  %s  ==========${reset}\n" "$@" 
+e_header() {
+        ALL="$@"
+        printf "\n${bold}${rose}==========  $ALL  ==========${reset}\n"
         }
-e_arrow() { printf "➜ $@\n"
+e_arrow() {
+        ALL="$@"
+        printf "➜ $ALL\n"
         }
 e_success() {
-        printf "${green}✔ %s${reset}\n" "$@"
+         ALL="$@"
+        printf "${vert}✔ $ALL${reset}\n" "$@"
         }
 e_error() {
-        printf "${red}✖ %s${reset}\n" "$@"
+        ALL="$@"
+        printf "${rouge}✖ $ALL${reset}\n" "$@"
         }
 e_warning() {
-        printf "${tan}➜ %s${reset}\n" "$@"
+        ALL="$@"
+        printf "${tan}➜ $ALL${reset}\n" "$@"
         }
-e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" 
-} 
-e_bold() { printf "${bold}%s${reset}\n" "$@"
+e_underline() {
+         ALL="$@"
+        printf "${underline}${bold}$ALL${reset}\n"
+        } 
+e_bold() {
+        ALL="$@"
+        printf "${bold}$ALL${reset}\n"
+        }
+e_note() {
+        ALL="$@"
+        printf "${underline}${bold}${blue}Note:${reset}  ${blue}$ALL${reset}\n"  
 }
-e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"  
-}
-
 
 # Écrire dans ces 7 couleurs + noir & blanc :
 
