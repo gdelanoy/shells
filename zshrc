@@ -205,6 +205,11 @@ then
   fi
 fi
 
+# Des couleurs :
+#
+
+source /home/guillaume/.shells/scripts/couleurs.shell
+
 ###########################
 # Alias spécifiques à zsh :
 ###########################
