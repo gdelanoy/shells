@@ -1,0 +1,9 @@
+#!/bin/bash
+
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@serveur:/ /mnt/serveur/ -o allow_other
+# 
+
+df -h | grep serveur | lolcat
+exit
+
+
