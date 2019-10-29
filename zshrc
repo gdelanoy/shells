@@ -536,7 +536,7 @@ alias now='date +"%T"'
 ##############################################################
 
 # Mes scripts de session byobu :
-alias hop='bash $HOME/.scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash $HOME/.shells/scripts/byobu-session-$(hostname).sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'

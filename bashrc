@@ -494,7 +494,7 @@ alias safe-in-cloud='encfs "/home/guillaume/Cloud/MEGAsync/Cloud Drive/Safe/" /h
 alias safe-on-usb='encfs /media/$USER/USBPRO/Coffre-fort ~/safe-on-usb && df -h | grep safe-on'
 
 # Mes scripts de session byobu :
-alias hop='bash ~/.scripts/byobu-opensession.sh'
+alias hop='bash ~/.shells/scripts/byobu-session-$(hostname).sh'
 alias poe='bash ~/.scripts/byobu-poe.sh'
 
 # POUR LE BOULOT :
