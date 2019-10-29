@@ -22,20 +22,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'cd /; fcd' 'C-m'
  byobu-tmux send-keys -t 1 'ranger' 'C-m'
 
- # On crée une autre fenêtre ( Deux shells )...
- byobu-tmux new-window
- byobu-tmux rename-window 'Ansible'
- byobu split-window -v
- byobu-tmux send-keys -t 1 'sudo su' 'C-m'
- sleep 1
-
- byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
- sleep 1
- byobu-tmux send-keys -t 1 'neo' 'C-m'
- byobu-tmux send-keys -t 0 'ssh formateur@localhost' 'C-m'
- byobu-tmux send-keys -t 0 'cd ~/ansible' 'C-m'
- byobu-tmux send-keys -t 0 'clear' 'C-m'
-
  # Une nouvelle fenêtre pour vim avec son explorateur ...
  byobu-tmux new-window
  byobu-tmux rename-window 'VIM'
@@ -47,47 +33,81 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'fizsh'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'zsh' 'C-m'
+ byobu-tmux send-keys -t 0 'bash' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'fish' 'C-m'
- byobu-tmux send-keys -t 1 'cd .git' 'C-m'
+ byobu-tmux send-keys -t 1 'cd .bin' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'll' 'C-m'
 
-# Encore une fenêtre  ...
+# Et une autre :
+
  byobu-tmux new-window
- byobu-tmux rename-window 'Docs'
+ byobu-tmux rename-window 'Un'
  byobu split-window -v
+ byobu-tmux send-keys -t 1 'sudo su' 'C-m'
+ sleep 1
+ byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
+ sleep 1
+ byobu-tmux send-keys -t 1 'neo' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'cd ~/Documents/Documentation' 'C-m'
- byobu-tmux send-keys -t 0 'find . -iname "' 
+ byobu-tmux send-keys -t 0 'tue' 'C-m'
 
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'cd ~/Documents/Documentation' 'C-m'
- byobu-tmux send-keys -t 1 'grep -ri "" *' 
+# Create another window
 
- # Encore une fenêtre  ...
  byobu-tmux new-window
- byobu-tmux rename-window 'Slides'
+ byobu-tmux rename-window 'Deux'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'cd ~/Documents/Formation/slides-poe/reveal-js' 'C-m'
- byobu-tmux send-keys -t 0 'll ..' 'C-m'
- byobu-tmux send-keys -t 0 './start'
+ byobu-tmux send-keys -t 1 '( ping -c1 salon && ssh salon ) || ( ping -c1 serveur && ssh serveur ) || ( ping -c1 chambre && ssh chambre ) || ssh -X aureo@localhost' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'cd ~/Documents/Formations/slides-poe/' 'C-m'
+ byobu-tmux send-keys -t 0 'ping -c1 syno && ssh syno' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
 
-# Encore une fenêtre  ...
+# Yet another window
+
+ byobu-tmux new-window                                                               
+ byobu-tmux rename-window 'Safe'                                                   
+ byobu split-window -v                                                               
+ byobu-tmux send-keys -t 1 'clear' 'C-m'                                             
+ byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m' 
+ byobu-tmux send-keys -t 0 'calcurse' 'C-m'                                          
+
+# And a last one             
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Recent'
+ byobu split-window -v
+ byobu-tmux send-keys -t 1 'cd ~/Téléchargements' 'C-m'
+ byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'find . -ctime -15 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 1 'find . -iname "*' 
+ byobu-tmux send-keys -t 0 'cd ~/Vidéos' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*.*" -ctime -15 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*'
+
+# OK, that wasn't the last one yet ...              
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Cinq'
+ byobu split-window -v
+ byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
+ byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'joue' 'C-m' 
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'sursyno' 
+
+# THERE is the last one !  ;-) 
  byobu-tmux new-window
  byobu-tmux rename-window 'Double'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
 
-# Encore une fenêtre  ...
+# LOL  ...
  byobu-tmux new-window
  byobu-tmux rename-window 'Simple'
- byobu-tmux send-keys 'byz' 'C-m'
+ byobu-tmux send-keys 'bofh' 'C-m'
 fi
 # Enter Byobu
  byobu-tmux attach -t $USER 
