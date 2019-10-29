@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ~
 if [ -z "$(byobu list-sessions | grep $USER)" ]
  then
  byobu-tmux new-session -d -s $USER # Crée une nouvelle session détachée
