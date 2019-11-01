@@ -16,6 +16,7 @@ export LESSCHARSET="latin1"
 autoload -U promptinit; promptinit
 
 export ZPLUG_HOME=$HOME/.shells/zplug
+export GREP_OPTIONS=""
 source $ZPLUG_HOME/init.zsh
 zplug load 2>/dev/null
 
