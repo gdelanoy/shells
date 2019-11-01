@@ -25,8 +25,8 @@ export FZF_COMPLETION_TRIGGER='²'
 
 
 # Mon prompt est complexe, je le définis dans des fichiers à part :
-PS1=$(cat ~/.ps1.txt)
-PS2=$(cat ~/.ps2.txt)
+printf -v PS1 "%s\n" "`< ~/.ps1.txt`"
+printf -v PS2 "%s\n" "`< ~/.ps2.txt`"
 # PROMPT_COMMAND=$(cat ~/.pscmd.txt)
 
 # Un charset français :
