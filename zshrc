@@ -282,23 +282,26 @@ setopt list_packed
 #
 ######################################################
 
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/sudo", from:oh-my-zsh
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-completions"
-zplug "themes/robbyrussell", from:oh-my-zsh, as:theme
-zplug "zsh-users/zsh-autosuggestions"
-zplug "skywind3000/z.lua"
-zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
-zplug "pinelibg/dircolors-solarized-zsh"
-zplug "plugins/colored-man-pages",        from:oh-my-zsh
-zplug "plugins/colorize",                 from:oh-my-zsh
-zplug "plugins/fzf",                      from:oh-my-zsh
-zplug "plugins/ubuntu",               from:oh-my-zsh
+# À Dépanner parce que les zplugs ne sont visiblement pas reconnus d'une session
+# à l'autre. Ce sera bien quand ça va justemarcher... :-/  .
+
+# zplug "plugins/git", from:oh-my-zsh
+# zplug "plugins/git", from:oh-my-zsh
+# zplug "plugins/sudo", from:oh-my-zsh
+# zplug "plugins/command-not-found", from:oh-my-zsh
+# zplug "zsh-users/zsh-syntax-highlighting"
+# zplug "zsh-users/zsh-history-substring-search"
+# zplug "zsh-users/zsh-completions"
+# zplug "themes/robbyrussell", from:oh-my-zsh, as:theme
+# zplug "zsh-users/zsh-autosuggestions"
+# zplug "skywind3000/z.lua"
+# zplug "zdharma/fast-syntax-highlighting", defer:2
+# zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
+# zplug "pinelibg/dircolors-solarized-zsh"
+# zplug "plugins/colored-man-pages",        from:oh-my-zsh
+# zplug "plugins/colorize",                 from:oh-my-zsh
+# zplug "plugins/fzf",                      from:oh-my-zsh
+# zplug "plugins/ubuntu",               from:oh-my-zsh
 
 # zplug "plugins/debian",               from:oh-my-zsh
 # zplug "plugins/dnf",                  from:oh-my-zsh, if:"(( $+commands[dnf] ))"
