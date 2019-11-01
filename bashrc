@@ -122,29 +122,29 @@ function mkcd() {
 # Chiffrement / Déchiffrement :
 encrypt ()
 {
-gpg -ac --no-options "$1"
+	gpg -ac --no-options "$1"
 }
 decrypt ()
 {
-gpg --no-options "$1"
+	gpg --no-options "$1"
 }
 
 # Chercher, trouver :
 function findc()
-   {
-      find . -type f | xargs grep -nHi "${1}"
-   }
+{
+   find . -type f | xargs grep -nHi "${1}"
+}
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
 alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
 
 # Générateur de mots de passe (indiquer un chiffre pour la longueur) :
-genpasswd() { 
+genpasswd() {
 	local l=$1
    	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
-	}
+      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
 
 # Améliorer l'appel des pages de man :
 function man()
@@ -188,17 +188,16 @@ function repeat()       # Repeat n times command.
 # Montrer tous les paquetages installés :
 showpkg () {
   apt-cache pkgnames | grep -i "$1" | sort
-  return;
 }
 
 
 # Pour Noël :
 snow() {
-	           clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|gawk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
-   }
+	clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|gawk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
+}
 
 # Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
-function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
+function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; }
 
 # Serve a directory on a given port
 # https://davidwalsh.name/serve-directory-python
@@ -215,12 +214,13 @@ function services() { printf "$(service --status-all 2>&1|sed -e 's/ + /\\E42m +
 # Interroger le serveur LDAP de la salle de formation :
 function ldapfind() {
 	        ldapsearch -x -h annuaire.capen.sis -b dc=capen,dc=sis uid=$1
-	}
+}
 
 #  Lancer une appli indépendamment du shell d'origine et sans sortie :
 function nh() {
-	    nohup "$@" &>/dev/null &
-    }
+	nohup "$@" &>/dev/null &
+}
+
 # Faut-il vraiment expliquer celle-là ? O:-)
 function rtfm() { help $@ || man $@ || $BROWSER "http://www.google.com/search?q=$@"; }
 
@@ -233,16 +233,16 @@ function showdiff()
 # Remonter une arborescence autant de niveaux que je le mentionne :
 function up() {
 	[ "${1/[^0-9]/}" == "$1" ] && {
-	 local ups=""
-	 for ((i=1; i<=$1; i++))
-	 do
-	     ups=$ups"../"
-	 done
-         cd $ups
-	      }
+		local ups=""
+		for ((i=1; i<=$1; i++))
+		do
+			ups=$ups"../"
+		done
+		cd $ups
 	}
+}
 
-# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
 function safevi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
@@ -276,47 +276,48 @@ alias colle="ls /tmp/copie* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/copie.% .
 
 # Une couleur au hasard à chaque ligne d'un tail -f :
 coltail()
-	{
-	tail -F "${1}" |while read -r line;do printf "\033[38;5;%dm%s\033[0m\n" $(($RANDOM%255)) "$line";done
-	}
+{
+	tail -F "${1}" | while read -r line; do
+		printf "\033[38;5;%dm%s\033[0m\n" $(($RANDOM%255)) "$line"
+	done
+}
 
 morpheus()
-	{
+{
 	/usr/lib/xscreensaver/glmatrix -window-id $( xwininfo -int -name "Bureau" | grep "Bureau" | awk '{print $4}' ) &
-	}
+}
 
 # Faire parler le nordinateur (en anglais) :
 say()
-	{
-espeak "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
-	}
+{
+	espeak "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+}
 
 # Faire parler le nordinateur (en français) :
 dis()
-	{
-cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
-espeak -v mb-fr1 "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
-cd -
-	}
+{
+	cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
+	espeak -v mb-fr1 "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+	cd -
+}
 
 # Faire parler le nordinateur (en allemand) :
 sag()
-	{
-cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
-espeak -v mb-de2 "$*" --stdout | play - tempo 1.1 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
-cd -
-	}
+{
+	cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
+	espeak -v mb-de2 "$*" --stdout | play - tempo 1.1 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+	cd -
+}
 
 # Comme "please", mais on pose poliment la question (merci Canard) :
-function fuck() {                                                                    
-     local last_cmd=$(history -p !!)                                                  
-     echo -n "run command '${last_cmd}' with sudo? [y/n]: "                           
-     read -s -n 1 confirm                                                             
-     echo ""                                                                          
-     if [ "${confirm}" = "y" ]; then                                                  
-     sudo ${last_cmd}                                                             
-     fi                                                                               
-	}
+function fuck() {
+     local last_cmd=$(history -p !!)
+     read -s -n 1 -p "run command '${last_cmd}' with sudo? [y/n]: " confirm
+     echo ""
+     if [ "${confirm}" = "y" ]; then
+          sudo ${last_cmd}
+     fi
+}
 
 
 ###############
@@ -357,18 +358,18 @@ alias lla='ls -la'
 alias llo='ls -aol'
 alias lli='ls -AlhGrti'
 alias lsd="ls -alF | grep /$"
-alias lx='ls -lXB'        	# Par extension
-alias lk='ls -lSr'        	# Par taille
-alias lsize='ls --sort=size -lhr' # Ou comme ça
-alias la='ls -Al'        	# Montre les fichiers cachés
-alias lr='ls -lR'        	# Récursif
-alias lt='ls -ltr'        	# Trié par date
-alias lm='ls -al |most'        # pipé dans 'most'
-alias l='ls -hF --color'    # quick listing
+alias lx='ls -lXB'                 # Par extension
+alias lk='ls -lSr'                 # Par taille
+alias lsize='ls --sort=size -lhr'  # Ou comme ça
+alias la='ls -Al'                  # Montre les fichiers cachés
+alias lr='ls -lR'                  # Récursif
+alias lt='ls -ltr'                 # Trié par date
+alias lm='ls -al |most'            # pipé dans 'most'
+alias l='ls -hF --color'           # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
-# 
-alias tree='tree -Cs'       
+#
+alias tree='tree -Cs'
 alias less='less --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
@@ -419,7 +420,7 @@ alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -
 alias burn='pkill -9'
 alias px='ps aux | grep '
 alias ct='column -t'
-alias dfc='df -hPT | column -t' 
+alias dfc='df -hPT | column -t'
 alias untar='tar -zxvf'
 alias ipext='curl ipinfo.io/ip'
 alias ipin='hostname -I'
@@ -451,7 +452,7 @@ alias script='script ma_session-$(date +%d-%m-%Y-%T).txt'
 # alias most="bat"
 
 alias pping="prettyping"
-alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"  
+alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"
 
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
@@ -463,12 +464,12 @@ alias diskspace="du -S | sort -n -r |more"
 alias folders="find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
 # Raccourcis pour la gestion des paquetages :
-#	
+#
 alias apti='sudo apt-get install'
 alias apts="sudo apt-cache search"
-alias aptr='sudo apt-get remove' 
+alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
 alias maj="sudo apt-get update && sudo apt-get upgrade --only-upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log; sudo apt-get -f install; sudo apt autoclean; sudo apt autoremove"
 
 # Arrêt / Reboot :
@@ -557,7 +558,7 @@ alias vm7='ssh formation@serveur -p 2200$(echo $HOSTNAME | tail -c2)'
 
 
 ###############################
-# Pour les différentes applis : 
+# Pour les différentes applis :
 ###############################
 
 # Raccourcis pour 'grep' :
@@ -575,7 +576,7 @@ alias suod='sudo'
 alias svi='sudo nvim'
 alias us="su"
 
-# VIM : 
+# VIM :
 #
 alias vi='nvim'
 alias edit='nvim'
@@ -625,7 +626,7 @@ alias accio=ansibleSetup
 alias ans='ansible'
 alias ansp='ansible-playbook'
 
-# Docker : 
+# Docker :
 # alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 # alias dockd="docker run -d -P"			# Daemonized container
 # alias docki="docker run -t -i -P"       	# Insteractive container
@@ -669,7 +670,7 @@ alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.
 
 shscr(){
 	echo "#!/bin/bash" > ${1}
-	echo "######################################" >> ${1} 
+	echo "######################################" >> ${1}
 	echo "# Nom du script : $(basename $1)" >> ${1}
 	echo "# Utilité: ce script sert à faire pousser des fleurs" >> ${1}
 	echo "# Usage: ... (le cas échéant)" >> ${1}
@@ -678,7 +679,7 @@ shscr(){
 	echo "######################################" >> ${1}
 	echo "#" >> ${1}
 	echo "set -o errexit" >> ${1}
-        echo "set -o nounset" >> ${1}
+	echo "set -o nounset" >> ${1}
 	echo "#" >> ${1}
 	echo "# VARIABLES :" >> ${1}
 	echo "#" >> ${1}
@@ -727,7 +728,7 @@ shscr(){
 	echo "" >> ${1}
 	echo "" >> ${1}
 	chmod 750 ${1}
-	vim ${1} 
+	vim ${1}
 }
 
 #
@@ -737,17 +738,17 @@ shscr(){
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 fkill() {
-    local pid 
+    local pid
     if [ "$UID" != "0" ]; then
         pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi  
+    fi
 
     if [ "x$pid" != "x" ]
     then
         echo $pid | xargs kill -${1:-9}
-    fi  
+    fi
 }
 
 
@@ -756,26 +757,38 @@ fkill() {
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
 fe() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exact --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+	local files
+	IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exact --exit-0))
+	[[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
 # fh - repeat history
 runcmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, <>' ; }
 
 fh() {
-  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
+  ([ -n "$ZSH_NAME" ] && fc -l 1 || history)\
+    | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
 }
 
-fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;     fi;     while true; do         local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;');         local dir="$(printf '%s\n' "${lsd[@]}" |
-            fzf --reverse --preview '
-                __cd_nxt="$(echo {})";
-                __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
-                echo $__cd_path;
-                echo;
-                ls -p --color=always "${__cd_path}";
-        ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
+fcd() {
+	if [[ "$#" != 0 ]]; then
+		builtin cd "$@"
+		return
+	fi
+
+	while true; do
+		local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;')
+		local dir="$(printf '%s\n' "${lsd[@]}" | fzf --reverse --preview '
+			__cd_nxt="$(echo {})";
+			__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+			echo $__cd_path;
+			echo;
+			ls -p --color=always "${__cd_path}";')"
+
+		[[ ${#dir} != 0 ]] || return 0
+		builtin cd "$dir" &> /dev/null
+	done
+}
 
 
 alias f='. fzf-fs'
