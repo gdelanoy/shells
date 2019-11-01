@@ -15,10 +15,21 @@ export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
 
+######################################################
+#
+#     Zplug Plug-Ins :
+#
+######################################################
+
 export ZPLUG_HOME=$HOME/.shells/zplug
 export GREP_OPTIONS=""
 source $ZPLUG_HOME/init.zsh
-zplug load 2>/dev/null
+zplug load
+# Il y en a toute une liste ici :
+# https://gitlab.yuribugelli.it/yuri/dotfiles/blob/master/zsh/zplug.zsh
+#
+
+
 
 # Path to your oh-my-zsh installation.
 #
@@ -203,7 +214,7 @@ alias history='fc -il 1'
 # then
 #  if [ -r $HOME/.shells/dircolors ]
 #  then
-#    eval "`dircolors $HOME/.shells/dircolors`"
+    eval "`dircolors $HOME/.shells/dircolors`"
 #  elif [ -r /etc/dir_colors ]
 #  then
 #    eval "`dircolors /etc/dir_colors`"
@@ -281,60 +292,6 @@ setopt pushd_to_home            # `pushd` = `pushd $HOME`
 # compacked complete list display
 setopt list_packed
 
-######################################################
-#
-#     Zplug Plug-Ins :
-#
-######################################################
-
-# À Dépanner parce que les zplugs ne sont visiblement pas reconnus d'une session
-# à l'autre. Ce sera bien quand ça va justemarcher... :-/  .
-
-# zplug "plugins/git", from:oh-my-zsh
-# zplug "plugins/git", from:oh-my-zsh
-# zplug "plugins/sudo", from:oh-my-zsh
-# zplug "plugins/command-not-found", from:oh-my-zsh
-# zplug "zsh-users/zsh-syntax-highlighting"
-# zplug "zsh-users/zsh-history-substring-search"
-# zplug "zsh-users/zsh-completions"
-# zplug "themes/robbyrussell", from:oh-my-zsh, as:theme
-# zplug "zsh-users/zsh-autosuggestions"
-# zplug "skywind3000/z.lua"
-# zplug "zdharma/fast-syntax-highlighting", defer:2
-# zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
-# zplug "pinelibg/dircolors-solarized-zsh"
-# zplug "plugins/colored-man-pages",        from:oh-my-zsh
-# zplug "plugins/colorize",                 from:oh-my-zsh
-# zplug "plugins/fzf",                      from:oh-my-zsh
-# zplug "plugins/ubuntu",               from:oh-my-zsh
-
-# zplug "plugins/debian",               from:oh-my-zsh
-# zplug "plugins/dnf",                  from:oh-my-zsh, if:"(( $+commands[dnf] ))"
-# zplug "plugins/fedora",
-
-# zplug "plugins/tmux",                     from:oh-my-zsh
-# zplug "plugins/tmuxinator",               from:oh-my-zsh
-# zplug "plugins/urltools",                 from:oh-my-zsh
-# zplug "plugins/web-search",               from:oh-my-zsh
-# zplug "plugins/z",                        from:oh-my-zsh
-# zplug "plugins/zsh-navigation-tools",     from:oh-my-zsh
-# zplug "plugins/autoenv",                  from:oh-my-zsh
-# zplug "plugins/autojump",                 from:oh-my-zsh
-# zplug "plugins/emoji",                    from:oh-my-zsh
-# zplug "plugins/emoji-clock",              from:oh-my-zsh
-# zplug "plugins/emotty",                   from:oh-my-zsh
-# zplug "plugins/git",                      from:oh-my-zsh, if:"(( $+commands[git] ))"
-# zplug "plugins/git-auto-fetch",           from:oh-my-zsh, if:"(( $+commands[git] ))"
-# zplug "plugins/git-extras",               from:oh-my-zsh, if:"(( $+commands[git] ))"
-# zplug "plugins/git-flow",                 from:oh-my-zsh, if:"(( $+commands[git] ))"
-
-# Si j'en ajoute, il faudra repasser la commande :
-#
-# zplug load --verbose
-#
-# Il y en a toute une liste ici :
-# https://gitlab.yuribugelli.it/yuri/dotfiles/blob/master/zsh/zplug.zsh
-#
 
 ##############
 # Fonctions :
