@@ -70,7 +70,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Safe'                                                   
  byobu split-window -v                                                               
  byobu-tmux send-keys -t 1 'clear' 'C-m'                                             
- byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m' 
+#  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m' 
  byobu-tmux send-keys -t 0 'calcurse' 'C-m'                                          
 
 # And a last one             
