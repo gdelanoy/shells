@@ -14,10 +14,14 @@ export PATH PS1
 export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
-# prompt spaceship
+
+export ZPLUG_HOME=$HOME/.shells/zplug
+source $ZPLUG_HOME/init.zsh
+zplug load 2>/dev/null
 
 # Path to your oh-my-zsh installation.
 #
+
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
