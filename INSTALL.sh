@@ -1,6 +1,5 @@
 #!/bin/bash
-cd $HOME
-mkdir .shells
+mkdir $HOME/.shells
 cd .shells
 sudo git submodule init
 sudo git submodule update
@@ -14,11 +13,18 @@ sudo git submodule update
 #  ln -s .shells/fzf.bash .fzf.bash
 #  ln -s .shells/fzf.zsh .fzf.zsh
 
-cd /home/$USER/
-[ -f /home/$USER/.zshrc ] && ( echo "Sauvegarde du zshrc existant dans ~/.shells/old/ ..."; mv /home/$USER/.zshrc /home/$USER/.shells/old/zshrc-original-$(date +%F-%T))
+cd $HOME
+
+if [ -f $HOME/.zshrc ]; then
+	(
+		echo "Sauvegarde du zshrc existant dans ~/.shells/old/ ..."
+		mv $HOME/.zshrc $HOME/.shells/old/zshrc-original-$(printf "%(%F-%T)T" -1) 
+	)
+fi
+
 sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-mv /home/$USER/.zshrc /home/$USER/.shells/old/zshrc-original-$(date +%F-%T)
-ln -s /home/$USER/.shells/zshrc .zshrc
+mv $HOME/.zshrc $HOME/.shells/old/zshrc-original-$(date +%F-%T)
+ln -s $HOME/.shells/zshrc .zshrc
 
