@@ -293,15 +293,40 @@ zplug "themes/robbyrussell", from:oh-my-zsh, as:theme
 zplug "zsh-users/zsh-autosuggestions"
 zplug "skywind3000/z.lua"
 zplug "zdharma/fast-syntax-highlighting", defer:2
-
-
 zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
 zplug "pinelibg/dircolors-solarized-zsh"
+zplug "plugins/colored-man-pages",        from:oh-my-zsh
+zplug "plugins/colorize",                 from:oh-my-zsh
+zplug "plugins/fzf",                      from:oh-my-zsh
+zplug "plugins/ubuntu",               from:oh-my-zsh
 
+# zplug "plugins/debian",               from:oh-my-zsh
+# zplug "plugins/dnf",                  from:oh-my-zsh, if:"(( $+commands[dnf] ))"
+# zplug "plugins/fedora",
+
+# zplug "plugins/tmux",                     from:oh-my-zsh
+# zplug "plugins/tmuxinator",               from:oh-my-zsh
+# zplug "plugins/urltools",                 from:oh-my-zsh
+# zplug "plugins/web-search",               from:oh-my-zsh
+# zplug "plugins/z",                        from:oh-my-zsh
+# zplug "plugins/zsh-navigation-tools",     from:oh-my-zsh
+# zplug "plugins/autoenv",                  from:oh-my-zsh
+# zplug "plugins/autojump",                 from:oh-my-zsh
+# zplug "plugins/emoji",                    from:oh-my-zsh
+# zplug "plugins/emoji-clock",              from:oh-my-zsh
+# zplug "plugins/emotty",                   from:oh-my-zsh
+# zplug "plugins/git",                      from:oh-my-zsh, if:"(( $+commands[git] ))"
+# zplug "plugins/git-auto-fetch",           from:oh-my-zsh, if:"(( $+commands[git] ))"
+# zplug "plugins/git-extras",               from:oh-my-zsh, if:"(( $+commands[git] ))"
+# zplug "plugins/git-flow",                 from:oh-my-zsh, if:"(( $+commands[git] ))"
 
 # Si j'en ajoute, il faudra repasser la commande :
 #
 # zplug load --verbose
+#
+# Il y en a toute une liste ici :
+# https://gitlab.yuribugelli.it/yuri/dotfiles/blob/master/zsh/zplug.zsh
+#
 
 ##############
 # Fonctions :
