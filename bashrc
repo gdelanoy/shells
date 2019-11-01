@@ -44,8 +44,6 @@ export SAVEHIST=100
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-#HISTCONTROL="ignorespace"
-#HISTCONTROL="ignoredups"
 HISTCONTROL="ignoreboth"
 HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
 
