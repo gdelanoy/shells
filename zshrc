@@ -174,8 +174,8 @@ SPACESHIP_DIR_PREFIX=""
 SPACESHIP_DIR_COLOR="045"
 SPACESHIP_DIR_TRUNC="3"
 SPACESHIP_EXEC_TIME_PREFIX="ça a pris "
-# SPACESHIP_BATTERY_SHOW="true"
-# SPACESHIP_BATTERY_THRESHOLD="60"
+SPACESHIP_BATTERY_SHOW="true"
+SPACESHIP_BATTERY_THRESHOLD="66"
 SPACESHIP_JOBS_SHOW="true"
 SPACESHIP_EXIT_CODE_SHOW="true"
 
@@ -194,16 +194,17 @@ HISTCONTROL="ignoreboth"
 alias history='fc -il 1'
 
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
-if [ -x /usr/bin/dircolors ]
-then
-  if [ -r $HOME/.shells/dircolors ]
-  then
-    eval "`dircolors $HOME/.shells/dircolors`"
-  elif [ -r /etc/dir_colors ]
-  then
-    eval "`dircolors /etc/dir_colors`"
-  fi
-fi
+# if [ -x /usr/bin/dircolors ]
+# then
+#  if [ -r $HOME/.shells/dircolors ]
+#  then
+#    eval "`dircolors $HOME/.shells/dircolors`"
+#  elif [ -r /etc/dir_colors ]
+#  then
+#    eval "`dircolors /etc/dir_colors`"
+#  fi
+# fi
+
 
 # Des couleurs :
 #
@@ -289,11 +290,14 @@ zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-completions"
 zplug "themes/robbyrussell", from:oh-my-zsh, as:theme
-
-
 zplug "zsh-users/zsh-autosuggestions"
 zplug "skywind3000/z.lua"
 zplug "zdharma/fast-syntax-highlighting", defer:2
+
+
+zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
+zplug "pinelibg/dircolors-solarized-zsh"
+
 
 # Si j'en ajoute, il faudra repasser la commande :
 #
