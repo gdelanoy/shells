@@ -101,10 +101,10 @@ extract () {
           *.zip)       unzip $1       ;;
           *.Z)         uncompress $1  ;;
           *.7z)        7z x $1        ;;
-          *)           echo "don't know how to extract '$1'..." ;;
+          *)           echo "don't know how to extract '$1'..." >&2 ;;
       esac
   else
-      echo "'$1' is not a valid file!"
+      echo "'$1' is not a valid file!" >&2
   fi
 }
 
@@ -266,7 +266,7 @@ crd(){
         if [ -d "$lastdir" ]; then
                 cd "$lastdir"
         else
-                echo "no existing directory stored in buffer $1">&2
+                echo "no existing directory stored in buffer $1" >&2
         fi
 }
 
