@@ -3,7 +3,6 @@
 #####################################
 
 PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:~/fzf-fs"
-# PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
@@ -24,8 +23,6 @@ export FZF_CTRL_R_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --
 export FZF_ALT_C_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'tree -C {} | head -200'"
 export FZF_COMPLETION_TRIGGER='²'
 
-
-
 # Mon prompt est complexe, je le définis dans des fichiers à part :
 PS1=$(cat ~/.ps1.txt)
 PS2=$(cat ~/.ps2.txt)
@@ -43,8 +40,9 @@ source /home/guillaume/.shells/scripts/couleurs.shell
 # Nombre d'entrées dans l'historique :
 export HISTORY=100
 export SAVEHIST=100
-# Fichier ou est stocké l'historique :
+# Fichier où est stocké l'historique :
 export HISTFILE=$HOME/.history
+# Options de l'historique :
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
 HISTCONTROL="ignoreboth"
 HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
@@ -101,10 +99,10 @@ extract () {
           *.zip)       unzip $1       ;;
           *.Z)         uncompress $1  ;;
           *.7z)        7z x $1        ;;
-          *)           echo "don't know how to extract '$1'..." ;;
+          *)           echo "Je ne sais pas comment extraire '$1'..." ;;
       esac
   else
-      echo "'$1' is not a valid file!"
+      echo "'$1' n\'est pas un fichier valide !"
   fi
 }
 
