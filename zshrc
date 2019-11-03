@@ -39,8 +39,6 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
-# ZSH_THEME="robbyrussell"
-
 ZSH_THEME="spaceship"
 
 # Set list of themes to pick from when loading at random
@@ -75,7 +73,7 @@ ZSH_THEME="spaceship"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -677,6 +675,8 @@ alias joue='cd ~/Musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 �
 alias film='cd ~/Vidéos && mpv "$(fzf)"; cd -'
 
 # Des options pour fzf ( <3 ) :
+
+export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
 
 export FZF_DEFAULT_OPTS="--height 20% --border --layout=reverse --multi --exact --prompt='¯\_(ツ)_/¯ ' --margin=0,10% --preview 'cat {}'"
 export FZF_CTRL_T_OPTS="--prompt='(⊃｡•́‿•̀｡)⊃ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"
