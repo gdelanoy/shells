@@ -14,18 +14,30 @@ export PATH PS1
 export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
-# prompt spaceship
 
-# Path to your oh-my-zsh installation.
-# 
+######################################################
+#
+#     Zplug Plug-Ins :
+#
+######################################################
+
+export ZPLUG_HOME=$HOME/.shells/zplug
+export GREP_OPTIONS=""
+source $ZPLUG_HOME/init.zsh
+zplug load
+# Il y en a toute une liste ici :
+# https://gitlab.yuribugelli.it/yuri/dotfiles/blob/master/zsh/zplug.zsh
+#
+
+# Path to your oh-my-zsh installation
+#
+
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-
-# ZSH_THEME="robbyrussell"
 
 ZSH_THEME="spaceship"
 
@@ -61,7 +73,7 @@ ZSH_THEME="spaceship"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -156,7 +168,7 @@ SPACESHIP_PROMPT_ORDER=(
   vi_mode       # Vi-mode indicator
   jobs          # Background jobs indicator
   char          # Prompt character
-  exit_code     # Exit code section       
+  exit_code     # Exit code section
 )
 
 SPACESHIP_CHAR_SYMBOL="└─-~^~-~➜ "
@@ -174,8 +186,8 @@ SPACESHIP_DIR_PREFIX=""
 SPACESHIP_DIR_COLOR="045"
 SPACESHIP_DIR_TRUNC="3"
 SPACESHIP_EXEC_TIME_PREFIX="ça a pris "
-# SPACESHIP_BATTERY_SHOW="true"
-# SPACESHIP_BATTERY_THRESHOLD="60"
+SPACESHIP_BATTERY_SHOW="true"
+SPACESHIP_BATTERY_THRESHOLD="66"
 SPACESHIP_JOBS_SHOW="true"
 SPACESHIP_EXIT_CODE_SHOW="true"
 
@@ -194,16 +206,17 @@ HISTCONTROL="ignoreboth"
 alias history='fc -il 1'
 
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
-if [ -x /usr/bin/dircolors ]
-then
-  if [ -r $HOME/.shells/dircolors ]
-  then
+# if [ -x /usr/bin/dircolors ]
+# then
+#  if [ -r $HOME/.shells/dircolors ]
+#  then
     eval "`dircolors $HOME/.shells/dircolors`"
-  elif [ -r /etc/dir_colors ]
-  then
-    eval "`dircolors /etc/dir_colors`"
-  fi
-fi
+#  elif [ -r /etc/dir_colors ]
+#  then
+#    eval "`dircolors /etc/dir_colors`"
+#  fi
+# fi
+
 
 # Des couleurs :
 #
@@ -223,10 +236,10 @@ alias -s conf=vim
 alias -s html="firefox"
 alias -s org="firefox"
 
-# Alias globaux : 
+# Alias globaux :
 #
 # Exemple :
-# 
+#
 # $ alias -g C='| wc -l'
 # $ grep alias ~/.zsh/* C
 # 443
@@ -265,6 +278,17 @@ zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*'   force-list always
 zstyle ':completion:*' squeeze-slashes true
 
+
+# auto directory pushd that you can get dirs list by cd -[tab]
+setopt auto_pushd
+setopt pushd_ignore_dups        # no duplicates in dir stack
+setopt pushd_silent             # no dir stack after pushd or popd
+setopt pushd_to_home            # `pushd` = `pushd $HOME`
+#
+# compacked complete list display
+setopt list_packed
+
+
 ##############
 # Fonctions :
 ##############
@@ -294,7 +318,7 @@ snow() {
    }
 
 # Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
-function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
+function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; }
 
 # Serve a directory on a given port
 # https://davidwalsh.name/serve-directory-python
@@ -321,7 +345,7 @@ function showdiff()
 	wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' $1 $2
 }
 
-# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
 function svi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && vim $1
@@ -427,8 +451,8 @@ alias lm='ls -al |most'        # pipé dans 'most'
 alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
-# 
-alias tree='tree -Cs'       
+#
+alias tree='tree -Cs'
 alias less='less --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
@@ -473,7 +497,7 @@ alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -
 alias burn='pkill -9'
 alias px='ps aux | grep '
 alias ct='column -t'
-alias dfc='df -hPT | column -t' 
+alias dfc='df -hPT | column -t'
 alias untar='tar -zxvf'
 alias ipext='curl ipinfo.io/ip'
 alias ipin='hostname -I'
@@ -509,12 +533,12 @@ alias diskspace="du -S | sort -n -r |more"
 alias folders="sudo find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
 # Raccourcis pour la gestion des paquetages :
-#	
+#
 alias apti='sudo apt-get install'
 alias apts="sudo apt-cache search"
-alias aptr='sudo apt-get remove' 
+alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
 alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
 
 # Arrêt / Reboot :
@@ -536,7 +560,7 @@ alias now='date +"%T"'
 ##############################################################
 
 # Mes scripts de session byobu :
-alias hop='bash $HOME/.scripts/byobu-opensession.sh 2>/dev/null'
+alias hop='bash $HOME/.shells/scripts/byobu-session-$(hostname).sh 2>/dev/null'
 
 # La box de configuration de l'interface graphique de Voyager :
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
@@ -552,7 +576,7 @@ alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
 # alias usbb='rsync -avz /media/usbdisk/ ~/backup/usb/'
 
 ###############################
-# Pour les différentes applis : 
+# Pour les différentes applis :
 ###############################
 
 # Raccourcis pour 'grep' :
@@ -572,7 +596,7 @@ alias sud='sudo su'
 sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 # sudo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 
-# VIM : 
+# VIM :
 #
 alias vi='vim'
 alias edit='vim'
@@ -619,7 +643,7 @@ alias accio=ansibleSetup
 alias ans='ansible'
 alias ansp='ansible-playbook'
 
-# Ouvre tout ce que je  te donne :                                                                                                          
+# Ouvre tout ce que je  te donne :
 ouvre () {
   if [ -f $1 ] ; then
       case $1 in
@@ -651,6 +675,8 @@ alias joue='cd ~/Musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 �
 alias film='cd ~/Vidéos && mpv "$(fzf)"; cd -'
 
 # Des options pour fzf ( <3 ) :
+
+export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
 
 export FZF_DEFAULT_OPTS="--height 20% --border --layout=reverse --multi --exact --prompt='¯\_(ツ)_/¯ ' --margin=0,10% --preview 'cat {}'"
 export FZF_CTRL_T_OPTS="--prompt='(⊃｡•́‿•̀｡)⊃ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"

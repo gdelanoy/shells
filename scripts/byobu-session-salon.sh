@@ -1,15 +1,4 @@
 #!/bin/bash
-#####################################################
-# Nom du script : byobu-opensession.sh
-# Utilité: Ce script sert à créer rapidement un environnement de terminaux virtuels qui fournissent un environnement personnalisé avec
-# plein d'options.
-
-# Usage: via un alias : alias hop="~/.scripts/byobu-opensession.sh"
-#
-# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
-# Créé le: vendredi_18/10/2019 à 22h40
-#####################################################
-
 if [ -z "$(byobu list-sessions | grep $USER)" ]
  then
  cd ~
@@ -28,9 +17,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'sudo su' 'C-m'
  byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
- sleep 2
- byobu-tmux send-keys -t 1 ":filter-out may be a replay" 'C-m'
- byobu-tmux send-keys -t 1 ':save-config' 'C-m'
+ # sleep 2
+ # byobu-tmux send-keys -t 1 ":filter-out may be a replay" 'C-m'
+ # byobu-tmux send-keys -t 1 ':save-config' 'C-m'
  byobu-tmux send-keys -t 0 'sudo su' 'C-m'
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
 
@@ -39,7 +28,8 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Files'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'ranger' 'C-m'
+ # byobu-tmux send-keys -t 1 'ranger' 'C-m'
+ byobu-tmux send-keys -t 1 'nnn' 'C-m'
  byobu-tmux send-keys -t 0 'tue' 'C-m'
 
  # Une nouvelle fenêtre pour vim avec son explorateur ...
@@ -73,7 +63,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  sleep 1
  byobu-tmux send-keys -t 1 'neo' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'meteo' 'C-m'
+ byobu-tmux send-keys -t 0 'calcurse' 'C-m'
 
  # Create another window
 
@@ -94,7 +84,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
- byobu-tmux send-keys -t 0 'calcurse' 'C-m'
+ byobu-tmux send-keys -t 0 'sursyno'
 
 # And a last one
 
@@ -119,7 +109,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'sursyno'
 
 # THERE is the last one ;-)
 

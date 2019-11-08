@@ -40,13 +40,13 @@ stabjaune=$(tput setab 3)
 stabvert=$(tput setab 2) 
 stableu=$(tput setab 6) 
 stabmauve=$(tput setab 5) 
-stabviolet=$(tput setab 4) 
+stabviolet=$(tput setab 3) 
 stabnoir=$(tput setab 0) 
 
-# Les entrées de Nataniel Landau, que je remercie pour son inspiration ;-)  :
+# Les entrées -un peu remaniées- de Nataniel Landau, que je remercie pour son inspiration ;-)  :
 
 rose=$(tput setaf 171)
-tan=$(tput setaf 3)
+or=$(tput setaf 3)
 blue=$(tput setaf 38)
                       
 e_header() {
@@ -67,7 +67,7 @@ e_error() {
         }
 e_warning() {
         ALL="$@"
-        printf "${tan}➜ $ALL${reset}\n" "$@"
+        printf "${or}➜ $ALL${reset}\n" "$@"
         }
 e_underline() {
          ALL="$@"

@@ -8,19 +8,7 @@
 # Veuillez consulter https://www.gnu.org/licenses/quick-guide-gplv3.fr.html
 # Créé le: vendredi_18/10/2019 à 22h40
 #####################################################
-#
-set -o errexit
-set -o nounset
-#
-# VARIABLES :
-#
-#Des Couleurs :
 
-source /home/guillaume/.shells/scripts/couleurs.shell
-
-# FONCTIONS :
-#
-# source /etc/skel/.scripts/functions.sh
 #
 # LE SCRIPT PROPREMENT DIT : 
 #
@@ -34,8 +22,8 @@ source /home/guillaume/.shells/scripts/couleurs.shell
         echo "# License: Ce script est sous license GPL v3." >> ${1}
         echo "# Veuillez consulter https://www.gnu.org/licenses/quick-guide-gplv3.fr.html" >> ${1}
         echo "# La licence GPLv3 vous autorise à faire commerce des produits sous licence." >> ${1}
-        echo "# Si toutefois vous y parvenez avec l'un de mes scripts, vous êtes soit " >> ${1}
-        echo "# un vendeur de génie, soit un grippe-sou de classe mondiale ! " >> ${1}
+        echo "# Si toutefois vous parvenez à vendre l'un de mes scripts, vous êtes soit " >> ${1}
+        echo "# un vendeur de génie, soit un grippe-sou de classe mondiale ;-) . " >> ${1}
         echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
         echo "#####################################################" >> ${1}
         echo "#" >> ${1}
@@ -44,17 +32,18 @@ source /home/guillaume/.shells/scripts/couleurs.shell
         echo "#" >> ${1}
         echo "# VARIABLES :" >> ${1}
         echo "#" >> ${1}
-        echo '#Des Couleurs ' >> ${1}
+        echo '#Des Couleurs :' >> ${1}
         echo '# ' >> ${1}
-        echo 'source /home/guillaume/.shells/scripts/couleurs.shell' >> ${1}
+        echo 'source /home/$USER/.shells/scripts/couleurs.shell' >> ${1}
         echo "#" >> ${1}
         echo "# FONCTIONS :" >> ${1}
         echo "#" >> ${1}
-        echo "# source /etc/skel/.scripts/functions.sh" >> ${1}
+        echo "# source /home/$USER/.shells/scripts/functions.shell" >> ${1}
         echo "#" >> ${1}
         echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
         echo "#" >> ${1}
         echo "" >> ${1}
+        echo "clear >> ${1}
         echo "e_header $(basename ${1})" >> ${1}
         echo "" >> ${1}
         echo "" >> ${1}

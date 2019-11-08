@@ -36,8 +36,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'sudo su' 'C-m'
  sleep 1
- byobu-tmux send-keys -t 1 'Aponno@stos' 'C-m'
- sleep 1
  byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 1 'neo' 'C-m'
