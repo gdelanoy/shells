@@ -128,10 +128,8 @@ decrypt ()
 }
 
 # Chercher, trouver :
-function findc()
-{
-   find . -type f | xargs grep -nHi "${1}"
-}
+findc() { grep -RnHi "$*"; }
+
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
 alias fd='find / -type d -name $1'
@@ -140,17 +138,17 @@ alias ffi='sudo find / -iname $1'
 # Générateur de mots de passe (indiquer un chiffre pour la longueur) :
 genpasswd() {
 	local l=$1
-   	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+	[ "$l" == "" ] && l=16
+	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
 }
 
 # Améliorer l'appel des pages de man :
 function man()
 {
-    for i ; do
-        xtitle The $(basename $1|tr -d .[:digit:]) manual
-        command man -a "$i"
-    done
+	for i ; do
+		xtitle The $(basename $1|tr -d .[:digit:]) manual
+		command man -a "$i"
+	done
 }
 
 # Déboguage en http :
