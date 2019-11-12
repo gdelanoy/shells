@@ -240,7 +240,7 @@ function up() {
 
 # L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
-function safevi() {
+function svi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
 }
 
@@ -442,6 +442,7 @@ alias showconn="lsof -Pan -i tcp -i udp"
 alias mdpdf=" ~/.pandoc/md2pdf"
 
 alias script='script ma_session-$(date +%d-%m-%Y-%T).txt'
+alias ck="/usr/bin/i3lock -n -c 000000"
 
 # alias less="bat"
 # alias more="bat"
