@@ -1,13 +1,16 @@
+NEWPATH="$HOME/.bin/fzf/bin"
+
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */home/guillaume/.bin/fzf/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}/home/guillaume/.bin/fzf/bin"
-fi
+[[ "$PATH" == *"$NEWPATH"* ]] || export PATH+=":$NEWPATH"
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/home/guillaume/.bin/fzf/shell/completion.bash" 2> /dev/null
+[ "$PS1" ] && source "$NEWPATH/shell/completion.bash" 2>&-
 
 # Key bindings
 # ------------
-source "/home/guillaume/.bin/fzf/shell/key-bindings.bash"
+source "$NEWPATH/shell/key-bindings.bash"
+
+unset NEWPATH
+return 0
