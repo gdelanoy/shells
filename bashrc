@@ -561,8 +561,8 @@ alias vm7='ssh formation@serveur -p 2200$(echo $HOSTNAME | tail -c2)'
 # Raccourcis pour 'grep' :
 #
 alias {G,g}{re,er}p='grep'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+alias grep -E='grep -E --color=auto'
+alias grep -F='grep -F --color=auto'
 alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
