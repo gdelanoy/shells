@@ -189,8 +189,8 @@ alias lm='ls -al |most'        # pipé dans 'most'
 alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
-# 
-alias tree='tree -Cs'       
+#
+alias tree='tree -Cs'
 alias less='less --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
@@ -232,7 +232,7 @@ alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -
 alias burn='pkill -9'
 alias px='ps aux | grep '
 alias ct='column -t'
-alias dfc='df -hPT | column -t' 
+alias dfc='df -hPT | column -t'
 alias untar='tar -zxvf'
 alias ipext='curl ipinfo.io/ip'
 alias ipin='hostname -I'
@@ -265,12 +265,12 @@ alias diskspace="du -S | sort -n -r |more"
 alias folders="find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
 # Raccourcis pour la gestion des paquetages :
-#	
+#
 alias apti='sudo apt-get install'
 alias apts="sudo apt-cache search"
-alias aptr='sudo apt-get remove' 
+alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
 alias maj="sudo apt update && sudo apt upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
 
 # Arrêt / Reboot :
@@ -306,14 +306,14 @@ alias now='date +"%T"'
 # alias usbb='rsync -avz /media/usbdisk/ ~/backup/usb/'
 
 ###############################
-# Pour les différentes applis : 
+# Pour les différentes applis :
 ###############################
 
 # Raccourcis pour 'grep' :
 #
 alias {G,g}{re,er}p='grep'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
@@ -324,7 +324,7 @@ alias grep='grep --color=auto'
 #alias svi='sudo nvim'
 #alias us="su"
 
-# VIM : 
+# VIM :
 #
 alias vi='nvim'
 alias edit='nvim'
@@ -371,7 +371,7 @@ alias accio=ansibleSetup
 alias ans='ansible'
 alias ansp='ansible-playbook'
 
-# Docker : 
+# Docker :
 alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dockd="docker run -d -P"			# Daemonized container
 alias docki="docker run -t -i -P"       	# Insteractive container
@@ -444,10 +444,10 @@ alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
 
 # Générateur de mots de passe (indiquer un chiffre pour la longueur) :
-genpasswd() { 
+genpasswd() {
 	local l=$1
    	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
+      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
 	}
 
 # Améliorer l'appel des pages de man :
@@ -495,7 +495,7 @@ snow() {
    }
 
 # Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
-function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
+function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; }
 
 # Serve a directory on a given port
 # https://davidwalsh.name/serve-directory-python
@@ -534,7 +534,7 @@ function up() {
 	      }
 	}
 
-# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
 function safevi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
@@ -570,17 +570,17 @@ alias colle="ls /tmp/copie* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/copie.% .
 
 
 fkill() {
-    local pid 
+    local pid
     if [ "$UID" != "0" ]; then
         pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi  
+    fi
 
     if [ "x$pid" != "x" ]
     then
         echo $pid | xargs kill -${1:-9}
-    fi  
+    fi
 }
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor

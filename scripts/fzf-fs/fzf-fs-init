@@ -18,8 +18,8 @@
 #trap '(read -p "[$BASH_SOURCE:$LINENO] $BASH_COMMAND?")' DEBUG
 #exec 2>> ~/fzf-fs.log
 #typeset vars_base=$(set -o posix ; set)
-#fgrep -v -e "$vars_base" < <(set -o posix ; set) | \
-#egrep -v -e "^BASH_REMATCH=" \
+#grep -F -v -e "$vars_base" < <(set -o posix ; set) | \
+#grep -E -v -e "^BASH_REMATCH=" \
 #         -e "^OPTIND=" \
 #         -e "^REPLY=" \
 #         -e "^BASH_LINENO=" \

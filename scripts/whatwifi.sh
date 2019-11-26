@@ -11,6 +11,6 @@
 #####################################################
 #
 
-sudo iw dev wlo1 scan | egrep "SSID|signal" | awk -F ":" '{print $2}' | sed 'N;s/\n/:/' | sort
+sudo iw dev wlo1 scan | grep -E "SSID|signal" | awk -F ":" '{print $2}' | sed 'N;s/\n/:/' | sort
 
 
