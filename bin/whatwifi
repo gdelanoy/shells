@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #####################################################
 # Nom du script : whatwifi
 # Utilité: Ce script sert à afficher les ssid des réseaux wifi disponibles,
@@ -11,6 +11,4 @@
 #####################################################
 #
 
-sudo iw dev wlo1 scan | egrep "SSID|signal" | awk -F ":" '{print $2}' | sed 'N;s/\n/:/' | sort
-
-
+sudo iw dev wlo1 scan | awk -F ":" '/(SSID|signal)/{print $2}' | sed 'N;s/\n/:/' | sort
