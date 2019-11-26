@@ -248,7 +248,7 @@ alias -g C='| wc -l'
 alias -g CA="2>&1 | cat -A"
 alias -g DN=/dev/null
 alias -g NE="2> /dev/null"
-alias -g EG='|& egrep'
+alias -g EG='|& grep -E'
 alias -g EH='|& head'
 alias -g EL='|& less'
 alias -g ET='|& tail'
@@ -258,7 +258,7 @@ alias -g M='| most'
 alias -g RNS='| sort -nr'
 alias -g S='| sort'
 alias -g X='| xargs'
-alias -g X0G='| xargs -0 egrep'
+alias -g X0G='| xargs -0 grep -E'
 alias -g X0='| xargs -0'
 alias -g NF='*(.om[1])' # newest file
 alias -g G='| grep -'
@@ -535,10 +535,10 @@ alias folders="sudo find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 # Raccourcis pour la gestion des paquetages :
 #
 alias apti='sudo apt-get install'
-alias apts="sudo apt-cache search"
+alias apts="apt-cache search"
 alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
+alias aptclean='{ sudo apt-get autoremove; sudo apt-get clean; } && orphand'
 alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
 
 # Arrêt / Reboot :
@@ -582,8 +582,8 @@ alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
 # Raccourcis pour 'grep' :
 #
 alias {G,g}{re,er}p='grep'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
