@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 #####################################################
-# Nom du script : fgrep
+# Nom du script : grep -F
 # Utilité: Ce script sert à trouver des fichiers contenant une chaine donnée
 # Usage: fgrep simone (renvoie tous les fichiers contenant 'simone' )
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
@@ -10,6 +10,4 @@
 #####################################################
 #
 
-find . -type f -print0 2>/dev/null | xargs -0 grep --color=AUTO -Hn "$@" 2>/dev/null
-
-
+grep -IHsrn --color=AUTO "$@"
