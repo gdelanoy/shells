@@ -56,11 +56,11 @@ function update_tmux()
 function os_name()
 {
     if [ -f /etc/os-release ]; then
-        cat /etc/os-release | egrep "^ID=" | sed "s/ID=//g"
+        grep -E "^ID=" /etc/os-release | sed "s/ID=//g"
     elif [ -f /etc/lsb-release ]; then
-        cat /etc/lsb-release | egrep "^DISTRIB_ID=" | sed "s/DISTRIB_ID=//g"
+        grep -E "^DISTRIB_ID=" /etc/lsb-release | sed "s/DISTRIB_ID=//g"
     elif [ -f /etc/centos-release ]; then
-        cat /etc/centos-release | awk '{print $1}' | tr "[:upper:]" "[:lower:]"
+        awk '{print tolower($1)}' /etc/centos-release
     else
         echo "unknown"
     fi
@@ -69,9 +69,9 @@ function os_name()
 function os_version()
 {
     if [ -f /etc/os-release ]; then
-        cat /etc/os-release | egrep "^VERSION_ID=" | sed "s/VERSION_ID=//g"
+        grep -E "^VERSION_ID=" /etc/os-release | sed "s/VERSION_ID=//g"
     elif [ -f /etc/lsb-release ]; then
-        cat /etc/lsb-release | egrep "^DISTRIB_RELEASE=" | sed "s/DISTRIB_RELEASE=//g"
+        grep -E "^DISTRIB_RELEASE=" /etc/lsb-release | sed "s/DISTRIB_RELEASE=//g"
     else
         echo "unknown"
     fi
@@ -91,7 +91,7 @@ function _banner()
     case $1 in
         "hi")
             cat << EOF
-   ___           _        _ _  
+   ___           _        _ _
   |_ _|_ __  ___| |_ __ _| | |  $PLATFORM
    | || '_ \/ __| __/ _v | | |  $(abs-path $CWD)
    | || | | \__ \ || (_| | | |
@@ -120,7 +120,7 @@ function _progress()
 
     if [ $OPTION_VERBOSE -gt 0 -o "$name" == "vim"  ]; then
         $func &
-    else 
+    else
         $func 1>/dev/null 2>&1 &
     fi
     pid=$!
@@ -133,4 +133,4 @@ function _progress()
     done
 
     echo " "
-} 
+}
