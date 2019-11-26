@@ -1,10 +1,10 @@
 fkill() {
-    local pid 
-  pid=$(ps -auxwww | sed 1d | fzf -m --reverse --height=30% --prompt='(╯°□°）╯︵ ┻━┻ ' --margin=1,20% | awk '{print $2}')
+	local pid
+	pid=$(ps -auxwww --no-headers | fzf -m --reverse --height=30% --prompt='(╯°□°）╯︵ ┻━┻ ' --margin=1,20% | awk '{print $2}')
 
-  if [ "x$pid" != "x" ]
-  then
-    echo $pid | xargs kill -${1:-9}
-  fi
+	[ -n "$pid" ] || return 1
+	for I in $pid; do
+		kill -${1:-9}
+	done
 }
 fkill
