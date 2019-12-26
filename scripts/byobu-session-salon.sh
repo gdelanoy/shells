@@ -95,6 +95,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'find . -ctime -31 | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
