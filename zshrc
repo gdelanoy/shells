@@ -470,7 +470,7 @@ alias vf="cd"
 alias see="most"
 alias mpv="mpv --no-audio-display"
 alias couleurs="grep  '# Color' ~/.bashrc"
-alias cls="clear"
+alias cls="true; clear"
 
 # Des gadgets rigolos ( il en faut ;-) ) :
 #
