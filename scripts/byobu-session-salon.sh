@@ -82,23 +82,26 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Trois'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
- byobu-tmux send-keys -t 0 'sursyno'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
+ byobu-tmux send-keys -t 1 'sursyno'
 
 # And a last one
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Quatre'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'cd ~/Téléchargements' 'C-m'
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'find . -ctime -3 | lolcat' 'C-m'
- byobu-tmux send-keys -t 1 'find . -iname "*'
- byobu-tmux send-keys -t 0 'cd ~/Vidéos' 'C-m'
+ byobu-tmux send-keys -t 0 'cd ~/Téléchargements' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'find . -iname "*.*" -ctime -3 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -ctime -31 | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
+ byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
+ byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 1 'find . -iname "*'
 
  # OK, that wasn't the last one yet ...
 
