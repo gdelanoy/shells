@@ -588,7 +588,9 @@ alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
 #
-# alias sudo='nocorrect sudo '
+alias sudo='nocorrect sudo '
+
+alias please='sudo $(fc -ln -1)'
 
 # function please (){
 #  args="$@"
