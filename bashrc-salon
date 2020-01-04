@@ -2,8 +2,7 @@
 # Le Path et les variables système :
 #####################################
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:~/fzf-fs"
-# PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:~/fzf-fs:~/.shells/bin"
 ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
@@ -15,7 +14,7 @@ umask 022
 export PATH PS1
 
 # FZF :
-
+export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
 export FZF_DEFAULT_OPTS="--height 20% --layout=reverse --multi --preview --exact --prompt='¯\_(ツ)_/¯ ' --margin=0,20%"
 export FZF_CTRL_T_OPTS="--prompt='¯\_(ツ)_/¯ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"
 export FZF_CTRL_R_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
@@ -44,8 +43,6 @@ export SAVEHIST=100
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-HISTCONTROL="ignorespace"
-HISTCONTROL="ignoredups"
 HISTCONTROL="ignoreboth"
 HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
 
@@ -86,165 +83,16 @@ fi
 ##############
 #
 
-# Extraction facile :
-extract () {
-  if [ -f $1 ] ; then
-      case $1 in
-          *.tar.bz2)   tar xvjf $1    ;;
-          *.tar.gz)    tar xvzf $1    ;;
-          *.bz2)       bunzip2 $1     ;;
-          *.rar)       rar x $1       ;;
-          *.gz)        gunzip $1      ;;
-          *.tar)       tar xvf $1     ;;
-          *.tbz2)      tar xvjf $1    ;;
-          *.tgz)       tar xvzf $1    ;;
-          *.zip)       unzip $1       ;;
-          *.Z)         uncompress $1  ;;
-          *.7z)        7z x $1        ;;
-          *)           echo "don't know how to extract '$1'..." ;;
-      esac
-  else
-      echo "'$1' is not a valid file!"
-  fi
-}
-
-# Créer une archive à partir d'un répertoire donné :
-mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
-mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
-
-# Créer un répertoire ET cd dedans :
-function mkcd() {
-    mkdir -p -v $1
-    cd $1
-}
-
-# Chiffrement / Déchiffrement :
-encrypt ()
-{
-gpg -ac --no-options "$1"
-}
-decrypt ()
-{
-gpg --no-options "$1"
-}
-
-# Chercher, trouver :
-function findc()
-   {
-      find . -type f | xargs grep -nHi "${1}"
-   }
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
 alias fd='find / -type d -name $1'
 alias ffi='sudo find / -iname $1'
 
 # Générateur de mots de passe (indiquer un chiffre pour la longueur) :
-genpasswd() { 
-	local l=$1
-   	[ "$l" == "" ] && l=16
-      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
-	}
 
-# Améliorer l'appel des pages de man :
-function man()
-{
-    for i ; do
-        xtitle The $(basename $1|tr -d .[:digit:]) manual
-        command man -a "$i"
-    done
-}
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
-# Déboguage en http :
-hthead () { /usr/bin/curl -I -L $@ ; }
-htdebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
-
-
-# Créer une archive (*.tar.gz) à partir d'un répertoire donné :
-function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-
-# Créer une archive ZIP archive d'un fichier ou d'un répertoire :
-function makezip() { zip -r "${1%%/}.zip" "$1" ; }
-
-bofh(){
-if [ -x /usr/games/fortune ]; then
-	fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat
-fi
-}
-# Gestion des processus :
-myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
-pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
-
-# Faire répéter une commande n fois :
-function repeat()       # Repeat n times command.
-{
-    local i max
-    max=$1; shift;
-    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
-        eval "$@";
-    done
-}
-
-# Montrer tous les paquetages installés :
-showpkg () {
-  apt-cache pkgnames | grep -i "$1" | sort
-  return;
-}
-
-
-# Pour Noël :
-snow() {
-	           clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|gawk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
-   }
-
-# Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
-function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
-
-# Serve a directory on a given port
-# https://davidwalsh.name/serve-directory-python
-# $1 = port
-# Example: servedir 8080
-servedir() {
-  # Allow myself to change the port ($1)
-  python -m SimpleHTTPServer "$1"
-}
-
-# Voir la liste des services lancés lisiblement :
-function services() { printf "$(service --status-all 2>&1|sed -e 's/ + /\\E42m + \\E0m/g' -e 's/ - /\\E41m - \\E0m/g' -e 's/ ? /\\E43m ? \\E0m/g')\n"; }
-
-# Interroger le serveur LDAP de la salle de formation :
-function ldapfind() {
-	        ldapsearch -x -h annuaire.capen.sis -b dc=capen,dc=sis uid=$1
-	}
-
-#  Lancer une appli indépendamment du shell d'origine et sans sortie :
-function nh() {
-	    nohup "$@" &>/dev/null &
-    }
-# Faut-il vraiment expliquer celle-là ? O:-)
-function rtfm() { help $@ || man $@ || $BROWSER "http://www.google.com/search?q=$@"; }
-
-# Montrer les différences entre deux fichiers en couleurs :
-function showdiff()
-{
-	wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' $1 $2
-}
-
-# Remonter une arborescence autant de niveaux que je le mentionne :
-function up() {
-	[ "${1/[^0-9]/}" == "$1" ] && {
-	 local ups=""
-	 for ((i=1; i<=$1; i++))
-	 do
-	     ups=$ups"../"
-	 done
-         cd $ups
-	      }
-	}
-
-# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
-
-function safevi() {
+function svi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
 }
 
@@ -308,14 +156,14 @@ cd -
 	}
 
 # Comme "please", mais on pose poliment la question (merci Canard) :
-function fuck() {                                                                    
-     local last_cmd=$(history -p !!)                                                  
-     echo -n "run command '${last_cmd}' with sudo? [y/n]: "                           
-     read -s -n 1 confirm                                                             
-     echo ""                                                                          
-     if [ "${confirm}" = "y" ]; then                                                  
-     sudo ${last_cmd}                                                             
-     fi                                                                               
+function fuck() {
+     local last_cmd=$(history -p !!)
+     echo -n "run command '${last_cmd}' with sudo? [y/n]: "
+     read -s -n 1 confirm
+     echo ""
+     if [ "${confirm}" = "y" ]; then
+     sudo ${last_cmd}
+     fi
 	}
 
 
@@ -367,8 +215,8 @@ alias lm='ls -al |most'        # pipé dans 'most'
 alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
-# 
-alias tree='tree -Cs'       
+#
+alias tree='tree -Cs'
 alias less='less --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
@@ -419,7 +267,7 @@ alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -
 alias burn='pkill -9'
 alias px='ps aux | grep '
 alias ct='column -t'
-alias dfc='df -hPT | column -t' 
+alias dfc='df -hPT | column -t'
 alias untar='tar -zxvf'
 alias ipext='curl ipinfo.io/ip'
 alias ipin='hostname -I'
@@ -446,12 +294,9 @@ alias mdpdf=" ~/.pandoc/md2pdf"
 
 alias script='script ma_session-$(date +%d-%m-%Y-%T).txt'
 
-# alias less="bat"
-# alias more="bat"
-# alias most="bat"
 
 alias pping="prettyping"
-alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"  
+alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"
 
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
@@ -463,12 +308,12 @@ alias diskspace="du -S | sort -n -r |more"
 alias folders="find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
 # Raccourcis pour la gestion des paquetages :
-#	
+#
 alias apti='sudo apt-get install'
 alias apts="sudo apt-cache search"
-alias aptr='sudo apt-get remove' 
+alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
 alias maj="sudo apt-get update && sudo apt-get upgrade --only-upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log; sudo apt-get -f install; sudo apt autoclean; sudo apt autoremove"
 
 # Arrêt / Reboot :
@@ -493,61 +338,10 @@ alias now='date +"%T"'
 alias safe-in-cloud='encfs "/home/guillaume/Cloud/MEGAsync/Cloud Drive/Safe/" /home/guillaume/safe-in-cloud/ && df -h | grep -i cloud'
 alias safe-on-usb='encfs /media/$USER/USBPRO/Coffre-fort ~/safe-on-usb && df -h | grep safe-on'
 
-# Mes scripts de session byobu :
-alias hop='bash ~/.scripts/byobu-opensession.sh'
-alias poe='bash ~/.scripts/byobu-poe.sh'
+# Mes scripts de session byobu alias hop='bash ~/.scripts/byobu-opensession.sh'
+alias hop='bash ~/.shells/scripts/byobu-session-$(hostname).sh'
+alias poe='bash ~/.scripts-poe.sh'
 
-# POUR LE BOULOT :
-#
-# Wake On LAN pour la salle de formation :
-# Tous :
-# alias wola="wakeonlan `cat /etc/WoL/macadd-all.txt` && order4-sucmd reboot"
-# Chaque poste individuellement :
-# alias wol1="wakeonlan `cat /etc/WoL/macadd-formation1.txt`"
-# alias wol2="wakeonlan `cat /etc/WoL/macadd-formation2.txt`"
-# alias wol3="wakeonlan `cat /etc/WoL/macadd-formation3.txt`"
-# alias wol4="wakeonlan `cat /etc/WoL/macadd-formation4.txt`"
-# alias wol5="wakeonlan `cat /etc/WoL/macadd-formation5.txt`"
-# alias wol6="wakeonlan `cat /etc/WoL/macadd-formation6.txt`"
-# alias wol7="wakeonlan `cat /etc/WoL/macadd-formation7.txt`"
-# alias wol8="wakeonlan `cat /etc/WoL/macadd-formation8.txt`"
-# alias wol9="wakeonlan `cat /etc/WoL/macadd-formation9.txt`"
-# alias wol10="wakeonlan `cat /etc/WoL/macadd-formation10.txt`"
-#
-# Prise de contrôle graphique des postes de la salle de formation :
-#
-alias remote1='xtightvncviewer -via "formateur@formation1" localhost:0'
-alias remote2='xtightvncviewer -via "formateur@formation2" localhost:0'
-alias remote3='xtightvncviewer -via "formateur@formation3" localhost:0'
-alias remote4='xtightvncviewer -via "formateur@formation4" localhost:0'
-alias remote5='xtightvncviewer -via "formateur@formation5" localhost:0'
-alias remote6='xtightvncviewer -via "formateur@formation6" localhost:0'
-alias remote7='xtightvncviewer -via "formateur@formation7" localhost:0'
-alias remote8='xtightvncviewer -via "formateur@formation8" localhost:0'
-alias remote9='xtightvncviewer -via "formateur@formation9" localhost:0'
-alias remote10='xtightvncviewer -via "formateur@formation10" localhost:0'
-#
-# Raccourcis pratiques pendant les cours :
-#
-alias sss="ssh formateur@serveur"
-alias sse="ssh formateur@serveuse"
-#
-alias ss1="ssh formateur@formation1"
-alias ss2="ssh formateur@formation2"
-alias ss3="ssh formateur@formation3"
-alias ss4="ssh formateur@formation4"
-alias ss5="ssh formateur@formation5"
-alias ss6="ssh formateur@formation6"
-alias ss7="ssh formateur@formation7"
-alias ss8="ssh formateur@formation8"
-alias ss9="ssh formateur@formation9"
-alias ss10="ssh formateur@formation10"
-#
-alias ssv="ssh formateur@192.168.20.82"
-alias ssv2="ssh formateur@192.168.20.83"
-#
-# Pour que les accèdent directment à leur VM Debian 7 sur le Proxmox de la salle de formation :
-alias vm7='ssh formation@serveur -p 2200$(echo $HOSTNAME | tail -c2)'
 
 ################
 # à peaufiner :
@@ -557,7 +351,7 @@ alias vm7='ssh formation@serveur -p 2200$(echo $HOSTNAME | tail -c2)'
 
 
 ###############################
-# Pour les différentes applis : 
+# Pour les différentes applis :
 ###############################
 
 # Raccourcis pour 'grep' :
@@ -575,7 +369,7 @@ alias suod='sudo'
 alias svi='sudo nvim'
 alias us="su"
 
-# VIM : 
+# VIM :
 #
 alias vi='nvim'
 alias edit='nvim'
@@ -625,32 +419,6 @@ alias accio=ansibleSetup
 alias ans='ansible'
 alias ansp='ansible-playbook'
 
-# Docker : 
-# alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
-# alias dockd="docker run -d -P"			# Daemonized container
-# alias docki="docker run -t -i -P"       	# Insteractive container
-
-# dockb() { docker build -t="$1" .; }		# docker build
-# dockri() { docker rmi $(docker images -q); }	# rm image
-# dockrm() { docker rm $(docker ps -q -a); }	# rm container
-
-# alias dockmenage="docker container rm $(docker container ps -a -q)"
-# alias dockercleancontainers="docker ps -aq | xargs docker rm"
-# alias dockercleanimages="docker images -aq -f dangling=true | xargs docker rmi"
-# alias dockerclean="dockercleancontainers && dockercleanimages"
-# alias docker-killall="docker ps -q | xargs docker kill"
-
-# alias dl='docker ps -l -q'
-# alias drm="docker rm"
-# alias dps="docker ps -a"
-# alias dockimg="docker images | uniq -f 3"
-# alias dockps="docker ps -a | less -S"
-# alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1"
-# alias docklog="docker logs -f -t $1"
-# alias dockstat="docker stats $1"
-# alias dockrmimg="docker images -aq -f dangling=true | xargs docker rmi"
-# alias dockkillall="docker ps -q | xargs docker kill"
-
 
 # LXC :
 
@@ -664,90 +432,23 @@ alias lxcstart="lxc-start -n $@"
 alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
 
 #
-# Générer des Shell Scripts avec de bonnes options de départ :
-#
-
-shscr(){
-	echo "#!/bin/bash" > ${1}
-	echo "######################################" >> ${1} 
-	echo "# Nom du script : $(basename $1)" >> ${1}
-	echo "# Utilité: ce script sert à faire pousser des fleurs" >> ${1}
-	echo "# Usage: ... (le cas échéant)" >> ${1}
-	echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com" >> ${1}
-	echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
-	echo "######################################" >> ${1}
-	echo "#" >> ${1}
-	echo "set -o errexit" >> ${1}
-        echo "set -o nounset" >> ${1}
-	echo "#" >> ${1}
-	echo "# VARIABLES :" >> ${1}
-	echo "#" >> ${1}
-	echo '#Set Colors ' >> ${1}
-	echo '# ' >> ${1}
-	echo 'bold=$(tput bold) ' >> ${1}
-	echo 'underline=$(tput sgr 0 1) ' >> ${1}
-	echo 'reset=$(tput sgr0) ' >> ${1}
-	echo 'purple=$(tput setaf 171) ' >> ${1}
-	echo 'red=$(tput setaf 1) ' >> ${1}
-	echo 'green=$(tput setaf 76) ' >> ${1}
-	echo 'tan=$(tput setaf 3) ' >> ${1}
-	echo 'blue=$(tput setaf 38) ' >> ${1}
-	echo '# ' >> ${1}
-	echo '# Headers and  Logging ' >> ${1}
-	echo '# ' >> ${1}
-	echo 'e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_arrow() { printf "➜ $@\n" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_success() { printf "${green}✔ %s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_error() { printf "${red}✖ %s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_warning() { printf "${tan}➜ %s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_bold() { printf "${bold}%s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo 'e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' >> ${1}
-	echo '} ' >> ${1}
-	echo "#" >> ${1}
-	echo "# FONCTIONS :" >> ${1}
-	echo "#" >> ${1}
-	echo "stamp(){ 'date "+%A_%d/%m/%Y_%Hh%M"' }" >> ${1}
-	echo "tps=$(date +%F)" >> ${1}
-	echo "now=$(date +%T)" >> ${1}
-	echo "source /etc/skel/.scripts/functions.sh" >> ${1}
-	echo "#" >> ${1}
-	echo "#" >> ${1}
-	echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
-	echo "#" >> ${1}
-	echo "" >> ${1}
-	echo "e_header $(basename ${1})" >> ${1}
-	echo "" >> ${1}
-	echo "" >> ${1}
-	chmod 750 ${1}
-	vim ${1} 
-}
-
-#
 # FZF : The Fuzzy Finder :
 #
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 fkill() {
-    local pid 
+    local pid
     if [ "$UID" != "0" ]; then
         pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi  
+    fi
 
     if [ "x$pid" != "x" ]
     then
         echo $pid | xargs kill -${1:-9}
-    fi  
+    fi
 }
 
 
@@ -779,5 +480,4 @@ fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;   
 
 
 alias f='. fzf-fs'
-alias byz='tmux list-windows -F "#I:#W" | fzf-tmux | cut -d ":" -f 1 | xargs tmux select-window -t'
 # [ -f ~/.oh-my-fzf.bash ] && . ~/.oh-my-fzf.bash
