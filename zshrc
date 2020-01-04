@@ -217,7 +217,6 @@ alias history='fc -il 1'
 #  fi
 # fi
 
-
 # Des couleurs :
 #
 
@@ -588,11 +587,6 @@ alias grep='grep --color=auto'
 alias sudo='nocorrect sudo '
 
 alias please='sudo $(fc -ln -1)'
-
-# function please (){
-#  args="$@"
-#    /usr/bin/sudo -u "$USER" zsh -i -c "$args"
-#    }
 
 alias suod='sudo'
 alias sudosu='sudo su -'

@@ -1,0 +1,51 @@
+# The following lines are desirable for IPv6 capable hosts
+
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+# This hosts file is a merged collection of hosts from reputable sources,
+# with a dash of crowd sourcing via Github
+#
+# Date: August 28 2017
+# Number of unique domains: 38,376
+#
+# Fetch the latest version of this file: https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+# Project home page: https://github.com/StevenBlack/hosts
+#
+# ===============================================================
+                                                                                                       127.0.0.1 localhost                                                                  
+127.0.0.1 localhost.localdomain                                                      
+127.0.0.1 local                                                                      
+255.255.255.255 broadcasthost                                                        
+::1 localhost                                                                        
+fe80::1%lo0 localhost                                                                
+127.0.1.1   salon                                                                    
+
+# Entrées persos :                                                                   
+
+192.168.1.254   routeur.dela.noy	routeur box
+192.168.1.254   gw.dela.noy		    gw
+
+192.168.1.1     serveur.dela.noy    serveur
+192.168.1.2     syno.dela.noy		syno synology
+192.168.1.3     salon.dela.noy      salon
+192.168.1.4     chambre.dela.noy    chambre
+
+192.168.1.10    annuaire.dela.noy           annuaire ldap pdc
+192.168.1.11    git.dela.noy                git gitlab
+192.168.1.12    www.dela.noy                www web ouaibe wiki blog intra intranet
+
+
+192.168.1.69    proxmox.dela.noy proxmox pve
+192.168.1.31    formation.dela.noy formation
+
+# LXC Containers :
+#
+
+10.0.3.113	web	web.dela.noy www.dela.noy
+
+# Custom host records are listed here.
+#
