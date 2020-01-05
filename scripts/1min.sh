@@ -1,0 +1,28 @@
+#!/bin/bash
+######################################################################
+# Nom du script : 1min
+# Utilité: Ce script sert à compter des intervalles d'une minute.
+#           C'est pratique, pour faire de la gyme par exemple.
+# Usage: ... (le cas échéant)
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
+# License: Ce script est sous license GPL v3.
+# Veuillez consulter https://www.gnu.org/licenses/quick-guide-gplv3.fr.html
+# La licence GPLv3 vous autorise à faire commerce des produits sous licence.
+# Si toutefois vous parvenez à vendre l'un de mes scripts, vous êtes soit
+# un vendeur de génie, soit un grippe-sou de classe mondiale ;-) .
+# Créé le: dimanche_05/01/2020 à 22h30
+######################################################################
+#
+espeak -s 110 -p 0.000000001 -v mb-fr1 'Je vais compter 30 minutes avec des intervalles de 10 secondes.' 2>/dev/null
+for y in {1..30}
+    do
+    espeak -s 110 -p 0.000000001 -v mb-fr1 "$y minute dans 10 secondes" 2>/dev/null
+    sleep 9
+    espeak -s 110 -p 0.000000001 -v mb-fr1 "TOP" 2>/dev/null
+        for i in {1..60}
+        do
+    #    echo $i
+        espeak -s 165 -p 0.0000001 -v mb-fr1 "$i" 2>/dev/null
+    #    sleep 0.07
+    done 
+done 
