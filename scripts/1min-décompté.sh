@@ -13,26 +13,19 @@
 # Créé le: dimanche_05/01/2020 à 22h30
 ######################################################################
 #
-espeak -s 110 -p 0.000000001 -v mb-fr1 'Je vais compter 30 séquences de une minute chacune, avec des pauses de 30 secondes.' 2>/dev/null
+espeak -s 110 -p 0.000000001 -v mb-fr1 'Je vais compter 30 minutes avec des pauses de 30 secondes.' 2>/dev/null
 for y in {1..30}
     do
     espeak -s 110 -p 0.000000001 -v mb-fr1 "OK." 2>/dev/null
-    espeak -s 110 -p 0.000000001 -v mb-fr1 "séquence numéro $y dans 30 secondes" 2>/dev/null
+    espeak -s 110 -p 0.000000001 -v mb-fr1 "$y minute dans 30 secondes" 2>/dev/null
     sleep 9
     espeak -s 110 -p 0.000000001 -v mb-fr1 "encore 20 secondes" 2>/dev/null
     sleep 9
     espeak -s 110 -p 0.000000001 -v mb-fr1 "encore 10 secondes" 2>/dev/null
     sleep 9
     espeak -s 110 -p 0.000000001 -v mb-fr1 "TOP" 2>/dev/null
-
-
-    sleep 14
-        espeak -s 110 -p 0.000000001 -v mb-fr1 "15 secondes" 2>/dev/null
-    sleep 14
-        espeak -s 110 -p 0.000000001 -v mb-fr1 "30 secondes" 2>/dev/null
-    sleep 14
-        espeak -s 110 -p 0.000000001 -v mb-fr1 "45 secondes" 2>/dev/null
-    sleep 14
-        espeak -s 110 -p 0.000000001 -v mb-fr1 "Et voilà." 2>/dev/null
-
+        for i in {1..60}
+        do
+        espeak -s 165 -p 0.0000001 -v mb-fr1 "$i" 2>/dev/null
+    done
 done
