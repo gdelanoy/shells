@@ -1,0 +1,74 @@
+#
+# Blacklister les mises à jour du serveur X et du driver Nouveau, pour pas se faire péter
+# une ènième fois la conf' de mes 4 écrans !
+# 
+
+ apt-mark hold xserver-xorg-video-nouveau
+ apt-mark hold nouveau-firmware
+ apt-mark hold libdrm-nouveau2
+ apt-mark hold xserver-xorg*
+ apt-mark hold xorg*
+
+# Mise à jour :
+
+ apt update
+ apt upgrade -y
+
+# Les indispensables :
+
+apt install vim neovim most wget curl par net-tools
+
+# Environnement ;
+
+update-alternatives --config editor
+update-alternatives --config pager
+
+# Dans nmtui, fixer l'@IP de la machine
+
+# Restauration du répetoire /root à partir d'un backup
+
+# Décompression d'une archive /etc, et restauration au moins de hosts et de sudoers
+
+# Création des répertoires qui vont bien dans /mnt :
+
+chambre/  donnees/  portable/  serveur/  syno/  test/
+
+# Et dans syno :
+
+IT/  MesDocs/  musique/  offsite/  sauvegardes/  tizzbird/
+
+# setup de sshfs, et montage des reps de syno pour restauration des paquets :
+
+apt install sshfs -y
+
+cd /mnt/syno/sauvegardes/live/Packages/
+cat sources.list > /etc/apt/sources.list
+yes | cp -R ./sources.list.d/* /etc/apt/sources.list.d/
+apt-key add Repo-2019-08-11.keys 
+
+ apt-get install dselect
+ dselect update
+ dpkg --set-selections < ~/Package.list
+ apt-get dselect-upgrade -y
+
+
+
+sudo dpkg-reconfigure libdvd-pkg 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
