@@ -721,3 +721,5 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
 alias son="pulseaudio -k && pulseaudio -D"
 
 # source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+source /home/guillaume/.config/broot/launcher/bash/br

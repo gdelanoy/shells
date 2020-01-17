@@ -23,6 +23,7 @@ export FZF_ALT_C_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --l
 export FZF_COMPLETION_TRIGGER='²'
 
 
+source /home/guillaume/.config/broot/launcher/bash/br
 
 # Mon prompt est complexe, je le définis dans des fichiers à part :
 PS1=$(cat ~/.shells/ps1.txt)
@@ -457,6 +458,8 @@ alias diskspace="du -S | sort -n -r |more"
 # La taille des répertoires dans le rép. en cours :
 alias folders="find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
+alias br="br --sizes -dp"
+
 # Raccourcis pour la gestion des paquetages :
 #
 alias apti='sudo apt-get install'
@@ -780,3 +783,4 @@ fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;   
 alias f='. fzf-fs'
 alias byz='tmux list-windows -F "#I:#W" | fzf-tmux | cut -d ":" -f 1 | xargs tmux select-window -t'
 # [ -f ~/.oh-my-fzf.bash ] && . ~/.oh-my-fzf.bash
+
