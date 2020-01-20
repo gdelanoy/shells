@@ -481,3 +481,6 @@ fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;   
 
 alias f='. fzf-fs'
 # [ -f ~/.oh-my-fzf.bash ] && . ~/.oh-my-fzf.bash
+
+source /home/guillaume/.config/broot/launcher/bash/br
+alias br='br --sizes -dp'

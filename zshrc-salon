@@ -15,6 +15,8 @@ export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
 
+source /home/guillaume/.config/broot/launcher/bash/br
+
 ######################################################
 #
 #     Zplug Plug-Ins :
@@ -479,6 +481,8 @@ alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Loos'
 alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
 
+alias son="pulseaudio -k && pulseaudio -D"
+
 # Administration :
 #
 alias reload='source ~/.bashrc'
@@ -518,6 +522,7 @@ alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
 alias close='eject -t /dev/sr0'
 alias open='eject /dev/sr0'
+alias br='br --sizes -dp'
 
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
@@ -717,7 +722,3 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
                 echo;
                 ls -p --color=always "${__cd_path}";
         ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
-
-alias son="pulseaudio -k && pulseaudio -D"
-
-# source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

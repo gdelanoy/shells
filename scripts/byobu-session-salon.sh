@@ -112,6 +112,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'br' 'C-m'
 
 # THERE is the last one ;-)
 
