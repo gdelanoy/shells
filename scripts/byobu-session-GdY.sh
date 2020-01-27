@@ -6,20 +6,25 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys 'glances' 'C-m'
 
  byobu-tmux new-window
+ byobu-tmux rename-window 'Gotop'
+ byobu-tmux send-keys -t 0 'gotop' 'C-m'
+
+ byobu-tmux new-window
  byobu-tmux rename-window 'Logs'
- byobu split-window -v
-# byobu-tmux send-keys -t 1 'tail -f /var/log/*log /var/log/*/*log' 'C-m'
- byobu-tmux send-keys -t 0 'whowatch' 'C-m'
- byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
+ byobu-tmux send-keys 'lnav /var/log/ /var/log/*/' 'C-m'
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Qui'
+ byobu-tmux send-keys  'whowatch' 'C-m'
 
 # Encore une fenêtre ( ssh serveur + serveuse ) ...
  byobu-tmux new-window
  byobu-tmux rename-window 'Serveurs'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'ssh formateur@serveur' 'C-m'
+ byobu-tmux send-keys -t 0 'ssh formateur@serveur || exit' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'ssh formateur@serveuse' 'C-m'
+ byobu-tmux send-keys -t 1 'ssh formateur@serveuse || exit' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 1 'clear' 'C-m'
 
@@ -28,15 +33,13 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Files'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'cd /; fcd' 'C-m'
- byobu-tmux send-keys -t 1 'ranger' 'C-m'
+ byobu-tmux send-keys -t 1 'br --dp --hidden --sizes' 'C-m'
 
  # On crée une autre fenêtre ( Deux shells )...
  byobu-tmux new-window
  byobu-tmux rename-window 'Ansible'
  byobu split-window -v
  byobu-tmux send-keys -t 1 'sudo su' 'C-m'
- sleep 1
- byobu-tmux send-keys -t 1 'Aponno@stos' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
  sleep 1
@@ -91,12 +94,13 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Double'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'safe' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
 
 # Encore une fenêtre  ...
  byobu-tmux new-window
  byobu-tmux rename-window 'Simple'
- byobu-tmux send-keys 'byz' 'C-m'
+ # byobu-tmux send-keys 'byz' 'C-m'
 fi
 # Enter Byobu
  byobu-tmux attach -t $USER 
