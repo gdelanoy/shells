@@ -22,18 +22,14 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Serveurs'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'ssh formateur@serveur || exit' 'C-m'
- sleep 1
- byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'ssh formateur@serveuse || exit' 'C-m'
- sleep 1
- byobu-tmux send-keys -t 1 'clear' 'C-m'
-
+ 
  # On crée une nouvelle fenêtre et on la renomme ...
  byobu-tmux new-window
  byobu-tmux rename-window 'Files'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'cd /; fcd' 'C-m'
- byobu-tmux send-keys -t 1 'br --dp --hidden --sizes' 'C-m'
+ byobu-tmux send-keys -t 1 'broot -dp --hidden --sizes' 'C-m'
 
  # On crée une autre fenêtre ( Deux shells )...
  byobu-tmux new-window
@@ -94,7 +90,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Double'
  byobu split-window -v
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'safe' 'C-m'
+ byobu-tmux send-keys -t 0 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
 
 # Encore une fenêtre  ...
