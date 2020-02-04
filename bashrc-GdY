@@ -498,7 +498,7 @@ alias poe='bash ~/.scripts/byobu-poe.sh'
 # POUR LE BOULOT :
 #
 
-alias ck="/usr/bin/i3lock -n -c 000000"
+alias ck="/usr/bin/i3lock -n -c 000000 2>/dev/null"
 
 
 # Wake On LAN pour la salle de formation :
