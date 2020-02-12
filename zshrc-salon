@@ -522,7 +522,7 @@ alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
 alias close='eject -t /dev/sr0'
 alias open='eject /dev/sr0'
-alias br='br --sizes -dp'
+alias br='br --sizes --hidden -dp'
 
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'

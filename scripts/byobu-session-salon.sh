@@ -22,6 +22,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  # byobu-tmux send-keys -t 1 ':save-config' 'C-m'
  byobu-tmux send-keys -t 0 'sudo su' 'C-m'
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
+ byobu-tmux send-keys -t 0 'C-m'
 
 # On crée une nouvelle fenêtre et on la renomme ...
 
@@ -29,7 +30,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Files'
  byobu split-window -v
  # byobu-tmux send-keys -t 1 'ranger' 'C-m'
- byobu-tmux send-keys -t 1 'nnn' 'C-m'
+ byobu-tmux send-keys -t 1 'br' 'C-m'
  byobu-tmux send-keys -t 0 'tue' 'C-m'
 
  # Une nouvelle fenêtre pour vim avec son explorateur ...
@@ -96,11 +97,11 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'find . -ctime -31 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | lolcat' 'C-m'
+ byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*'
 
  # OK, that wasn't the last one yet ...
@@ -112,7 +113,8 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'br' 'C-m'
+ byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
+ byobu-tmux send-keys -t 0 'mpv '
 
 # THERE is the last one ;-)
 
