@@ -443,8 +443,7 @@ alias showconn="lsof -Pan -i tcp -i udp"
 
 alias mdpdf=" ~/.pandoc/md2pdf"
 
-alias script='script /tmp/.ma_session-$(date +%d-%m-%Y-%T).txt'
-
+alias script='script ~/.archives/script_sessions/session-$(date +%d-%m-%Y__%Hh-%Mm-%Ss).txt'
 
 alias pping="prettyping"
 alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"
