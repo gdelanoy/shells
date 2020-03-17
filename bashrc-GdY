@@ -396,8 +396,8 @@ alias kikoo="fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shu
 alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Wasquehal'
 alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
-
 alias joue='cd /media/guillaume/ssdusb/Musique/ ; mpv $(/home/guillaume/.fzf/bin/fzf); cd - '
+alias sl='sl -ae'
 
 
 # Administration :
@@ -428,7 +428,6 @@ alias debug="set -o nounset; set -o xtrace"
 alias ssytemctl='systemctl'
 alias sstatus="sudo systemctl status -l"
 alias srestart="sudo systemctl restart"
-# alias tue="sudo pkill"
 alias mem="free -h"
 alias cdtmp="cd $(mktemp -d)"
 alias top-commands='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
@@ -440,11 +439,8 @@ alias ipinfo='curl ipinfo.io'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
-
 alias mdpdf=" ~/.pandoc/md2pdf"
-
 alias script='script ~/.archives/script_sessions/session-$(date +%d-%m-%Y__%Hh-%Mm-%Ss).txt'
-
 alias pping="prettyping"
 alias fic="find /var/www/html/formation/ -type f -exec chmod 644 {} \; && find /var/www/html/formation/ -type d -exec chmod 755 {} \;"
 
