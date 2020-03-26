@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+import sys; sys.path = ['/usr/local/share/menumaker'] + sys.path
+import MenuMaker.CLI
