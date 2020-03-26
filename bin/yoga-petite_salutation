@@ -1,0 +1,45 @@
+#!/bin/bash
+voix="/usr/lib/x86_64-linux-gnu/espeak-data/voices/mb"
+# mpg123 /home/guillaume/Musique/Sons/Love_you_to_death.mp3
+clear
+cd $voix
+
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour $USER, nous sommes "`date +%A`" "`date +%d`" "`date +%B`". Il est "`date +%H`" heure "`date +%M`". Bienvenue pour ta petite salutation au soleil."
+sleep 5
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Prends place, on y va."
+sleep 10
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu es à genoux au bord du tapis. Respire calmement, puis lève les bras en prière au-dessus de la tête ...et redescends-les mains devant la poitrine, pour saluer..."
+sleep 3
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Namasté."
+sleep 3
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Inspire... puis penche-toi en avant pour aller poser le front sur le sol, et tends les bras loin devant toi."
+sleep 15
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Monte à quatre pattes... écarte les genoux de la largeur du bassin, puis fais le chat."
+sleep 5
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Do rond ... do creux."
+sleep 50
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Maintenant, tu arque-boute les orteil contre le sol. Monte les fesses pour faire le chien museau vers le sol. Pousse sur les mains. Descends les talons vers le sol en étirant le bassin. Baisse la tête et étends le do..."
+sleep 20
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Pied droit... entre les mains."
+sleep 25
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied gauche rejoint le pied droit. Tu relèves les fesses, tu tends les jambes et tu touches le sol devant tes pié avec le bout de tes doigts."
+sleep 25
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Bien. Plie les genoux... Pied droit, en arrière."
+sleep 20
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied gauche rejoint le pied droit. Tu fais la planche... reste bien droit."
+sleep 40
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Genoux à terre, tu viens te rassoir sur les talons tout en laissant les mains loin devant toi."
+sleep 20
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu ramènes les mains de chaque côté du visage. Et tu te redresses sur une inspiration..."
+sleep 6
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Lève les bras en prière au-dessus de la tête... Et redescends les mains devant la poitrine, pour saluer..."
+sleep 3
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Namasté."
+sleep 8
+aplay /home/guillaume/Musique/Sons/Om.wav
+clear
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est maintenant "`date +%H`" heure "`date +%M`"... ... Au revoir, $USER ... Namasté."
+# espeak -s 110 -p 0.000000001 -v mb-fr1 "Et voilà... ... Au revoir, $USER ... Namasté."
+sleep 20
+aplay /home/guillaume/Musique/Sons/Om.wav 
+exit

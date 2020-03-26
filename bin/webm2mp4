@@ -1,0 +1,4 @@
+#!/bin/bash
+#      ffmpeg -i "$1".webm -qscale 0 "$1" && rename 's/.webm/.mp4/' "$1"
+      ffmpeg -i "$1".webm -q 0 "$1" && rename 's/.webm/.mp4/' "$1"
+

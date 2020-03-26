@@ -1,0 +1,34 @@
+#!/bin/bash
+#####################################################
+# Nom du script : aa
+# Utilité: Trouver un fichier avec fzf, et l'ouvrir avec l'utilitaire approprié
+# Usage: aa (choisir le fichier, il choisit avec quoi l'ouvrir)
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com
+# Créé le: vendredi_05/07/2019 à 23h19
+#####################################################
+#
+cd /
+open () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.txt|*.sh|*.conf)       			vim $1 ;;
+          *.mp3|*.ogg|*.flac|*.wav|*.wma)    		mpv $1 ;;
+	  *.jp*g|*.gif|*.png|*.bmp)			ristretto $1 ;;
+	  *.avi|*.mkv|*.webm|*.mp*g|*.mov|*.wmv|*.mp4) 	vlc $1 ;;
+	  *.torrent)                                    deluge $1 ;;
+	  *.desktop|*.htm*|*.php*)			firefox $1 ;;
+	  *.kbd*)					keepassx $1 ;;
+          *.odp|*.odt|*.ods|*.doc*|*.xls*|*.ppt*)      	libreoffice $1 ;;
+          *)	echo "Je ne sais pas avec quoi ouvrir '$1'...  ¯\_(ツ)_/¯ " ;;
+      esac
+  else
+      echo "'$1' n'est pas un fichier valide !"
+  fi
+}
+
+if [ "$1" == "" ]; then
+	open $(fzf --height 30% --layout=reverse --exact --border --preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200')
+	else    
+	open $1
+fi
+cd - 
