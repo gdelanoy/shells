@@ -29,6 +29,9 @@ source /home/$USER/.shells/scripts/couleurs.shell
 #
 
 clear
-e_header uniquelines.sh
-
+# e_header uniquelines.sh
+echo ""
+echo ""
+ebu_bleu "Çi-dessous les lignes que l'on trouve dans $1, et pas dans $2 :"
+echo ""
 awk 'FNR==NR {a[$0]++; next} !a[$0]' $1 $2
