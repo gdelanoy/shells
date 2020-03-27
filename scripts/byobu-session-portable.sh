@@ -11,9 +11,12 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'gotop' 'C-m'
 
  byobu-tmux new-window
- byobu-tmux rename-window 'Logs'
- byobu split-window -v
+ byobu-tmux rename-window 'Who'
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
+
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Logs'
  byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
 
  # On crée une nouvelle fenêtre et on la renomme ...
@@ -100,13 +103,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'sursyno'
 
 # THERE is the last one !  ;-)
- byobu-tmux new-window
- byobu-tmux rename-window 'Double'
- byobu split-window -v
- byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'clear' 'C-m'
-
-# LOL  ...
  byobu-tmux new-window
  byobu-tmux rename-window 'Simple'
  byobu-tmux send-keys 'bofh' 'C-m'
