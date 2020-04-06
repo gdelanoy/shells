@@ -74,8 +74,8 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux rename-window 'Safe'
 # byobu split-window -v
  byobu-tmux send-keys -t 1 'clear' 'C-m'
-# byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
-# byobu-tmux send-keys -t 0 'calcurse' 'C-m'
+ byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
+ byobu-tmux send-keys -t 0 'sursyno' 'C-m'
 
 # And a last one
 
@@ -86,21 +86,21 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find . -ctime -15 | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*'
- byobu-tmux send-keys -t 0 'cd ~/Vidéos' 'C-m'
- byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'find . -iname "*.*" -ctime -15 | lolcat' 'C-m'
- byobu-tmux send-keys -t 0 'find . -iname "*'
+# byobu-tmux send-keys -t 0 'cd ~/Vidéos' 'C-m'
+# byobu-tmux send-keys -t 0 'clear' 'C-m'
+# byobu-tmux send-keys -t 0 'find . -iname "*.*" -ctime -15 | lolcat' 'C-m'
+# byobu-tmux send-keys -t 0 'find . -iname "*'
 
 # OK, that wasn't the last one yet ...
 
- byobu-tmux new-window
- byobu-tmux rename-window 'Cinq'
- byobu split-window -v
- byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'joue' 'C-m'
+# byobu-tmux new-window
+# byobu-tmux rename-window 'Cinq'
+# byobu split-window -v
+ byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'sursyno'
+ byobu-tmux send-keys -t 0 'joue' 'C-m'
+# byobu-tmux send-keys -t 1 'clear' 'C-m'
+# byobu-tmux send-keys -t 1 'sursyno'
 
 # THERE is the last one !  ;-)
  byobu-tmux new-window
