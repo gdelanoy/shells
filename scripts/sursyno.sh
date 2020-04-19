@@ -1,4 +1,15 @@
 #!/bin/bash
+######################################
+# Nom du script : sursyno.sh
+# Utilité: ce script sert à mounter mes partages sur mon NAS
+# Usage: ... (le cas échéant)
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com
+# Créé le: samedi_28/03/2020 à 11h38
+######################################
+#
+
+
+#!/bin/bash
 # Contrôler si Syno est actif et mounter ses partages si c'est le cas :
 if
         [ -d /mnt/syno/MesDocs/Documents ]

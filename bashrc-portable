@@ -781,3 +781,5 @@ fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;   
 alias f='. fzf-fs'
 alias byz='tmux list-windows -F "#I:#W" | fzf-tmux | cut -d ":" -f 1 | xargs tmux select-window -t'
 # [ -f ~/.oh-my-fzf.bash ] && . ~/.oh-my-fzf.bash
+
+source /home/guillaume/.config/broot/launcher/bash/br
