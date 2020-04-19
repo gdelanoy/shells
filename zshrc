@@ -659,6 +659,11 @@ ouvre () {
   fi
 }
 
+trv(){
+        ( find . -iname "*$1*" | xargs -0 grep -oihE '\\[a-z]+' | sort | uniq -c | sort -rn | less )
+}
+
+
 #
 # FZF : The Fuzzy Finder :
 #

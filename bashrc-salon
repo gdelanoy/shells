@@ -484,3 +484,4 @@ alias f='. fzf-fs'
 
 source /home/guillaume/.config/broot/launcher/bash/br
 alias br='br --sizes -dp'
+source ~/.bash_completion/alacritty
