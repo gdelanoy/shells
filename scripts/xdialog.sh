@@ -12,5 +12,5 @@
 # Créé le: mercredi_20/05/2020 à 23h10
 ######################################################################
 #
-sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 "${1}"
+sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 "${*}"
 
