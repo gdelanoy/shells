@@ -13,15 +13,25 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 # Tiens, une autre :
 
  byobu-tmux new-window
+ byobu-tmux rename-window 'bashtop'
+ byobu-tmux send-keys 'bashtop' 'C-m'
+
+# Et une autre :
+
+ byobu-tmux new-window
  byobu-tmux rename-window 'Logs'
  byobu split-window -v
  byobu-tmux send-keys -t 1 'sudo su' 'C-m'
  byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
+ byobu-tmux send-keys -t 1 'C-m'
+ byobu-tmux send-keys -t 1 'C-m'
+ byobu-tmux send-keys -t 1 'C-m'
  # sleep 2
  # byobu-tmux send-keys -t 1 ":filter-out may be a replay" 'C-m'
  # byobu-tmux send-keys -t 1 ':save-config' 'C-m'
  byobu-tmux send-keys -t 0 'sudo su' 'C-m'
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
+ byobu-tmux send-keys -t 0 'C-m'
  byobu-tmux send-keys -t 0 'C-m'
 
 # On crée une nouvelle fenêtre et on la renomme ...
@@ -97,12 +107,14 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu split-window -v
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*'
+ byobu split-window -v
 
  # OK, that wasn't the last one yet ...
 
