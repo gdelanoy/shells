@@ -107,14 +107,12 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu split-window -v
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*'
- byobu split-window -v
 
  # OK, that wasn't the last one yet ...
 
