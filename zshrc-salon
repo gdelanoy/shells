@@ -480,8 +480,8 @@ alias kikoo="fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shu
 alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Loos'
 alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
-
 alias son="pulseaudio -k && pulseaudio -D"
+alias plonk="pkill plank && nohup plank & ; rm -f nohup.out"
 
 # Administration :
 #
