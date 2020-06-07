@@ -111,7 +111,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'find . -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
+ byobu-tmux send-keys -t 1 'find Temp/ -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'find . -iname "*'
 
  # OK, that wasn't the last one yet ...
