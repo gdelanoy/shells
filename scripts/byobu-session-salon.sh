@@ -13,9 +13,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 # Tiens, une autre :
 
  byobu-tmux new-window
- byobu-tmux rename-window 'bashtop'
- byobu-tmux send-keys 'bashtop' 'C-m'
-
+ byobu split-window -v
+ byobu-tmux send-keys -t 0 'bashtop' 'C-m'
+ byobu-tmux send-keys -t 1 'br' 'C-m'
 # Et une autre :
 
  byobu-tmux new-window
@@ -33,15 +33,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
  byobu-tmux send-keys -t 0 'C-m'
  byobu-tmux send-keys -t 0 'C-m'
-
-# On crée une nouvelle fenêtre et on la renomme ...
-
- byobu-tmux new-window
- byobu-tmux rename-window 'Files'
- byobu split-window -v
- # byobu-tmux send-keys -t 1 'ranger' 'C-m'
- byobu-tmux send-keys -t 1 'br' 'C-m'
- byobu-tmux send-keys -t 0 'tue' 'C-m'
 
  # Une nouvelle fenêtre pour vim avec son explorateur ...
 
