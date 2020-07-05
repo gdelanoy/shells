@@ -20,8 +20,8 @@
 source /home/$USER/.shells/scripts/couleurs.shell
 clear
 
-
-sudo apt-get update && sudo apt list --upgradable && sudo apt-get upgrade --only-upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log
+e_header "Mise à jour du système :"
+sudo apt-get update && e_vert $(sudo apt list --upgradable) && sudo apt-get upgrade --only-upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log
 sudo apt-get -f install
 sudo apt autoclean
 sudo apt autoremove
