@@ -60,7 +60,7 @@
         echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
         echo "#" >> ${1}
         echo "" >> ${1}
-        echo "clear >> ${1}
+        echo "clear" >> ${1}
         echo "e_header $(basename ${1})" >> ${1}
         echo "" >> ${1}
         echo "" >> ${1}
