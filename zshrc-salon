@@ -10,7 +10,7 @@ EDITOR="/usr/bin/vim"
 BROWSER="/usr/bin/firefox"
 
 # Pour Espanso :
-XDG_CONFIG_HOME=/home/guillaume/.config
+XDG_CONFIG_HOME=/home/$USER/.config
 
 umask 022
 export PATH PS1 XDG_CONFIG_HOME
