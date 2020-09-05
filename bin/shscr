@@ -23,22 +23,33 @@
         echo "# Veuillez consulter https://anticapitalist.software" >> ${1}
         echo "# ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)" >> ${1}
         echo "# Copyright © [year] [copyright holders]" >> ${1}
-        echo "# This is anti-capitalist software, released for free use by individuals and organizations that do not operate by capitalist principles." >> ${1}
-        echo "# Permission is hereby granted, free of charge, to any person or organization (the "User") obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, merge, distribute, and/or sell copies of the Software, subject to the following conditions:" >> ${1}
+        echo "# This is anti-capitalist software, released for free use by individuals and organizations" >> ${1}
+        echo "# that do not operate by capitalist principles." >> ${1}
+        echo "# Permission is hereby granted, free of charge, to any person or organization (the "User")" >> ${1}
+        echo "# obtaining a copy of this software and associated documentation files (the "Software"), to use, copy," >> ${1}
+        echo "# modify, merge, distribute, and/or sell copies of the Software, subject to the following conditions:" >> ${1}
         echo "# " >> ${1}
-        echo "# 1. The above copyright notice and this permission notice shall be included in all copies or modified versions of the Software." >> ${1}
+        echo "# 1. The above copyright notice and this permission notice shall be included in all copies or" >> ${1}
+        echo "# modified versions of the Software." >> ${1}
         echo "# " >> ${1}
         echo "# 2. The User is one of the following:" >> ${1}
         echo "# a. An individual person, laboring for themselves" >> ${1}
         echo "# b. A non-profit organization" >> ${1}
         echo "# c. An educational institution" >> ${1}
-        echo "# d. An organization that seeks shared profit for all of its members, and allows non-members to set the cost of their labor" >> ${1}
+        echo "# d. An organization that seeks shared profit for all of its members, and allows non-members" >> ${1}
+        echo "# to set the cost of their labor" >> ${1}
         echo "# " >> ${1}
-        echo "# 3. If the User is an organization with owners, then all owners are workers and all workers are owners with equal equity and/or equal vote." >> ${1}
+        echo "# 3. If the User is an organization with owners, then all owners are workers and all workers" >> ${1}
+        echo "# are owners with equal equity and/or equal vote." >> ${1}
         echo "# " >> ${1}
-        echo "# 4. If the User is an organization, then the User is not law enforcement or military, or working for or under either." >> ${1}
+        echo "# 4. If the User is an organization, then the User is not law enforcement or military," >> ${1}
+        echo "# or working for or under either." >> ${1}
         echo "# " >> ${1}
-        echo "# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." >> ${1}
+        echo "# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND," >> ${1}
+        echo "# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE" >> ${1}
+        echo "# AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" >> ${1}
+        echo "# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF" >> ${1}
+        echo "# OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." >> ${1}
         echo "# " >> ${1}
         echo "# " >> ${1}
         echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}

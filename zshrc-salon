@@ -5,10 +5,15 @@ LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
 INFODIR="/usr/share/info:/usr/local/share/info"
 PAGER="/usr/bin/most"
+MANPAGER="/usr/bin/vim"
 EDITOR="/usr/bin/vim"
 BROWSER="/usr/bin/firefox"
+
+# Pour Espanso :
+XDG_CONFIG_HOME=/home/guillaume/.config
+
 umask 022
-export PATH PS1
+export PATH PS1 XDG_CONFIG_HOME
 
 # Un charset français :
 export LESSCHARSET="latin1"
