@@ -84,9 +84,10 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Trois'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
- byobu-tmux send-keys -t 1 'sursyno'
+ byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'espanso restart' 'C-m'
+ byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
+ byobu-tmux send-keys -t 0 'sursyno'
 
 # And a last one
 

@@ -21,6 +21,7 @@ export LESSCHARSET="latin1"
 autoload -U promptinit; promptinit
 
 source /home/guillaume/.config/broot/launcher/bash/br
+source /home/guillaume/.config/forgit/forgit.plugin.zsh
 
 ######################################################
 #
