@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~/scripts/hosts
+./remove-blacklist-from-hosts.sh
+wait
+exit
