@@ -114,6 +114,7 @@ plugins=(colorize)
 plugins=(fzf)
 plugins=(z)
 plugins=(tmux)
+plugins=(zshmarks)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -172,9 +173,9 @@ SPACESHIP_PROMPT_ORDER=(
 #  kubecontext   # Kubectl context section
 #  terraform     # Terraform workspace section
   exec_time     # Execution time
+  jobs          # Background jobs indicator
   line_sep      # Line break
   vi_mode       # Vi-mode indicator
-  jobs          # Background jobs indicator
   char          # Prompt character
   exit_code     # Exit code section
 )
@@ -238,8 +239,8 @@ autoload colors ; colors
 
 # Quel programme employer selon la terminaison d'un fichier que je nommme :
 #
-alias -s txt=vim
-alias -s conf=vim
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias -s {txt,yml,yaml,conf,md,sh,list}=vim
 alias -s html="firefox"
 alias -s org="firefox"
 
@@ -295,10 +296,20 @@ setopt pushd_to_home            # `pushd` = `pushd $HOME`
 # compacked complete list display
 setopt list_packed
 
+# Alias utiles pour zshmarks :
+
+alias g="jump"
+alias s="bookmark"
+alias d="deletemark"
+alias p="showmarks"
+alias l="showmarks"
 
 ##############
 # Fonctions :
 ##############
+mkcd() {
+mkdir -p -v "$1" &&  cd "$1"
+}
 
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
@@ -447,7 +458,7 @@ alias ll="ls -lv --group-directories-first"
 alias lla='ls -la'
 alias llo='ls -aol'
 alias lli='ls -AlhGrti'
-alias lsd="ls -alF | grep /$"
+# alias lsd="ls -alF | grep /$"
 alias lx='ls -lXB'        	# Par extension
 alias lk='ls -lSr'        	# Par taille
 alias lsize='ls --sort=size -lhr' # Ou comme ça
@@ -455,7 +466,6 @@ alias la='ls -Al'        	# Montre les fichiers cachés
 alias lr='ls -lR'        	# Récursif
 alias lt='ls -ltr'        	# Trié par date
 alias lm='ls -al |most'        # pipé dans 'most'
-alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
 #
@@ -546,7 +556,7 @@ alias apts="sudo apt-cache search"
 alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
 alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
-# alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
+alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
 
 # Arrêt / Reboot :
 #
@@ -559,7 +569,7 @@ alias shutdown='sudo /sbin/shutdown'
 
 # Date et Heure :
 alias stamp='date "+%A_%d/%m/%Y_%Hh%M"'
-alias d='date +%F'
+alias day='date +%F'
 alias now='date +"%T"'
 
 #############################################################
@@ -670,6 +680,15 @@ ouvre () {
   fi
 }
 
+trv(){
+        ( find . -iname "*$1*" | xargs -0 grep -oihE '\\[a-z]+' | sort | uniq -c | sort -rn | less )
+}
+
+
+# Ouvre la page de man de n'importe quoi que je viens de taper avec Alt+? (min.)
+
+autoload -Uz run-help
+bindkey '\e,' run-help
 #
 # FZF : The Fuzzy Finder :
 #
@@ -728,3 +747,8 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
                 echo;
                 ls -p --color=always "${__cd_path}";
         ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
+alias son="pulseaudio -k && pulseaudio -D"
+
+# source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+source /home/guillaume/.config/broot/launcher/bash/br

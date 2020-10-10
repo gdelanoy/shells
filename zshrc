@@ -5,15 +5,23 @@ LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 MANPATH="/usr/share/man:/usr/local/share/man"
 INFODIR="/usr/share/info:/usr/local/share/info"
 PAGER="/usr/bin/most"
+MANPAGER="/usr/bin/vim"
 EDITOR="/usr/bin/vim"
 BROWSER="/usr/bin/firefox"
+
+# Pour Espanso :
+XDG_CONFIG_HOME=/home/$USER/.config
+
 umask 022
-export PATH PS1
+export PATH PS1 XDG_CONFIG_HOME
 
 # Un charset français :
 export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
+
+source /home/guillaume/.config/broot/launcher/bash/br
+source /home/guillaume/.config/forgit/forgit.plugin.zsh
 
 ######################################################
 #
@@ -106,6 +114,7 @@ plugins=(colorize)
 plugins=(fzf)
 plugins=(z)
 plugins=(tmux)
+plugins=(zshmarks)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -164,9 +173,9 @@ SPACESHIP_PROMPT_ORDER=(
 #  kubecontext   # Kubectl context section
 #  terraform     # Terraform workspace section
   exec_time     # Execution time
+  jobs          # Background jobs indicator
   line_sep      # Line break
   vi_mode       # Vi-mode indicator
-  jobs          # Background jobs indicator
   char          # Prompt character
   exit_code     # Exit code section
 )
@@ -230,8 +239,8 @@ autoload colors ; colors
 
 # Quel programme employer selon la terminaison d'un fichier que je nommme :
 #
-alias -s txt=vim
-alias -s conf=vim
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias -s {txt,yml,yaml,conf,md,sh,list}=vim
 alias -s html="firefox"
 alias -s org="firefox"
 
@@ -287,10 +296,20 @@ setopt pushd_to_home            # `pushd` = `pushd $HOME`
 # compacked complete list display
 setopt list_packed
 
+# Alias utiles pour zshmarks :
+
+alias g="jump"
+alias s="bookmark"
+alias d="deletemark"
+alias p="showmarks"
+alias l="showmarks"
 
 ##############
 # Fonctions :
 ##############
+mkcd() {
+mkdir -p -v "$1" &&  cd "$1"
+}
 
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
@@ -439,7 +458,7 @@ alias ll="ls -lv --group-directories-first"
 alias lla='ls -la'
 alias llo='ls -aol'
 alias lli='ls -AlhGrti'
-alias lsd="ls -alF | grep /$"
+# alias lsd="ls -alF | grep /$"
 alias lx='ls -lXB'        	# Par extension
 alias lk='ls -lSr'        	# Par taille
 alias lsize='ls --sort=size -lhr' # Ou comme ça
@@ -447,7 +466,6 @@ alias la='ls -Al'        	# Montre les fichiers cachés
 alias lr='ls -lR'        	# Récursif
 alias lt='ls -ltr'        	# Trié par date
 alias lm='ls -al |most'        # pipé dans 'most'
-alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
 #
@@ -478,6 +496,8 @@ alias kikoo="fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shu
 alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Loos'
 alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
+alias son="pulseaudio -k && pulseaudio -D"
+alias plonk="pkill plank && nohup plank & ; rm -f nohup.out"
 
 # Administration :
 #
@@ -518,6 +538,7 @@ alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
 alias close='eject -t /dev/sr0'
 alias open='eject /dev/sr0'
+alias br='br --sizes --hidden -dp'
 
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
@@ -548,7 +569,7 @@ alias shutdown='sudo /sbin/shutdown'
 
 # Date et Heure :
 alias stamp='date "+%A_%d/%m/%Y_%Hh%M"'
-alias d='date +%F'
+alias day='date +%F'
 alias now='date +"%T"'
 
 #############################################################
@@ -664,6 +685,10 @@ trv(){
 }
 
 
+# Ouvre la page de man de n'importe quoi que je viens de taper avec Alt+? (min.)
+
+autoload -Uz run-help
+bindkey '\e,' run-help
 #
 # FZF : The Fuzzy Finder :
 #
@@ -722,7 +747,6 @@ function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         r
                 echo;
                 ls -p --color=always "${__cd_path}";
         ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
-
 alias son="pulseaudio -k && pulseaudio -D"
 
 # source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
