@@ -96,15 +96,15 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 0 'cd ~/Téléchargements' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
-byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
-byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
+ byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
- byobu-tmux send-keys -t 0 'find . -iname "*'
+#  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find Temp/ -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
- byobu-tmux send-keys -t 1 'find . -iname "*'
+ byobu-tmux send-keys -t 1 'mpv ²'
 
  # OK, that wasn't the last one yet ...
 
@@ -116,13 +116,20 @@ byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Te
  byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
- byobu-tmux send-keys -t 0 'mpv '
+ byobu-tmux send-keys -t 0 'grosse'
 
 # THERE is the last one ;-)
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Six'
  byobu-tmux send-keys 'bofh' 'C-m'
+
+# LOL jk :-P
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Sept'
+ byobu-tmux send-keys 'su - testeur' 'C-m'
+
 
  # It's OK. If that session isn't already running, fire it :
 
