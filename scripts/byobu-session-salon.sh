@@ -49,6 +49,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'bash' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'if' 'C-m'
  byobu-tmux send-keys -t 0 'fish' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'

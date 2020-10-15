@@ -2,6 +2,8 @@
 #####################################################
 # Nom du script : grosse.sh
 # Utilité: Ce script sert à écouter la grosse radio.
+# Il enregistre dans le même temps un fichier mp3 dans /tmp .
+# De cdtte façon, si un morce au me plait, je n'ai qu'à ouvrir ce mp3 dans Audacity, et le découper ;-)
 # Usage: ... (le cas échéant)
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # License: Ce script est sous license anticapitalliste.
@@ -41,6 +43,5 @@
 #####################################################
 #
 
-
-mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3
+mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3 --record-file=/tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).mp3
 
