@@ -43,5 +43,7 @@
 #####################################################
 #
 
-mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3 --record-file=/tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).mp3
+# mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3 --record-file=/tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).mp3 2>/dev/null
+mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3 --record-file=/tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).mp3 2>/dev/null | tee /tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).txt
+exit 0
 
