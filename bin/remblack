@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~
+bash ~/.scripts/remblack.sh
+exit 0
+

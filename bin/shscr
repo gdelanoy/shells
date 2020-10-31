@@ -19,7 +19,7 @@
         echo "# Utilité: Ce script sert à faire pousser des fleurs" >> ${1}
         echo "# Usage: ... (le cas échéant)" >> ${1}
         echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>" >> ${1}
-        echo "# License: Ce script est sous license anticapitalliste." >> ${1}
+        echo "# License: Ce script est sous license anticapitaliste." >> ${1}
         echo "# Veuillez consulter https://anticapitalist.software" >> ${1}
         echo "# ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)" >> ${1}
         echo "# Copyright © [year] [copyright holders]" >> ${1}

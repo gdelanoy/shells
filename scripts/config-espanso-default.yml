@@ -1,0 +1,184 @@
+# espanso configuration file
+
+# This is the default configuration file, change it as you like it
+# You can refer to the official documentation:
+# https://espanso.org/docs/
+
+# Matches are the substitution rules, when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  # Simple text replacement
+  - trigger: "espanso²"
+    replace: "Kikoo lol !"
+
+  # Signature
+  - trigger: "dng²"
+    replace: "Bien cordialement,\n\n-- \nGuillaume Delanoy\nguillaume@delanoy.fr"
+
+    # Date
+    #  - trigger: "d²"
+    # replace: "{{mydate}}"
+    # vars:
+    #   - name: mydate
+    #    type: date
+    #    params:
+    #      format: "%d/%m/%Y"
+
+  - trigger: "date²"
+    replace: "{{madate}}"
+    vars:
+      - name: madate
+        type: date
+        params:
+          format: "%A %d %B %Y"
+
+  # Heure
+  - trigger: "hm²"
+    replace: "Il est {{mytime}}"
+    vars:
+      - name: mytime
+        type: date
+        params:
+          format: "%Hh%M"
+
+  # Shell commands
+#  - trigger: ":shell"
+#    replace: "{{output}}"
+#    vars:
+#      - name: output
+#        type: shell
+#        params:
+#          cmd: "echo Hello from your shell"
+
+# Remplacer des caractères par d'autres :
+
+  - trigger: "sz²"
+    replace: "ß"
+
+  - trigger: "c²"
+    replace: "©"
+
+  - trigger: "cr²"
+    replace: "®"
+
+  - trigger: "1/2"
+    replace: "½"
+    word: true
+
+  - trigger: "1/4"
+    replace: "¼"
+    word: true
+
+  - trigger: "3/4"
+    replace: "¾"
+    word: true
+
+  - trigger: "ç²"
+    replace: "Ç"
+
+  - trigger: "é²"
+    replace: "É"
+
+  - trigger: "è²"
+    replace: "È"
+
+  - trigger: "ê²"
+    replace: "Ê"
+
+  - trigger: "ù²"
+    replace: "Ù"
+
+  - trigger: "à²"
+    replace: "À"
+
+  - trigger: "ae²"
+    replace: "æ"
+
+  - trigger: "oe²"
+    replace: "œ"
+
+# Remplacements personnalisés
+
+  - trigger: "r²"
+    replace: "répondre"
+    word: true
+
+  - trigger: "g²"
+    replace: "Guillaume"
+    word: true
+
+  - trigger: "d²"
+    replace: "Delanoy"
+    word: true
+
+  - trigger: "gd²"
+    replace: "Guillaume Delanoy"
+    word: true
+
+  - trigger: "aa²"
+    replace: "Aurélie-Anne"
+    word: true
+
+  - trigger: "ge²"
+    replace: "¯\_(ツ)_/¯"
+    word: true
+
+  - trigger: "bjr²"
+    replace: "bonjour"
+
+  - trigger: "ajd²"
+    replace: "aujourd'hui"
+
+  - trigger: "rofl²"
+    replace: "🤣"
+
+  - trigger: "heyes²"
+    replace: "😍"
+
+  - trigger: "kiss²"
+    replace: "😘"
+
+  - trigger: "mask²"
+    replace: "😷"
+
+  - trigger: "wut²"
+    replace: "😳"
+
+  - trigger: "sob²"
+    replace: "😭"
+
+  - trigger: "poop²"
+    replace: "💩"
+
+  - trigger: "boom²"
+    replace: "💥"
+
+  - trigger: "fuck²"
+    replace: "🖕"
+
+  - trigger: "(y)"
+    replace: "👍"
+
+  - trigger: "y²"
+    replace: "👍"
+
+  - trigger: "de²"
+    replace: "🇩🇪"
+
+  - trigger: "om²"
+    replace: "🕉"
+
+  - trigger: "fr²"
+    replace: "🇫🇷"
+
+  - trigger: "gb²"
+    replace: "🇬🇧"
+
+# Lutter contre la dyslexie dans les commandes :
+
+  - trigger: "sud o "
+    replace: "sudo "
+
+  - trigger: "sduo "
+    replace: "sudo "
+    word: true

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ~
+bash ~/.scripts/addblack.sh
+exit 0
+
