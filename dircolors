@@ -11,7 +11,7 @@
 #   00=normal 01=gras 04=soulignÃ© 05=clignotant 07=inversÃ© caractÃ¨res/fond
 #   08=invisible (?)
 # - Couleur des caractÃ¨res :
-#   30=noir 31=rouge 32=vert 33=jaune 34=bleu 35=magenta 36=cyan 37=blanc
+#   30=noir 31=rouge 32=vert 36=jaune 34=bleu 35=magenta 36=cyan 37=blanc
 # - Couleur du fond
 #   40=noir 41=rouge 42=vert 43=marron 44=bleu 45=magenta 46=cyan 47=gris
 
@@ -24,42 +24,42 @@ DIR 01;32
 # Couleur pour les liens symboliques
 LINK 36
 # Couleur pour les FIFOs
-FIFO 33
+FIFO 36
 # Couleur pour les sockets
 SOCK 01;35
 # Couleur pour les block device drivers
-BLK 01;33
+BLK 01;36
 # Couleur pour les character device drivers
-CHR 01;33
+CHR 01;36
 # Couleur pour les fichiers ayant les permissions d'exÃ©cution
 EXEC 01;31
 
 # Couleur pour les fichiers selon leur extension
 
 # Fichiers de configuration
-.conf 01;33
+.conf 01;36
 # Fichiers exÃ©cutables
 .sh   01;31
 .pl   01;31
 .php3 01;31
 .php  01;31
 # Fichiers compressÃ©s
-.tar  36
-.tgz  36
-.txz  36
-.tbz  36
-.arj  36
-.taz  36
-.lzh  36
-.zip  36
-.gz   36
-.bz2  36
-.lzma 36
-.xz   36
-.rar  36
+.tar  33
+.tgz  33
+.txz  33
+.tbz  33
+.arj  33
+.taz  33
+.lzh  33
+.zip  33
+.gz   33
+.bz2  33
+.lzma 33
+.xz   33
+.rar  33
 # Packages
-.deb  33
-.rpm  33
+.deb  36
+.rpm  36
 # Fichiers images
 .jpg  35
 .JPG  35
@@ -91,16 +91,16 @@ EXEC 01;31
 .wmv  32
 .wma  32
 # Fichiers bureautique divers
-.odg  33
-.odc  33
-.ods  33
-.odp  33
-.odd  33
-.doc  33
-.xls  33
-.ppt  33
-.pps  33
-.tex  33
-.pdf  33
-.ps   33
-.djvu 33
+.odg  36
+.odc  36
+.ods  36
+.odp  36
+.odd  36
+.doc  36
+.xls  36
+.ppt  36
+.pps  36
+.tex  36
+.pdf  36
+.ps   36
+.djvu 36
