@@ -1,8 +1,10 @@
 #!/bin/bash
 #####################################################
 # Nom du script : rootssh.sh
-# Utilité: Ce script sert à faire pousser des fleurs
-# Usage: ... (le cas échéant)
+# Utilité: Ce script sert à envoyer une alarme dans l'interface graphique de celui
+# qui utilise localement ce système si une élévation root (su ou sudo) est réalisée
+# depuis une session initiée en ssh.
+# Usage: Appeler ce script au début du .bashrc / .zshrc de root !
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # License: Ce script est sous license anticapitaliste.
 # Veuillez consulter https://anticapitalist.software
