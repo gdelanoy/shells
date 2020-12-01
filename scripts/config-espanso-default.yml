@@ -82,9 +82,6 @@ matches:
   - trigger: "è²"
     replace: "È"
 
-  - trigger: "ê²"
-    replace: "Ê"
-
   - trigger: "ù²"
     replace: "Ù"
 
@@ -107,6 +104,18 @@ matches:
     replace: "Guillaume"
     word: true
 
+  - trigger: "ggm²"
+    replace: "gdelanoy@gmail.com"
+    word: true
+
+  - trigger: "gdm²"
+    replace: "guillaume@delanoy.fr"
+    word: true
+
+  - trigger: "adgm²"
+    replace: "16 / 6, square Jean Monnet - 59120 Loos"
+    word: true
+
   - trigger: "d²"
     replace: "Delanoy"
     word: true
@@ -120,7 +129,7 @@ matches:
     word: true
 
   - trigger: "ge²"
-    replace: "¯\_(ツ)_/¯"
+    replace: "¯\\_(ツ)_/¯"
     word: true
 
   - trigger: "bjr²"
@@ -128,6 +137,42 @@ matches:
 
   - trigger: "ajd²"
     replace: "aujourd'hui"
+
+  - trigger: "lol²"
+    replace: "😄"
+
+  - trigger: "wink²"
+    replace: "😉"
+
+  - trigger: "angel²"
+    replace: "😇"
+
+  - trigger: "think²"
+    replace: "🤔"
+
+  - trigger: "vomit²"
+    replace: "🤮"
+
+  - trigger: "fear²"
+    replace: "😱"
+
+  - trigger: "rage²"
+    replace: "🤬"
+
+  - trigger: "clown²"
+    replace: "🤡"
+
+  - trigger: "santa²"
+    replace: "🎅"
+
+  - trigger: "popcorn²"
+    replace: "🍿"
+
+  - trigger: "champ²"
+    replace: "🍾"
+
+  - trigger: "beer²"
+    replace: "🍻"
 
   - trigger: "rofl²"
     replace: "🤣"
@@ -162,6 +207,99 @@ matches:
   - trigger: "y²"
     replace: "👍"
 
+  - trigger: "sw²"
+    replace: "😅"
+
+  - trigger: "bwa²"
+    replace: "🤪"
+
+  - trigger: "smirk²"
+    replace: "😏"
+
+  - trigger: "cold²"
+    replace: "🥶"
+
+  - trigger: "culture²"
+    replace: "🧐"
+
+  - trigger: "devil²"
+    replace: "😈"
+
+  - trigger: "skull²"
+    replace: "☠"
+
+  - trigger: "alien²"
+    replace: "👽"
+
+  - trigger: "heart²"
+    replace: "💖"
+
+  - trigger: "rose²"
+    replace: "🌹"
+
+  - trigger: "world²"
+    replace: "🌍"
+
+  - trigger: "gyro²"
+    replace: "🚨"
+
+  - trigger: "fmoon²"
+    replace: "🌝"
+
+  - trigger: "fire²"
+    replace: "🔥"
+
+  - trigger: "shiny²"
+    replace: "✨"
+
+  - trigger: "tada²"
+    replace: "🎉"
+
+  - trigger: "notes²"
+    replace: "🎶"
+
+  - trigger: "phone²"
+    replace: "☎"
+
+  - trigger: "titre²"
+    replace: "📙"
+
+  - trigger: "money²"
+    replace: "💰"
+
+  - trigger: "no²"
+    replace: "⛔"
+
+  - trigger: "nuclear²"
+    replace: "☢"
+
+  - trigger: "biohazard²"
+    replace: "☣"
+
+  - trigger: "lys²"
+    replace: "⚜"
+
+  - trigger: "check²"
+    replace: "✔"
+
+  - trigger: "us²"
+    replace: "🇺🇸"
+
+  - trigger: "mindblown²"
+    replace: "🤯"
+
+  - trigger: "hot²"
+    replace: "🥵"
+
+  - trigger: "party²"
+    replace: "🥳"
+
+  - trigger: "sunglasses²"
+    replace: "😎"
+
+  - trigger: "star²"
+    replace: "🌠"
+
   - trigger: "de²"
     replace: "🇩🇪"
 
@@ -173,6 +311,17 @@ matches:
 
   - trigger: "gb²"
     replace: "🇬🇧"
+
+  - trigger: "biz²"
+    replace: "(づ￣ ³￣)づ )"
+
+  - trigger: "magie²"
+    replace: "(∩｀-´)⊃━☆ﾟ.･｡☆ﾟ.･｡ﾟ)"
+
+  - trigger: "table²"
+    replace: "(┛◉Д◉)┛彡┻━┻)"
+
+
 
 # Lutter contre la dyslexie dans les commandes :
 
