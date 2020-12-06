@@ -14,8 +14,8 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 
  byobu-tmux new-window
  byobu split-window -v
- byobu-tmux send-keys -t 0 'bashtop' 'C-m'
- byobu-tmux send-keys -t 1 'br' 'C-m'
+ byobu-tmux send-keys -t 1 'ranger' 'C-m'
+ byobu-tmux send-keys -t 0 'br' 'C-m'
 # Et une autre :
 
  byobu-tmux new-window
@@ -49,7 +49,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'bash' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'if' 'C-m'
  byobu-tmux send-keys -t 0 'fish' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
@@ -66,7 +65,8 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  sleep 1
  byobu-tmux send-keys -t 1 'neo' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'calcurse' 'C-m'
+ byobu-tmux send-keys -t 0 'bashtop' 'C-m'
+ # byobu-tmux send-keys -t 0 'calcurse' 'C-m'
 
  # Create another window
 
@@ -99,9 +99,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.mkv" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*.avi" -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
- byobu-tmux send-keys -t 0 'clear' 'C-m'
+#  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
-#  byobu-tmux send-keys -t 0 'find . -iname "*'
+ byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find Temp/ -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
@@ -115,21 +115,21 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'joue' 'C-m'
- byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'grosse'
-
-# THERE is the last one ;-)
-
- byobu-tmux new-window
- byobu-tmux rename-window 'Six'
- byobu-tmux send-keys 'bofh' 'C-m'
 
 # LOL jk :-P
 
  byobu-tmux new-window
- byobu-tmux rename-window 'Sept'
+ byobu-tmux rename-window 'Six'
  byobu-tmux send-keys 'su - testeur' 'C-m'
+
+ # THERE is the last one ;-)
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'Sept'
+ byobu-tmux send-keys 'bofh' 'C-m'
 
 
  # It's OK. If that session isn't already running, fire it :
