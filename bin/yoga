@@ -1,21 +1,23 @@
 #!/bin/bash
 voix="/usr/lib/x86_64-linux-gnu/espeak-data/voices/mb"
 # mpg123 /home/guillaume/Musique/Sons/Love_you_to_death.mp3
-
+clear
 cd $voix
 
 # pkill firefox
 # clementine /home/guillaume/Documents/yoga_relaxation.xspf &
 
-espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour Guillaume, nous sommes "`date +%A`" "`date +%d`" "`date +%B`". Il est "`date +%H`" heure "`date +%M`". Bienvenue dans ta séance de yoga."
-sleep 1
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour $USER, nous sommes "`date +%A`" "`date +%d`" "`date +%B`". Il est "`date +%H`" heure "`date +%M`". Bienvenue dans ta séance de yoga."
+# espeak -s 110 -p 0.000000001 -v mb-fr1 "Bonjour $USER, Bienvenue dans ta séance de yoga."
+
+sleep 10
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Si tu veux allumer une bougie ou de l'encens, fais-le maintenant. Puis presse la touche Entrée."
 read attends
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait... Prends place, on y va."
 sleep 10
 espeak -s 110 -p 0.000000001 -v mb-fr1  "On va commencer par la petite salutation au soleil ... puis on fera la grande."
-sleep 1
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu es à genoux au bord du tapis. Respire calmement, puis lève les bras en prière au-dessus de la tête ...et redescends-les pour saluer..."
+sleep 4
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu es à genoux au bord du tapis. Respire calmement, puis lève les bras en prière au-dessus de la tête ...et redescends-les mains devant la poitrine, pour saluer..."
 sleep 3
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Namasté."
 sleep 3
@@ -25,7 +27,7 @@ espeak -s 110 -p 0.000000001 -v mb-fr1  "Monte à quatre pattes... écarte les g
 sleep 5
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Do rond ... do creux."
 sleep 50
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Maintenant, tu arque-boutes les orteils contre le sol. Monte les fesses pour faire le chien museau vers le sol. Pousse sur les mains. Descends les talons vers le sol. étire le bassin. Baisse la tête et étends le do..."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Maintenant, tu arque-boute les orteil contre le sol. Monte les fesses pour faire le chien museau vers le sol. Pousse sur les mains. Descends les talons vers le sol en étirant le bassin. Baisse la tête et étends le do..."
 sleep 20
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Pied droit... entre les mains."
 sleep 25
@@ -33,91 +35,96 @@ espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied gauche rejoint le pied droit. T
 sleep 25
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Bien. Plie les genoux... Pied droit, en arrière."
 sleep 20
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied gauche rejoint le pied droit. Tu fais la planche... bien droit."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied gauche rejoint le pied droit. Tu fais la planche... reste bien droit."
 sleep 40
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Genoux à terre, tu viens te rassoir sur les talons tout en laissant les mains loin devant toi."
 sleep 20
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu ramènes les mains de chaque côté du visage. Et tu te redresses sur une inspiration..."
-sleep 3
+sleep 6
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Lève les bras en prière au-dessus de la tête... Et redescends les mains devant la poitrine, pour saluer..."
 sleep 3
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Namasté."
 sleep 8
-aplay /home/guillaume/Musique/WAV/Om.wav
+aplay /home/guillaume/Musique/Sons/Om.wav
+clear
 sleep 2
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Il est maintenant "`date +%H`" heure "`date +%M`". Tu peux arrêter ici si tu n'as pas pluss de temps, ou bien poursuivre dans un instant avec Suriyia Namaskaar."
 sleep 4
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Oké. Prends place, on y va."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Oké. Prends place, on continue."
 sleep 4
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu te tiens debout au bout de ton tapis... Inspire calmement, puis lève les bras en prière au-dessus de la tête, et redescends-les devant la poitrine ... salue."
-sleep 3
-espeak -s 110 -p 0.000000001 -v mb-fr1  ".Puis laisse pendre les bras le long du corps."
-sleep 3
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Sur une inspiration tu lève les bras en l'air en les écartant, comme si tu voulais embrasser le ciel... Cambre-toi vers l'arrière, tout en contractant les fessiers pour protéger les lombaires. Renverse la tête en arrière pour regarder le ciel. Respire."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu te tiens debout à l'extrémité de ton tapis... Inspire calmement, puis lève les bras en prière au-dessus de la tête, et redescends-les devant la poitrine ... salue."
+sleep 5
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Puis tu laisses pendre les bras le long du corps."
+sleep 4
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Sur une inspiration tu lève les bras en l'air en les écartant, comme si tu voulais embrasser le ciel... ne te cambre pas vers l'arrière, renverse simplement la tête de manière à regarder complètement en l'air tout en contractant les fessiers et les grands dorsaux pour protéger les lombaires. Regarde le ciel. Ouvre grand ton coeur, et respire."
 sleep 20
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Inspire. Puis sur une expiration tu te penche en avant en regardant devant toi, tu étires le bassin tout en te soutenant avec les mains sur les genoux, tu maintiens les jambes bien droite, et tu continues à te pencher, jusqu'à toucher le sol du bout des doigts devant tes pié."
 sleep 10
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Respire là ... pendant quelques instants."
 sleep 25
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Plie les genoux ... et tend la jambe gauche, pied gauche, en arrière."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Plie les genoux ... puis tend la jambe gauche, pour amener le pied gauche loin en arrière."
 sleep 20
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied droit rejoint le pied gauche. Tu fais la planche, bien droit."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied droit rejoint le pied gauche. Tu fais la planche... bien droit."
 sleep 35
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Pose les genou à terre. Puis tu descends tout le corps comme si tu faisais une pompe. Reste là, le menton à quelques centimètres du sol. Maintiens la posture."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Pose les genou à terre. Puis Plie les jambes pour t'asseoir sur les talons, tout en laissant les mains ou elles se trouve, et en étirant les bras devant toi. Reste là un instant, profite de l'étirement."
 sleep 20
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Puis ... Plie les jambes pour t'asseoir sur les talons, tout en laissant les mains ou elles se trouvent et en étirant les bras devant toi. Reste là un instant, profite de l'étirement."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Puis ... tourne les mains sur le sol sans les rapprocher, et redresse-toi tout en glissant le menton à quelques centimètres du sol, et arrête-toi lorsque la tête est à la hauteur des mains... descends tout le corps comme si tu faisais une pompe. Reste là, le menton à quelques centimètres du sol. Maintiens la posture."
 sleep 20
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Sans bouger les mains, redresse-toi tout en glissant le menton à quelques centimètres du sol, et arrête-toi lorsque la tête est à la hauteur des mains..."
-sleep 2
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu avances les mains pour faire reposer les avant-bras sur le sol et tu poses le corps sur le sol ... Redresse la tête et le torse, pour faire le sphynx. Essaie de regarder vers le haut, tout en veillant bien à protéger les lombaires en contractant les muscle du torse ..."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu avances le torse et tu poses le corps sur le sol ... tends les bras en arrière le long du corps, redresse la tête et le torse, pour faire la sauterelle. Essaie de regarder loin devant toi, et de soulever les pieds et les genou aussi si tu le peux, sans forcer, tout en veillant bien à protéger les lombaires en contractant les muscle du torse ..."
+sleep 30
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Bien... détends le corps, pose les mains de part et d'autre des épaules. Soulève-toi, et reviens dans la posture du chat."
+sleep 8
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Puis ... tu arc-boute les orteils sur le sol, et tu monte les fesses pour faire le chien museau vers le sol. Pousse sur les mains. Descends les talons vers le sol en étirant le bassin. Baisse la tête et étends le do."
 sleep 35
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Bien... Reviens dans la posture de la planche."
-sleep 5
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Puis ... monte les fesses pour faire le chien museau vers le sol. Pousse sur les mains. Descends les talons vers le sol. étire le bassin. Baisse la tête et étends le do."
-sleep 25
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Pied gauche, en avant."
 sleep 20
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Le pied droit rejoint le pied gauche... Tu relèves les fesses vers le ciel tout en maintenant les doigts sur le sol, et en regardant loin devant toi... Tends les jambes..."
 sleep 35
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Plie lé genoux, puis redresse-toi en veillant à protéger ton do... Inspire tout en remontant..."
-sleep 3
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Une fois redressé, lève les bras en l'air sur une inspiration, comme si tu voulais embrasser le ciel... ... Cambre-toi vers l'arrière, tout en contractant les fessiers pour protéger les lombaires. Renverse la tête en arrière pour regarder le ciel. Respire."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Plie lé genoux, puis redresse-toi avec les mains sur les cuisses, en veillant à protéger ton do... Inspire tout en remontant..."
+sleep 8
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Une fois redressé, lève les bras en l'air en les écartant, comme si tu voulais embrasser le ciel... ne te cambre pas vers l'arrière, renverse simplement la tête de manière à regarder complètement en l'air tout en contractant les fessiers et les grands dorsaux pour protéger les lombaires. Regarde le ciel. Ouvre grand ton coeur, et respire."
 sleep 25
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Et puis tu joins les mains. Tu les ramènes en prière devant la poitrine. Et tu salues."
 sleep 3
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Namasté."
 sleep 5
-aplay /home/guillaume/Musique/WAV/Om.wav
+aplay /home/guillaume/Musique/Sons/Om.wav
+clear
 sleep 2
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Il est maintenant "`date +%H`" heure "`date +%M`". Tu peux arrêter ici si tu n'as pas pluss de temps, ou bien poursuivre dans quelques instant avec 30 minutes de posture de ton choix. Appuie sur Entrée pour continuer, ou sur Contrôle Çé pour arrêter..."
+# espeak -s 110 -p 0.000000001 -v mb-fr1  " Tu peux maintenant poursuivre dans quelques instant avec 30 minutes de posture de ton choix..."
 read attends
+sleep 20
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Prends place, on y va."
-sleep 5
+sleep 10
 
 for i in {1..30}
 do
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Prépare-toi pour la posture numéro"
 espeak -s 110 -p 0.000000001 -v mb-fr1  $i
 sleep 10
-aplay /home/guillaume/Musique/WAV/Om.wav 
+aplay /home/guillaume/Musique/Sons/Om.wav 
 sleep 60
 espeak -s 110 -p 0.000000001 -v mb-fr1 "C'est très bien... Relâche la posture, et détends-toi."
 sleep 10
 done
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Bravo, tes assana sont terminés. Félicitations, tu as fait une belle séance." 
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Bravo, tes assana sont terminés. Félicitations, tu as fai une belle séance." 
 sleep 3
 espeak -s 110 -p 0.000000001 -v mb-fr1  "Il est maintenant "`date +%H`" heure "`date +%M`". Tu peux arrêter ici si tu n'as pas pluss de temps, ou bien poursuivre dans quelques instant avec une séance de relaxation. Appuie sur Entrée pour continuer, ou sur Contrôle Çé pour arrêter..."
+# espeak -s 110 -p 0.000000001 -v mb-fr1  "Tu peux arrêter ici si tu n'as pas pluss de temps, ou bien poursuivre dans quelques instant avec une séance de relaxation."
+clear
 read attends
-espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. Prends place, on y va."
+espeak -s 110 -p 0.000000001 -v mb-fr1  "Parfait. installe-toi, on y va."
 sleep 30
 # wait
 mpg123 /home/guillaume/Musique/Sons/01-relaxation_express.mp3
 sleep 5
-espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est maintenant "`date +%H`" heure "`date +%M`"... ... Au revoir, Guillaume ... Namasté."
-sleep 30
-aplay /home/guillaume/Musique/WAV/Om.wav 
+espeak -s 110 -p 0.000000001 -v mb-fr1 "Il est maintenant "`date +%H`" heure "`date +%M`"... ... Au revoir, $USER ... Namasté."
+# espeak -s 110 -p 0.000000001 -v mb-fr1 "Et voilà... ... Au revoir, $USER ... Namasté."
+sleep 20
+aplay /home/guillaume/Musique/Sons/Om.wav 
 sleep 5
-aplay /home/guillaume/Musique/WAV/Om.wav 
+aplay /home/guillaume/Musique/Sons/Om.wav 
 sleep 5
-aplay /home/guillaume/Musique/WAV/Om.wav 
+aplay /home/guillaume/Musique/Sons/Om.wav 
 exit
