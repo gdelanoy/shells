@@ -42,7 +42,7 @@
 #
 
 [ -z "${TMUX}" ] && byobu -S /tmp/git-maj
-
+sleep 2
 byobu new-window -n 'git-maj'
 sleep 1
 byobu-tmux send-keys 'cd ~/.shells' 'C-m'
