@@ -55,3 +55,5 @@ byobu-tmux send-keys 'exit' 'C-m'
 byobu-tmux send-keys 'exit' 'C-m'
 exit
 
+ byobu-tmux attach -t git-maj
+
