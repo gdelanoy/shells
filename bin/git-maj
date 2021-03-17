@@ -41,7 +41,7 @@
 #####################################################
 #
 
-byobu -S /tmp/git-maj
+# byobu -S /tmp/git-maj
 byobu new-window -n 'git-maj'
 sleep 1
 byobu-tmux send-keys 'cd ~/.shells' 'C-m'
