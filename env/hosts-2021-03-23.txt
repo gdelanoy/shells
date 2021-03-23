@@ -1,0 +1,58 @@
+127.0.0.1	localhost
+127.0.1.1	salon
+
+#
+# Ces entrées servent à identifier votre environnement direct.
+# Merci de ne pas les supprimer.
+#
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+255.255.255.255 broadcasthost
+
+
+#
+# Entrées du boulot :
+#
+
+
+
+# Mes containers LXC :
+
+
+#
+# Entrées Perso :
+#
+
+8.8.8.8         google.dela.noy        google gg go
+1.1.1.1		dns.clouflare.com cloudflare
+
+
+192.168.1.254   routeur.dela.noy	routeur box gw gateway bouygues gw.dela.noy passerelle
+192.168.1.1	    serveur.dela.noy	serveur proxmox
+192.168.1.2	    syno.dela.noy	syno	synology nas NAS
+192.168.1.3	    salon.dela.noy	salon
+192.168.1.4     chambre.dela.noy chambre
+192.168.1.5 	aa.dela.noy aa
+192.168.1.24 	portable.dela.noy portable
+
+
+# LXC Containers :
+
+192.168.1.150   annuaire.dela.noy   annuaire ldap openldap
+192.168.1.151   gitlab.dela.noy   gitlab git tuveuxvoirmongit
+192.168.1.152   ouaibe.dela.noy   ouaibe www www.dela.noy reverse
+192.168.1.153   visio.dela.noy  visio guillaumedelanoy.bounceme.net
+
+# VMs :
+
+192.168.1.50 	vm.dela.noy vm
+#
+# Les BlackLists :
+#
+
+
