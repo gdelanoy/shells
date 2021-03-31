@@ -42,6 +42,6 @@
 #
 
 
-cd ~/Musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )"
+cd /mnt/donnees/musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )"
 cd -
 exit 0
