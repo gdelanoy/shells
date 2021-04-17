@@ -78,7 +78,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'figlet $(hostname) | lolcat' 'C-m'
- byobu-tmux send-keys -t 0 '( ( ping -c1 syno 2$1 >/dev/null && ssh syno ) || echo "Le NAS Synology est injoignable." ))' 'C-m'
+ byobu-tmux send-keys -t 0 '( ( ping -c1 syno 2$1 >/dev/null && ssh syno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 #  byobu-tmux send-keys -t 0 'clear' 'C-m'
 
 # Yet another window
@@ -89,7 +89,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'espanso restart' 'C-m'
  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
- byobu-tmux send-keys -t 0 '( ( ping -c1 syno 2$1 >/dev/null && sursyno ) || echo "Le NAS Synology est injoignable." ))'
+ byobu-tmux send-keys -t 0 '( ( ping -c1 syno 2$1 >/dev/null && sursyno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 
 # And a last one
 
@@ -130,6 +130,10 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'
+ byobu-tmux send-keys 'most ~/.config/espanso/default.yml' 'C-m'
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'huit'
  byobu-tmux send-keys 'bofh' 'C-m'
 
 

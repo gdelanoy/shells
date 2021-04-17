@@ -8,21 +8,25 @@
 # it gets replaced by the "replace" string.
 matches:
   # Simple text replacement
-  - trigger: ":espanso"
-    replace: "Kikoo lol !"
+  #   - trigger: "espanso²"
+  #  replace: "Kikoo lol !"
 
   # Signature
   - trigger: "dng²"
     replace: "Bien cordialement,\n\n-- \nGuillaume Delanoy\nguillaume@delanoy.fr"
 
+  - trigger: "dmg²"
+    replace: "Bien cordialement,\n\n-- \nGuillaume Delanoy\ngdelanoy@gmail.com"
+
+
     # Date
-  - trigger: "d²"
-    replace: "{{mydate}}"
-    vars:
-      - name: mydate
-        type: date
-        params:
-          format: "%d/%m/%Y"
+    #  - trigger: "d²"
+    # replace: "{{mydate}}"
+    # vars:
+    #   - name: mydate
+    #    type: date
+    #    params:
+    #      format: "%d/%m/%Y"
 
   - trigger: "date²"
     replace: "{{madate}}"
@@ -32,15 +36,14 @@ matches:
         params:
           format: "%A %d %B %Y"
 
-
   # Heure
-  - trigger: ":hm"
-    replace: "Il est {{mytime}}"
+  - trigger: "hm²"
+    replace: "{{mytime}}"
     vars:
       - name: mytime
         type: date
         params:
-          format: "%Hh%M"
+          format: "%Hh %M"
 
   # Shell commands
 #  - trigger: ":shell"
@@ -57,21 +60,21 @@ matches:
     replace: "ß"
 
   - trigger: "c²"
-    replace: "©"
+    replace: "© "
 
   - trigger: "cr²"
-    replace: "®"
+    replace: "® "
 
   - trigger: "1/2"
-    replace: "½"
+    replace: "½ "
     word: true
 
-  - trigger: ":1/4"
-    replace: "¼"
+  - trigger: "1/4"
+    replace: "¼ "
     word: true
 
-  - trigger: ":3/4"
-    replace: "¾"
+  - trigger: "3/4"
+    replace: "¾ "
     word: true
 
   - trigger: "ç²"
@@ -82,9 +85,6 @@ matches:
 
   - trigger: "è²"
     replace: "È"
-
-  - trigger: "ê²"
-    replace: "Ê"
 
   - trigger: "ù²"
     replace: "Ù"
@@ -101,79 +101,312 @@ matches:
 # Remplacements personnalisés
 
   - trigger: "r²"
-    replace: "répondre "
+    replace: "répondre à "
     word: true
 
-  - trigger: ":g²"
+  - trigger: "g²"
     replace: "Guillaume "
     word: true
 
-  - trigger: ":d²"
+  - trigger: "ggm²"
+    replace: "gdelanoy@gmail.com "
+    word: true
+
+  - trigger: "gdm²"
+    replace: "guillaume@delanoy.fr "
+    word: true
+
+  - trigger: "adg²"
+    replace: "16 / 6, square Jean Monnet - 59120 Loos "
+    word: true
+
+  - trigger: "d²"
     replace: "Delanoy "
     word: true
 
-  - trigger: ":gd²"
+  - trigger: "gd²"
     replace: "Guillaume Delanoy "
     word: true
 
+  - trigger: "aa²"
+    replace: "Aurélie-Anne "
+    word: true
+
   - trigger: "ge²"
-    replace: "¯\_(ツ)_/¯ "
+    replace: "¯\\\_(ツ)_/¯ "
     word: true
 
   - trigger: "bjr²"
-    replace: "bonjour"
+    replace: "bonjour "
 
   - trigger: "ajd²"
-    replace: "aujourd'hui"
+    replace: "aujourd'hui "
+
+  - trigger: ":)²"
+    replace: "😃 "
+
+  - trigger: ":/²"
+    replace: "😕 "
+
+  - trigger: "lol²"
+    replace: "😄 "
+
+  - trigger: ";)²"
+    replace: "😉 "
+
+  - trigger: "wink²"
+    replace: "😉 "
+
+  - trigger: "angel²"
+    replace: "😇 "
+
+  - trigger: "think²"
+    replace: "🤔 "
+
+  - trigger: "vomit²"
+    replace: "🤮 "
+
+  - trigger: "fear²"
+    replace: "😱 "
+
+  - trigger: "rage²"
+    replace: "🤬 "
+
+  - trigger: "clown²"
+    replace: "🤡 "
+
+  - trigger: "santa²"
+    replace: "🎅 "
+
+  - trigger: "popcorn²"
+    replace: "🍿 "
+
+  - trigger: "champ²"
+    replace: "🍾 "
+
+  - trigger: "beer²"
+    replace: "🍻 "
 
   - trigger: "rofl²"
-    replace: "🤣"
+    replace: "🤣 "
 
   - trigger: "heyes²"
-    replace: "😍"
-  
+    replace: "😍 "
+
   - trigger: "kiss²"
-    replace: "😘"
-  
+    replace: "😘 "
+
   - trigger: "mask²"
-    replace: "😷"
+    replace: "😷 "
 
   - trigger: "wut²"
-    replace: "😳"
+    replace: "😳 "
 
   - trigger: "sob²"
-    replace: "😭"
+    replace: "😭 "
 
   - trigger: "poop²"
-    replace: "💩"
+    replace: "💩 "
 
   - trigger: "boom²"
-    replace: "💥"
+    replace: "💥 "
 
   - trigger: "fuck²"
-    replace: "🖕"
+    replace: "🖕 "
 
   - trigger: "(y)"
-    replace: "👍"
+    replace: "👍 "
+
+  - trigger: "pray²"
+    replace: "🙏 "
+
+  - trigger: "clap²"
+    replace: "👏 "
+
+  - trigger: "swag²"
+    replace: "😅 "
+
+  - trigger: "bwa²"
+    replace: "🤪 "
+
+  - trigger: "smirk²"
+    replace: "😏 "
+
+  - trigger: "cold²"
+    replace: "🥶  "
+
+  - trigger: "culture²"
+    replace: "🧐 "
+
+  - trigger: "devil²"
+    replace: "😈 "
+
+  - trigger: "skull²"
+    replace: "☠ "
+
+  - trigger: "alien²"
+    replace: "👽 "
+
+  - trigger: "heart²"
+    replace: "💖 "
+
+  - trigger: "rose²"
+    replace: "🌹 "
+
+  - trigger: "world²"
+    replace: "🌍 "
+
+  - trigger: "gyro²"
+    replace: "🚨 "
+
+  - trigger: "fmoon²"
+    replace: "🌝 "
+
+  - trigger: "fire²"
+    replace: "🔥 "
+
+  - trigger: "shiny²"
+    replace: "✨ "
+
+  - trigger: "tada²"
+    replace: "🎉 "
+
+  - trigger: "notes²"
+    replace: "🎶 "
+
+  - trigger: "phone²"
+    replace: "☎ "
+
+  - trigger: "titre²"
+    replace: "📙 "
+
+  - trigger: "money²"
+    replace: "💰 "
+
+  - trigger: "no²"
+    replace: "⛔ "
+
+  - trigger: "nuclear²"
+    replace: "☢ "
+
+  - trigger: "biohazard²"
+    replace: "☣ "
+
+  - trigger: "lys²"
+    replace: "⚜ "
+
+  - trigger: "check²"
+    replace: "✔ "
+
+  - trigger: "us²"
+    replace: "🇺🇸 "
+
+  - trigger: "mindblown²"
+    replace: "🤯 "
+
+  - trigger: "hot²"
+    replace: "🥵  "
+
+  - trigger: "party²"
+    replace: "🥳  "
+
+  - trigger: "sunglasses²"
+    replace: "😎 "
+
+  - trigger: "star²"
+    replace: "🌠 "
 
   - trigger: "de²"
-    replace: "🇩🇪"
+    replace: "🇩🇪 "
 
   - trigger: "om²"
-    replace: "🕉"
+    replace: "🕉 "
 
   - trigger: "fr²"
-    replace: "🇫🇷"
+    replace: "🇫🇷 "
 
   - trigger: "gb²"
-    replace: "🇬🇧"
+    replace: "🇬🇧 "
 
+  - trigger: "biz²"
+    replace: "(づ￣ ³￣)づ "
+
+  - trigger: "magie²"
+    replace: "(∩｀-´)⊃━☆ﾟ.･｡☆ﾟ.･｡ﾟ) "
+
+  - trigger: "table²"
+    replace: "(╯°□°）╯︵ ┻━┻) "
+
+  - trigger: "zik²"
+    replace: "¸¸♬·¯·♩¸¸♪·¯·♫¸¸Happy Birthday !¸¸♬·¯·♩¸¸♪·¯·♫¸¸ "
+
+  - trigger: "enlum²"
+    replace: "(((¯`·._.·(¯`·._.· Text ·._.·´¯)·._.·´¯))) "
+
+  - trigger: "meh²"
+    replace: "╭∩╮（︶︿︶）╭∩╮ "
+
+  - trigger: "love²"
+    replace: "💋 "
+
+  - trigger: "apes²"
+    replace: "🙈 🙉 🙊 "
+
+  - trigger: "zzz²"
+    replace: "💤 "
+
+  - trigger: "metal²"
+    replace: "🤘 "
+
+  - trigger: "fist²"
+    replace: "✊ "
+
+  - trigger: "zombie²"
+    replace: "🧟 "
+
+  - trigger: "up² "
+    replace: "👆 "
+
+  - trigger: "down²"
+    replace: "👇 "
+
+  - trigger: "left²"
+    replace: "👈 "
+
+  - trigger: "right²"
+    replace: "👉 "
+
+  - trigger: "raja²"
+    replace: "🧘 "
+
+  - trigger: "cat²"
+    replace: "🐈 "
+
+  - trigger: "pig²"
+    replace: "🐽 "
+
+  - trigger: "arbre²"
+    replace: "🌳 "
+
+  - trigger: "frite²"
+    replace: "🍟 "
+
+  - trigger: "sushi²"
+    replace: "🍣 "
+
+  - trigger: "pasta²"
+    replace: "🍝 "
+
+   #  - trigger: "²"
+#    replace: ""
+#
 
 # Lutter contre la dyslexie dans les commandes :
 
-  - trigger: "sud o "
+  - trigger: "sud o"
     replace: "sudo "
 
   - trigger: "sduo"
-    replace: "sudo"
+    replace: "sudo "
     word: true
+
