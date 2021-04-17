@@ -1,0 +1,307 @@
+#!/usr/bin/env bash
+
+# Copyright (C) 2021 Bob Hepple <bob.hepple@gmail.com>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+# This is intended to be 'source'd into a bash session - perhaps in ~/.bashrc
+
+# NOTE: the usage of 'ccd' has changed since 2021-03-14 - if you have an
+# earlier version, please read 'ccd --help' carefully
+
+__ccd_prog="ccd"
+__ccd_freq_file="$HOME/.cache/$__ccd_prog"
+__ccd_max_stack=30 # a limit on the size of pushd/popd/dirs stack
+
+__ccd_usage=$( cat << EOF
+$__ccd_prog(1)            A redefinition of cd                           $__ccd_prog(1)
+
+SYNOPSIS
+cd [options] [directory]
+
+DESCRIPTION
+$__ccd_prog is intended to be source'd into an existing bash session
+and redefines the 'cd' command to allow selection of a new directory
+using fzf and a frequency-annotated history file '$__ccd_freq_file' as
+well as the pushd/popd/dirs stack.
+
+When using fzf, the most frequently used directories are listed first
+followed by the tree under the current directory (or as customised by
+the FZF_ALT_C_COMMAND).
+
+pushd/popd/dirs usage is improved by limiting the size of the stack to
+a reasonable number and removing duplicates.
+
+With $__ccd_prog, your history of directory choices is persistent and
+shared amongst all terminal sessions (although the pushd/popd/dirs
+stack is still local to a session and ephemeral).
+
+Use '\\cd' to use the default (builtin) 'cd'.
+
+Note that your scripts will still use the normal, builtin version of 'cd'.
+
+OPTIONS
+cd <dir>          : changes directory and saves it in the history file
+cd -/-b/--back    : go back where you were
+cd --/-p/--pushd  : list the current pushd/popd stack (== dirs -v)
+cd ---/-f/--fzf   : invokes fzf to select a remembered directory or one 
+                    below the current directory
+cd -e/--edit      : invokes \$EDITOR to manually edit history file
+cd -<N>/--<N>     : (integer <N>) cd to Nth item in 'dirs -v'
+cd -a/--add <dir> : add 'dir' to the frequency file
+cd -l/--list      : lists the history file
+cd -h/--help      : prints help
+cd -n/--name-sort : sort by name instead of frequency of use
+
+Alt-C             : change directory using fzf if fzf keybindings are 
+                    enabled. This can be done in the middle of a command 
+                    line.
+
+These aliases are also set up:
+    alias cdb='cd --back'
+    alias cdf='cd --fzf'
+    alias cdn='cd --name-sort'
+    alias cdp='cd --pushd'
+
+Note that \$HOME is not added to the frequency file.
+
+ENVIRONMENT VARIABLES
+    CCD_POST
+        $__ccd_prog executes \$CCD_POST after each change of directory eg
+            export CCD_POST="pwd; ls"
+    FZF_DEFAULT_OPTS
+    FZF_TMUX_HEIGHT
+    FZF_ALT_C_COMMAND
+        see fzf - NB I would recommend adding -xdev to the find command
+        to limit the search on very deep file system trees.
+
+DEPENDENCIES
+fzf
+
+INSTALLATION
+Download to somewhere on your \$PATH, chmod +x, then
+     source ccd
+
+To make it permanent for all terminal sessions, put the above 'source'
+statement in ~/.bashrc (_after_ /usr/share/fzf/shell/key-bindings.bash
+if present), log out and log back in again.
+
+AUTHOR
+Bob Hepple (bob.hepple@gmail.com)
+
+SEE ALSO
+https://gitlab.com/wef/dotfiles/-/blob/master/bin/ccd
+
+LICENSE
+GPLv3
+EOF
+)
+
+__fzf_cd__() {
+    local cmd dir hist
+    hist=~/.cache/$__ccd_prog
+    cmd="sed 's/^[[:digit:]]* //' $hist | sed '/^ *$/d';
+              echo '------- directories under \$PWD: -------';
+              ${FZF_ALT_C_COMMAND:-"command \
+                  find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' \
+                                                  -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \
+                                                  \\) -prune -o -type d -print 2> /dev/null | cut -b3-"}"
+    dir=$(eval "$cmd" | sed "s:^$HOME:~:" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS $FZF_ALT_C_OPTS" $(__fzfcmd) +m | sed "s:^~/:$HOME/:") && [[ "$dir" ]] && [[ "$dir" =~ ^---- ]] || { printf "builtin pushd %q >/dev/null;$CCD_POST" "$dir" && __ccd_add_to_freq_file "$( readlink -e "$dir" )"; }
+}
+
+# is not exported by key-bindings.bash:
+__fzfcmd() {
+  [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
+    echo "fzf-tmux ${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} -- " || echo "fzf"
+}
+
+__ccd_add_to_freq_file() {
+    text="$*"
+
+    case "$text" in
+        "$HOME"|"~/") return 0 ;;
+    esac
+
+    #echo "Adding '$text' to $__ccd_freq_file" >&2
+    
+    TMP=$( mktemp )
+    trap "rm -f $TMP" EXIT
+
+    touch "$__ccd_freq_file"
+    
+    awk < "$__ccd_freq_file" >| "$TMP" -v text="$text" '
+BEGIN { 
+  count[text]=1
+}
+
+{ 
+  num=$1
+  gsub("^[[:digit:]]+ ","")
+  count[$0]+=num
+}
+
+END {
+  for (i in count) {
+    printf("%d %s\n", count[i], i)
+  }
+}'
+
+    sort -k1nr -k2 "$TMP" >| "$__ccd_freq_file"
+}
+
+..() { 
+    for (( j=${1:-1} - 1; j>0; j--)); do 
+        builtin cd ..
+    done 
+    cd ..
+}
+alias ...=".. 2" ....=".. 3"
+
+__ccd_func() {
+    arg1="$1"
+    shift
+    #echo "$__ccd_prog: '$arg1'" >&2
+    NAME_SORT=""
+    mkdir -p $( dirname $__ccd_freq_file )
+
+    case "$arg1" in
+        -h|--help)
+            echo "$__ccd_usage"
+            return 0
+            ;;
+        -l|--list)
+            cat "$__ccd_freq_file"
+            return 0
+            ;;
+        -a|--add)
+            arg1="$1"
+            [[ -d "$arg1" ]] && __ccd_add_to_freq_file "$( readlink -e "$arg1" )"
+            return 0
+            ;;
+
+        --[[:digit:]]*)
+            arg1=${arg1#-}
+            ;& # fall through
+        -[[:digit:]]*)
+            arg1=${arg1#-}
+            new_dir=$( dirs +$arg1 )
+            ;;
+        "")
+            new_dir=$HOME
+            ;;
+        "-"|-b|--back)
+            new_dir=$( dirs +1 )
+            ;;
+        "--"|-p|--push*)
+            dirs -v
+            return 0
+            ;;
+        -n|--name-sort)
+            NAME_SORT='| sort'
+            ;& # fall through
+        "---"|-f|--fzf)
+            # set -x
+            CMD="sed 's/^[[:digit:]]* //' $__ccd_freq_file | sed '/^ *$/d' $NAME_SORT;
+             echo '------- directories under \$PWD: -------';
+             ${FZF_ALT_C_COMMAND:-command find -L . -mindepth 1
+ \\( -path '*/\\.*' -o -fstype sysfs -o -fstype devfs -o -fstype
+devtmpfs -o -fstype proc \\) -prune -o -type d -print 2>/dev/null |
+                cut -b3- 
+             }"
+
+            new_dir=$( eval $CMD | sed "s:^$HOME:~:" | 
+                       # make FZF_DEFAULT_OPTS the same as in ALT-C:
+                       FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore $FZF_DEFAULT_OPTS" $( __fzfcmd ) +m
+                   )
+            #echo "new_dir='$new_dir'" >&2
+            ;;
+        -e|--edit)
+            ${EDITOR:-vi} $__ccd_freq_file
+            return $?
+            ;;
+        -*)
+            echo "$__ccd_prog: bad option '$arg1'" >&2
+            return 1
+            ;;
+        *)
+            new_dir="$arg1"
+            ;;
+    esac
+
+    # expand any leading ~ ... readlink doesn't do it
+    case "$new_dir" in
+        "~")
+            new_dir=$HOME
+            ;;
+        "~/"*)
+            new_dir=$HOME/${new_dir#"~/"}
+            ;;
+        "~"*)
+            echo "$__ccd_prog: expansion of '~' in '$new_dir' is not supported" >&2
+            return 1
+            ;;
+        "-----"*) # just in case the separator line was selected in fzf
+            return 0
+            ;;
+    esac
+
+    # only record it if it exists:
+    [[ -d "$new_dir" ]] && __ccd_add_to_freq_file "$( readlink -e "$new_dir" )"
+
+    pushd $new_dir > /dev/null
+    eval $CCD_POST
+
+    # Trim down everything beyond __ccd__max_stack entry
+    popd -n +$(( __ccd_max_stack + 1 )) >/dev/null 2>&1
+
+    # Remove any other occurence of this dir, skipping the top of the stack
+    CNT=1
+    while (( CNT < __ccd_max_stack )); do
+        x2=$(dirs +${CNT} 2>/dev/null)
+        [[ $? -ne 0 ]] && return 0
+        [[ ${x2:0:1} == '~' ]] && x2="${HOME}${x2:1}"
+        if [[ "${x2}" == "${new_dir}" ]]; then
+            popd -n +$CNT >/dev/null
+            CNT=$(($CNT - 1))
+        fi
+	CNT=$(($CNT + 1))
+    done
+    
+}
+
+alias cd=__ccd_func
+alias cdf='__ccd_func --fzf'
+alias cdb='__ccd_func --back'
+alias cdp='__ccd_func --pushd'
+alias cdn='__ccd_func --name-sort'
+
+# just in case this is run as a standalone instead of being source'd:
+case $0 in
+    *sh) # we've been source'd, all OK
+        :
+        ;;
+    *)
+        case $1 in
+            -h|--help)
+                echo "$__ccd_usage"
+                exit 0
+                ;;
+            *)
+                echo "$0: This script is intended to be source'd, not run standalone" >&2
+                exit 1
+                ;;
+        esac
+        ;;
+esac
+

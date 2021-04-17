@@ -42,6 +42,10 @@
 #
 
 
+<<<<<<< HEAD
+cd /mnt/donnees/musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )"
+=======
 cd ~/Musique && mpv --no-audio-display "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )"
+>>>>>>> cc5293e12ce80c2160b92b83aa3248caaa30d297
 cd -
 exit 0
