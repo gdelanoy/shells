@@ -17,7 +17,7 @@ autoload -U promptinit; promptinit
 # prompt spaceship
 
 # Path to your oh-my-zsh installation.
-# 
+#
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -156,7 +156,7 @@ SPACESHIP_PROMPT_ORDER=(
   vi_mode       # Vi-mode indicator
   jobs          # Background jobs indicator
   char          # Prompt character
-  exit_code     # Exit code section       
+  exit_code     # Exit code section
 )
 
 SPACESHIP_CHAR_SYMBOL="└─-~^~-~➜ "
@@ -208,7 +208,7 @@ fi
 # Des couleurs :
 #
 
-source /home/guillaume/.shells/scripts/couleurs.shell
+source /home/myadvens.lan/gdelanoy/.shells/scripts/couleurs.shell
 
 ###########################
 # Alias spécifiques à zsh :
@@ -223,10 +223,10 @@ alias -s conf=vim
 alias -s html="firefox"
 alias -s org="firefox"
 
-# Alias globaux : 
+# Alias globaux :
 #
 # Exemple :
-# 
+#
 # $ alias -g C='| wc -l'
 # $ grep alias ~/.zsh/* C
 # 443
@@ -294,7 +294,7 @@ snow() {
    }
 
 # Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
-function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
+function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; }
 
 # Serve a directory on a given port
 # https://davidwalsh.name/serve-directory-python
@@ -321,7 +321,7 @@ function showdiff()
 	wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' $1 $2
 }
 
-# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) :
 
 function svi() {
 	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && vim $1
@@ -427,8 +427,8 @@ alias lm='ls -al |most'        # pipé dans 'most'
 alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
-# 
-alias tree='tree -Cs'       
+#
+alias tree='tree -Cs'
 alias less='less --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
@@ -473,7 +473,7 @@ alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -
 alias burn='pkill -9'
 alias px='ps aux | grep '
 alias ct='column -t'
-alias dfc='df -hPT | column -t' 
+alias dfc='df -hPT | column -t'
 alias untar='tar -zxvf'
 alias ipext='curl ipinfo.io/ip'
 alias ipin='hostname -I'
@@ -509,12 +509,12 @@ alias diskspace="du -S | sort -n -r |more"
 alias folders="sudo find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
 
 # Raccourcis pour la gestion des paquetages :
-#	
+#
 alias apti='sudo apt-get install'
 alias apts="sudo apt-cache search"
-alias aptr='sudo apt-get remove' 
+alias aptr='sudo apt-get remove'
 alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
-alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand'
 alias maj="sudo apt-get update && sudo apt-get upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log"
 
 # Arrêt / Reboot :
@@ -552,7 +552,7 @@ alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
 # alias usbb='rsync -avz /media/usbdisk/ ~/backup/usb/'
 
 ###############################
-# Pour les différentes applis : 
+# Pour les différentes applis :
 ###############################
 
 # Raccourcis pour 'grep' :
@@ -572,7 +572,7 @@ alias sud='sudo su'
 sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 # sudo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 
-# VIM : 
+# VIM :
 #
 alias vi='vim'
 alias edit='vim'
@@ -619,7 +619,7 @@ alias accio=ansibleSetup
 alias ans='ansible'
 alias ansp='ansible-playbook'
 
-# Ouvre tout ce que je  te donne :                                                                                                          
+# Ouvre tout ce que je  te donne :
 ouvre () {
   if [ -f $1 ] ; then
       case $1 in
