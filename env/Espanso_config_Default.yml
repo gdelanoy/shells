@@ -142,6 +142,53 @@ matches:
   - trigger: "ajd²"
     replace: "aujourd'hui "
 
+  - trigger: "om²"
+    replace: "🕉 "
+
+  - trigger: "fr²"
+    replace: "🇫🇷 "
+
+  - trigger: "gb²"
+    replace: "🇬🇧 "
+
+  - trigger: "de²"
+    replace: "🇩🇪 "
+
+  - trigger: "us²"
+    replace: "🇺🇸 "
+
+  - trigger: "nuclear²"
+    replace: "☢ "
+
+  - trigger: "biohazard²"
+    replace: "☣ "
+
+  - trigger: "lys²"
+    replace: "⚜ "
+
+  - trigger: "check²"
+    replace: "✔ "
+
+  - trigger: "bisou²"
+    replace: "(づ￣ ³￣)づ "
+
+  - trigger: "magie²"
+    replace: "(∩｀-´)⊃━☆ﾟ.･｡☆ﾟ.･｡ﾟ) "
+
+  - trigger: "table²"
+    replace: "(╯°□°）╯︵ ┻━┻) "
+
+  - trigger: "zik²"
+    replace: "¸¸♬·¯·♩¸¸♪·¯·♫¸¸Happy Birthday !¸¸♬·¯·♩¸¸♪·¯·♫¸¸ "
+
+  - trigger: "enlum²"
+    replace: "(((¯`·._.·(¯`·._.· Text ·._.·´¯)·._.·´¯))) "
+
+  - trigger: "meh²"
+    replace: "╭∩╮（︶︿︶）╭∩╮ "
+
+    # Des emojis à portée de clavier :
+
   - trigger: ":)²"
     replace: "😃 "
 
@@ -193,7 +240,7 @@ matches:
   - trigger: "heyes²"
     replace: "😍 "
 
-  - trigger: "kiss²"
+  - trigger: "biz²"
     replace: "😘 "
 
   - trigger: "mask²"
@@ -286,21 +333,6 @@ matches:
   - trigger: "no²"
     replace: "⛔ "
 
-  - trigger: "nuclear²"
-    replace: "☢ "
-
-  - trigger: "biohazard²"
-    replace: "☣ "
-
-  - trigger: "lys²"
-    replace: "⚜ "
-
-  - trigger: "check²"
-    replace: "✔ "
-
-  - trigger: "us²"
-    replace: "🇺🇸 "
-
   - trigger: "mindblown²"
     replace: "🤯 "
 
@@ -316,37 +348,7 @@ matches:
   - trigger: "star²"
     replace: "🌠 "
 
-  - trigger: "de²"
-    replace: "🇩🇪 "
-
-  - trigger: "om²"
-    replace: "🕉 "
-
-  - trigger: "fr²"
-    replace: "🇫🇷 "
-
-  - trigger: "gb²"
-    replace: "🇬🇧 "
-
-  - trigger: "biz²"
-    replace: "(づ￣ ³￣)づ "
-
-  - trigger: "magie²"
-    replace: "(∩｀-´)⊃━☆ﾟ.･｡☆ﾟ.･｡ﾟ) "
-
-  - trigger: "table²"
-    replace: "(╯°□°）╯︵ ┻━┻) "
-
-  - trigger: "zik²"
-    replace: "¸¸♬·¯·♩¸¸♪·¯·♫¸¸Happy Birthday !¸¸♬·¯·♩¸¸♪·¯·♫¸¸ "
-
-  - trigger: "enlum²"
-    replace: "(((¯`·._.·(¯`·._.· Text ·._.·´¯)·._.·´¯))) "
-
-  - trigger: "meh²"
-    replace: "╭∩╮（︶︿︶）╭∩╮ "
-
-  - trigger: "love²"
+  - trigger: "kiss²"
     replace: "💋 "
 
   - trigger: "apes²"
@@ -397,7 +399,49 @@ matches:
   - trigger: "pasta²"
     replace: "🍝 "
 
-   #  - trigger: "²"
+  - trigger: "wave²"
+    replace: "👋 "
+
+  - trigger: "trek²"
+    replace: "🖖 "
+
+  - trigger: "ok²"
+    replace: "👌 "
+
+  - trigger: "brain²"
+    replace: "🧠 "
+
+  - trigger: "eyes²"
+    replace: "👀 "
+
+  - trigger: "yum²"
+    replace: "😋 "
+
+  - trigger: "hug²"
+    replace: "🤗 "
+
+  - trigger: "party²"
+    replace: "🥳  "
+
+  - trigger: "dizzy²"
+    replace: "🥴  "
+
+  - trigger: "nerd²"
+    replace: "🤓 "
+
+  - trigger: "arm²"
+    replace: "💪 "
+
+  - trigger: "unicorn²"
+    replace: "🦄 "
+
+  - trigger: "fusee²"
+    replace: "🚀 "
+
+  - trigger: "peace²"
+    replace: "☮ "
+
+#  - trigger: "²"
 #    replace: ""
 #
 
@@ -408,5 +452,4 @@ matches:
 
   - trigger: "sduo"
     replace: "sudo "
-    word: true
 
