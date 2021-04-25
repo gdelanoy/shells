@@ -1,0 +1,12 @@
+#!/bin/bash
+echo -n 'Wesh cousin, donne le nombre de chiffres que tu veux dans ta p*tain de suite de Fibonnacci : '
+read term
+
+i=0
+j=1
+for (( c=0; c<term; c++ )) ; do
+    (( n=i+j ))
+    (( i=j ))
+    (( j=n ))
+    echo $i
+done
