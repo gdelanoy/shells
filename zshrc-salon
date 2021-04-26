@@ -1,22 +1,19 @@
-
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
-ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
-LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
-MANPATH="/usr/share/man:/usr/local/share/man"
-INFODIR="/usr/share/info:/usr/local/share/info"
-PAGER="/usr/bin/most"
-MANPAGER="/usr/bin/vim"
-EDITOR="/usr/bin/vim"
-BROWSER="/usr/bin/firefox"
+# V0riables d'environnement :
+export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
+export ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
+export LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
+export MANPATH="/usr/share/man:/usr/local/share/man"
+export INFODIR="/usr/share/info:/usr/local/share/info"
+export PAGER="/usr/bin/bat"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export EDITOR="/usr/bin/vim"
+export BROWSER="/usr/bin/firefox"
 
 # Pour Espanso :
 XDG_CONFIG_HOME=/home/$USER/.config
 
 umask 022
 export PATH PS1 XDG_CONFIG_HOME
-
-# Un charset français :
-export LESSCHARSET="latin1"
 
 autoload -U promptinit; promptinit
 
