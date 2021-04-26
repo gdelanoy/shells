@@ -208,7 +208,7 @@ fi
 # Des couleurs :
 #
 
-source /home/myadvens.lan/gdelanoy/.shells/scripts/couleurs.shell
+# source /home/myadvens.lan/gdelanoy/.shells/scripts/couleurs.shell
 
 ###########################
 # Alias spécifiques à zsh :
