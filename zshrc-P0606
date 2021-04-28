@@ -1,17 +1,20 @@
+export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:/usr/games:$HOME/.shells/bin"
+export ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
+export LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
+export MANPATH="/usr/share/man:/usr/local/share/man"
+export INFODIR="/usr/share/info:/usr/local/share/info"
+export PAGER="/usr/bin/most"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export EDITOR="/usr/bin/vim"
+export BROWSER="/usr/bin/firefox"
 
-PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
-ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
-LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
-MANPATH="/usr/share/man:/usr/local/share/man"
-INFODIR="/usr/share/info:/usr/local/share/info"
-PAGER="/usr/bin/most"
-EDITOR="/usr/bin/vim"
-BROWSER="/usr/bin/firefox"
 umask 022
 export PATH PS1
 
-# Un charset français :
-export LESSCHARSET="latin1"
+# Pour Espanso :
+export XDG_CONFIG_HOME=/$HOME/.config
+
+source $HOME/.config/broot/launcher/bash/br
 
 autoload -U promptinit; promptinit
 # prompt spaceship
@@ -19,6 +22,10 @@ autoload -U promptinit; promptinit
 # Path to your oh-my-zsh installation.
 #
 export ZSH="$HOME/.oh-my-zsh"
+export ZPLUG_HOME=$HOME/.shells/zplug
+export GREP_OPTIONS=""
+source $ZPLUG_HOME/init.zsh
+zplug load
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -106,11 +113,11 @@ export LANG=fr_FR.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
+# export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
-export PAGER='most'
+# export PAGER='most'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -152,9 +159,9 @@ SPACESHIP_PROMPT_ORDER=(
 #  kubecontext   # Kubectl context section
 #  terraform     # Terraform workspace section
   exec_time     # Execution time
-  line_sep      # Line break
-  vi_mode       # Vi-mode indicator
   jobs          # Background jobs indicator
+  line_sep
+  vi_mode       # Vi-mode indicator
   char          # Prompt character
   exit_code     # Exit code section
 )
@@ -174,21 +181,19 @@ SPACESHIP_DIR_PREFIX=""
 SPACESHIP_DIR_COLOR="045"
 SPACESHIP_DIR_TRUNC="3"
 SPACESHIP_EXEC_TIME_PREFIX="ça a pris "
-# SPACESHIP_BATTERY_SHOW="true"
-# SPACESHIP_BATTERY_THRESHOLD="60"
+SPACESHIP_BATTERY_SHOW="true"
+SPACESHIP_BATTERY_THRESHOLD="60"
 SPACESHIP_JOBS_SHOW="true"
 SPACESHIP_EXIT_CODE_SHOW="true"
 
 # Paramètres de l'historique des commandes :
 #
 # Nombre d'entrées dans l'historique :
-export HISTORY=10000
-export SAVEHIST=10000
+export HISTORY=1000000
+export SAVEHIST=1000000
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-HISTCONTROL="ignorespace"
-HISTCONTROL="ignoredups"
 HISTCONTROL="ignoreboth"
 
 alias history='fc -il 1'
@@ -208,7 +213,7 @@ fi
 # Des couleurs :
 #
 
-# source /home/myadvens.lan/gdelanoy/.shells/scripts/couleurs.shell
+source $HOME/.shells/scripts/couleurs.shell
 
 ###########################
 # Alias spécifiques à zsh :
@@ -218,6 +223,8 @@ autoload colors ; colors
 
 # Quel programme employer selon la terminaison d'un fichier que je nommme :
 #
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias -s {txt,yml,yaml,conf,md,sh,list}=vim
 alias -s txt=vim
 alias -s conf=vim
 alias -s html="firefox"
@@ -265,9 +272,29 @@ zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*'   force-list always
 zstyle ':completion:*' squeeze-slashes true
 
+# auto directory pushd that you can get dirs list by cd -[tab]  ]
+setopt auto_pushd
+setopt pushd_ignore_dups        # no duplicates in dir stack
+setopt pushd_silent             # no dir stack after pushd or popd
+setopt pushd_to_home            # `pushd` = `pushd $HOME`
+
+# compacked complete list display
+setopt list_packed
+
+# Alias utiles pour zshmarks :
+alias g="jump"
+alias s="bookmark"
+alias d="deletemark"
+alias p="showmarks"
+alias l="showmarks"
+
 ##############
 # Fonctions :
 ##############
+
+ mkcd() {
+     mkdir -p -v "$1" &&  cd "$1"
+        }
 
 # Trouver des fichiers :
 alias ff='find / -type f -name $1'
@@ -424,12 +451,11 @@ alias la='ls -Al'        	# Montre les fichiers cachés
 alias lr='ls -lR'        	# Récursif
 alias lt='ls -ltr'        	# Trié par date
 alias lm='ls -al |most'        # pipé dans 'most'
-alias l='ls -hF --color'    # quick listing
 
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
 #
 alias tree='tree -Cs'
-alias less='less --quiet'
+alias less='less -X --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
 alias psgrep='ps aux |grep -v grep |grep -i'
@@ -443,10 +469,10 @@ alias dn='OPTIONS=$(\ls -F | grep /$); select s in $OPTIONS; do cd $PWD/$s; brea
 alias path='echo -e ${PATH//:/\\n}'
 alias xs="cd"
 alias vf="cd"
-alias see="most"
+alias see="bat"
 alias mpv="mpv --no-audio-display"
-alias couleurs="grep  '# Color' ~/.bashrc"
-alias cls="clear"
+# alias couleurs="grep  '# Color' ~/.bashrc"
+alias cls="true; clear"
 
 # Des gadgets rigolos ( il en faut ;-) ) :
 #
@@ -459,7 +485,7 @@ alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu
 
 # Administration :
 #
-alias reload='source ~/.bashrc'
+# alias reload='source ~/.bashrc'
 alias confctrl='grep "^[^#]" $1'
 alias nslookup='nslookup -sil'
 alias LOG="coltail /var/log/*log /var/log/*/*log"
@@ -486,7 +512,7 @@ alias tue="sudo fk"
 alias mem="free -h"
 alias cdtmp="cd $(mktemp -d)"
 alias topcomm='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
-alias neo='su -c cmatrix guillaume'
+alias neo='su -c cmatrix gdelanoy'
 alias cputemp='sensors | grep Core'
 alias chx='sudo chmod 755'
 alias chr='sudo chmod 644'
@@ -494,11 +520,8 @@ alias ipinfo='curl ipinfo.io'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias cmderror='/usr/local/bin/cmderror'
 alias showconn="lsof -Pan -i tcp -i udp"
-# alias ram='sudo smem --userfilter="$USER" --pie name -s pss'
-
-alias close='eject -t /dev/sr0'
-alias open='eject /dev/sr0'
-
+alias br='broot --sizes --hidden -dp'
+alias nload="nload -m -a 300 -t 600"
 # Les machines du réseau local :
 alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
 
@@ -536,10 +559,7 @@ alias now='date +"%T"'
 ##############################################################
 
 # Mes scripts de session byobu :
-alias hop='bash $HOME/.scripts/byobu-opensession.sh 2>/dev/null'
-
-# La box de configuration de l'interface graphique de Voyager :
-alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.png" --image="/usr/share/xfce4/voyager/Voyager0.png" --image-on-top --separator="" --width=300 --height=260 --list --radiolist --no-headers --column="1" --column="option" --print-column 2 true "Voyager Wall" false "Conky Control" false "Plank Control" false "Colors Icons" false "Reparation" false "System Infos")'
+alias hop='bash $HOME/.shells/scripts/byobu-session-$(hostname).sh 2>/dev/null'
 
 # Youtube-dl avec les bonnes options :
 alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
@@ -564,11 +584,14 @@ alias grep='grep --color=auto'
 
 # Raccourcis pour 'sudo' :
 #
+
+alias sudo='nocorrect sudo  '
 alias please='sudo $(fc -ln -1)'
 
 # alias sduo='sudo'
-alias suod='sudo'
-alias sud='sudo su'
+
+alias sudo='sudo  '
+alias suod='sudo '
 sduo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 # sudo() { if [[ $@ == "us" ]]; then command sudo su -; else command sudo "$@"; fi; }
 
@@ -587,7 +610,7 @@ alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
 alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
 
 # Git :
-alias yolo='git add . ; git commit -m "$(fortune bofh-excuses | sed '/BOFH/d')" && git push origin master'
+alias yolo='git add . ; git commit -m "$(fortune)" && git push origin master'
 alias gitar="git ls-files -d -m -o -z --exclude-standard | xargs -0 git update-index --add --remove"
 alias gpd='git push origin develop'
 alias gpm='git push origin master'
@@ -638,6 +661,14 @@ ouvre () {
   fi
 }
 
+ trv(){
+ ( find . -iname "*$1*" | xargs -0 grep -oihE '\\[a-z]+' | sort | uniq -c | sort -rn | less )
+}
+
+# Ouvre la page de man de n'importe quoi que je viens de taper avec Alt+? (min.) )
+autoload -Uz run-help
+bindkey '\e,' run-help
+
 #
 # FZF : The Fuzzy Finder :
 #
@@ -647,8 +678,6 @@ ouvre () {
 # Des fonctions qui vont bien pour fzf :
 #
 alias joue='cd ~/Musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )" ; cd -'
-
-alias film='cd ~/Vidéos && mpv "$(fzf)"; cd -'
 
 # Des options pour fzf ( <3 ) :
 
