@@ -1,5 +1,5 @@
 # V0riables d'environnement :
-export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:/snap/bin:$HOME/.shells/bin"
+export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:$HOME/.shells/bin"
 export ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
 export LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
 export MANPATH="/usr/share/man:/usr/local/share/man"
@@ -200,13 +200,11 @@ SPACESHIP_EXIT_CODE_SHOW="true"
 # Paramètres de l'historique des commandes :
 #
 # Nombre d'entrées dans l'historique :
-export HISTORY=10000
-export SAVEHIST=10000
+export HISTORY=1000000
+export SAVEHIST=1000000
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
 HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-HISTCONTROL="ignorespace"
-HISTCONTROL="ignoredups"
 HISTCONTROL="ignoreboth"
 
 alias history='fc -il 1'
@@ -467,7 +465,7 @@ alias lm='ls -al |most'        # pipé dans 'most'
 # Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
 #
 alias tree='tree -Cs'
-alias less='less --quiet'
+alias less='less  -X --quiet'
 alias df='df --human-readable'
 alias du='du -h --max-depth=1'
 alias psgrep='ps aux |grep -v grep |grep -i'
@@ -481,7 +479,7 @@ alias dn='OPTIONS=$(\ls -F | grep /$); select s in $OPTIONS; do cd $PWD/$s; brea
 alias path='echo -e ${PATH//:/\\n}'
 alias xs="cd"
 alias vf="cd"
-alias see="most"
+alias see="bat"
 alias mpv="mpv --no-audio-display"
 alias cls="true; clear"
 
