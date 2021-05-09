@@ -17,3 +17,6 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # set PATH so it includes user's private bin directories
+
+ssh-agent
+
