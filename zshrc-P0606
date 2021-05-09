@@ -508,7 +508,7 @@ alias debug="set -o nounset; set -o xtrace"
 alias ssytemctl='systemctl'
 alias sstatus="sudo systemctl status -l"
 alias srestart="sudo systemctl restart"
-alias tue="sudo fk"
+alias tue="sudo bash $HOME/.shells/bin/fk"
 alias mem="free -h"
 alias cdtmp="cd $(mktemp -d)"
 alias topcomm='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
