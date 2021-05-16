@@ -1,0 +1,56 @@
+
+# Aliases from A to Z ;-) :
+#
+# Address
+alias a="ip -c a | grep "MULTICAST,UP" -A 6&& echo; echo Mon addresse IPv4 publique est : $(curl -m 5 --ipv4 --silent canhazip.com)"
+# Block devices
+alias b='udisksctl status; echo && echo -- Block Devices --; blkid && echo; lsblk'
+# CPU
+alias c='echo -- CPU INFO --; lscpu |grep  "Nom de modèle"  && lscpu --extended --online'
+# Disk info
+alias d='df -hT -x devtmpfs -x tmpfs -x squashfs; echo && echo Directories by Size:; \du -sh --exclude=lost+found */ | sort -h'
+# Epoch
+alias e='echo -e Nombre de secondes depuis Epoch: $(date +%s) && echo Nombre de secondes jusqu au problème de 2038: $(( 2147483646 - $(date +%s) ))'
+# Forecast weather
+alias f='curl -m 5 wttr.in/Loos'
+# GPU info
+alias g='inxi -Gx'
+# Hostname
+alias h='hostnamectl status'
+# Installed packages
+alias i='echo Vous avez installé $(dpkg --get-selections |wc -l) paquetages.'
+# Journal
+alias j='journalctl -b -p crit --no-pager && echo; journalctl --disk-usage'
+# Kernel version
+alias k='cowsay -f tux Your $(uname -s) kernel is version $(uname -r) on $(uname -p) hardware. | lolcat'
+# List files
+alias l='ls -1hFs --group-directories-first'
+# Memory
+alias m='echo -e \\t\\t\\t -- Mémoire Vive et Swap: -- && free -hmtw'
+# Name servers
+alias n="echo Votre serveur DNS est: $(nmcli dev show | grep DNS |cut -d':' -f2)"
+# Open ports
+alias o='echo --Ports TCP en écoute-- && ss -lptn && echo -e "\n--Ports UDP en écoute--" && ss -lptn'
+# Processes
+alias p='echo Nombre de processus par usager:  && ps -Ao user |sort |uniq -c |sort -rn'
+# QR code
+# alias q="curl -m 5 qrenco.de/${#} 2>/dev/null; true" # Pasbon, à améliorer !
+# Routes
+alias r='echo -- Routes Réseau: -- && ip -c route'
+# Services
+alias s='systemctl list-units -t service --no-pager'
+# Terminal dimensions
+alias t='echo Ce terminal fait $(stty size|cut -d" " -f1) colonnes et $(stty size|cut -d" " -f2) caractères.'
+# Uptime
+alias u="echo Ce système est démarré depuis $(uptime -p | cut -d' ' -f2) heures et $(uptime -p | cut -d' ' -f4) minutes."
+# Value Cryptocoins
+# W already exists, just try it out ;-)
+alias v='curl -m 5 rate.sx'
+# Xeyes
+alias x='timeout 5 xeyes -fg blue'
+# Year calendar
+alias y='cal -y'
+# ZSH change directories
+#
+# Just try and type 'z', otherwise install it ;-)
+
