@@ -9,7 +9,7 @@ encfs /home/guillaume/Dropbox/Safe/ /home/guillaume/safe-in-cloud/ \
     case $yn in
         [YyOo]* ) /home/guillaume/.shells/bin/tirelire 2>/dev/null ; break;;
         [Nn]* ) echo "OK. bye."; df -h | grep safe | lolcat ; exit;;
-        * ) echo "Réponds par ou par non s'il te plaît...";;
+        * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
 #  df -h | grep safe | lolcat
  done

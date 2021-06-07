@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in *.mp3
+do
+sudo chown guillaume.users $i
+sudo chmod 640 $i
+# mv $i `echo $i | sed 's/~^~~^~/~^~/g'`
+mv $i `echo $i | sed 's/Intégrale/Integrale/g'`
+done

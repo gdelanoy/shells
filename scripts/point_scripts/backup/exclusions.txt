@@ -1,0 +1,14 @@
+*Cloud
+*Documents
+*Dropbox
+*Images
+*Musique
+*Publi_Formation
+*Téléchargements
+*Uploads
+*Vidéos
+*VirtualBox*
+*Safe
+*.cache
+*.dropbox*
+*.local/share/Steam/*
