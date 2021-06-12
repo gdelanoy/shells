@@ -272,14 +272,8 @@ alias -g NF='*(.om[1])' # newest file
 
 #  COMPLÉTION :
 
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.oh-my-zsh/cache
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
-zstyle ':completion:*:*:kill:*' menu yes select
-zstyle ':completion:*:kill:*'   force-list always
-zstyle ':completion:*' squeeze-slashes true
+source $HOME/.shells/completion.zsh
+
 
 
 # auto directory pushd that you can get dirs list by cd -[tab]
@@ -748,3 +742,5 @@ alias son="pulseaudio -k && pulseaudio -D"
 # source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 source /home/guillaume/.config/broot/launcher/bash/br
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
