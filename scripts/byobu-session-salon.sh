@@ -5,9 +5,10 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-session -d -s $USER # Crée une nouvelle session détachée
  byobu-tmux rename-window -t $USER:0 'Load' # Byobu se lance avec une seule fenêtre, on va la renommer.
  byobu split-window -v
- byobu-tmux send-keys -t 0 'sudo su' 'C-m'
- byobu-tmux send-keys -t 0 'gotop' 'C-m'
- byobu-tmux send-keys -t 1 'sudo su' 'C-m'
+ # byobu-tmux send-keys -t 0 'sudo su' 'C-m'
+ byobu-tmux send-keys -t 0 'bashtop' 'C-m'
+ # byobu-tmux send-keys -t 0 'gotop' 'C-m'
+ # byobu-tmux send-keys -t 1 'sudo su' 'C-m'
  byobu-tmux send-keys -t 1 'glances' 'C-m'
 
 # Tiens, une autre :
@@ -16,23 +17,21 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu-tmux send-keys -t 1 'ranger' 'C-m'
  byobu-tmux send-keys -t 0 'br' 'C-m'
+
 # Et une autre :
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Logs'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'sudo su' 'C-m'
+ # byobu-tmux send-keys -t 1 'sudo su' 'C-m'
  byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
  byobu-tmux send-keys -t 1 'C-m'
  byobu-tmux send-keys -t 1 'C-m'
  byobu-tmux send-keys -t 1 'C-m'
- # sleep 2
- # byobu-tmux send-keys -t 1 ":filter-out may be a replay" 'C-m'
- # byobu-tmux send-keys -t 1 ':save-config' 'C-m'
  byobu-tmux send-keys -t 0 'sudo su' 'C-m'
  byobu-tmux send-keys -t 0 'whowatch' 'C-m'
- byobu-tmux send-keys -t 0 'C-m'
- byobu-tmux send-keys -t 0 'C-m'
+ # byobu-tmux send-keys -t 0 'C-m'
+ # byobu-tmux send-keys -t 0 'C-m'
 
  # Une nouvelle fenêtre pour vim avec son explorateur ...
 
@@ -56,38 +55,37 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 
 # Et une autre :
 
- byobu-tmux new-window
- byobu-tmux rename-window 'Un'
- byobu split-window -v
+# byobu-tmux new-window
+# byobu-tmux rename-window 'Un'
+# byobu split-window -v
 #  byobu-tmux send-keys -t 1 'sudo su' 'C-m'
 # sleep 1
- byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
- sleep 1
- # byobu-tmux send-keys -t 1 'neo' 'C-m'
- byobu-tmux send-keys -t 1 'duf 2>/dev/null' 'C-m'
- byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'bashtop' 'C-m'
- # byobu-tmux send-keys -t 0 'calcurse' 'C-m'
+# byobu-tmux send-keys -t 1 'cd && clear' 'C-m'
+# sleep 1
+# byobu-tmux send-keys -t 1 'neo' 'C-m'
+# byobu-tmux send-keys -t 1 'duf 2>/dev/null' 'C-m'
+# byobu-tmux send-keys -t 0 'clear' 'C-m'
+# byobu-tmux send-keys -t 0 'bashtop' 'C-m'
+# byobu-tmux send-keys -t 0 'calcurse' 'C-m'
 
  # Create another window
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Deux'
  byobu split-window -v
-
 # byobu-tmux send-keys -t 0 '( ( ping -c1 syno && clear;ssh syno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 # byobu-tmux send-keys -t 1 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
 # byobu-tmux send-keys -t 1 'sleep 1' 'C-m'
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'figlet $(hostname) | lolcat' 'C-m'
+ byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'figlet $(hostname) | lolcat' 'C-m'
 # byobu-tmux send-keys -t 0 '( ( ping -c1 syno && clear;sh syno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 # byobu-tmux send-keys -t 0 'clear' 'C-m'
-
+#
 # Yet another window
-
- byobu-tmux new-window
- byobu-tmux rename-window 'Trois'
- byobu split-window -v
+#
+# byobu-tmux new-window
+# byobu-tmux rename-window 'Trois'
+# byobu split-window -v
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'espanso restart' 'C-m'
  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'

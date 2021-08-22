@@ -124,7 +124,7 @@ export LANG=fr_FR.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
+export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -741,6 +741,11 @@ alias son="pulseaudio -k && pulseaudio -D"
 
 # source $HOME/.git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-source /home/guillaume/.config/broot/launcher/bash/br
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# HSTR configuration - add this to ~/.zshrc
+alias hh=hstr                    # hh to be alias for hstr
+setopt histignorespace           # skip cmds w/ leading space from history
+export HSTR_CONFIG=hicolor       # get more colors
+#
