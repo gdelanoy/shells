@@ -9,6 +9,11 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR="/usr/bin/vim"
 export BROWSER="/usr/bin/firefox"
 
+if [ -d "$HOME/.shells/bookmarks" ]; then
+        export CDPATH=".:$HOME/.shells/bookmarks:/"
+            alias goto="cd -P"
+        fi
+
 # Pour Espanso :
 XDG_CONFIG_HOME=/home/$USER/.config
 

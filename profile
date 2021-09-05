@@ -17,6 +17,10 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # set PATH so it includes user's private bin directories
+# ssh-agent
+
+export PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:$HOME/.shells/bin"
 
 ssh-agent
 
+echo "$(date +%F____%T)\n" >> ~/Point_Profile_Log.txt)
