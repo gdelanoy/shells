@@ -1,5 +1,5 @@
 #!/bin/bash
 cd ~/.scripts/
-bash addblack.sh
+bash addblack.sh 2>/dev/null
 wait
 exit
