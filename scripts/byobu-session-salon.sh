@@ -131,7 +131,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'
- byobu-tmux send-keys 'bat ~/.config/espanso/default.yml' 'C-m'
+ byobu split-window -h
+ byobu-tmux send-keys -t 0 'bat ~/.zshrc' 'C-m'
+ byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'
