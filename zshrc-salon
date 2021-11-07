@@ -9,12 +9,13 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export EDITOR="/usr/bin/vim"
 export BROWSER="/usr/bin/firefox"
 
+# Des bookmarks faciles (en liens) vers les réps que vous voulez:
 if [ -d "$HOME/.shells/bookmarks" ]; then
         export CDPATH=".:$HOME/.shells/bookmarks:/"
             alias goto="cd -P"
         fi
 
-# Pour Espanso :
+        # Pour Espanso (autocomplétion) :
 XDG_CONFIG_HOME=/home/$USER/.config
 
 umask 022
@@ -22,8 +23,8 @@ export PATH PS1 XDG_CONFIG_HOME
 
 autoload -U promptinit; promptinit
 
+# Broot, l'explorateur de fichiers en CLI kilébô:
 source /home/guillaume/.config/broot/launcher/bash/br
-# source /home/guillaume/.config/forgit/forgit.plugin.zsh
 
 ######################################################
 #
@@ -209,10 +210,11 @@ export HISTORY=1000000
 export SAVEHIST=1000000
 # Fichier ou est stocké l'historique :
 export HISTFILE=$HOME/.history
-HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-HISTCONTROL="ignoreboth"
+export HISTTIMEFORMAT='%d/%m/%y %T '
+export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
+export HISTCONTROL="ignoreboth"
 
-alias history='fc -il 1'
+# alias history='fc -il 1'
 
 # Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
 # if [ -x /usr/bin/dircolors ]
@@ -229,7 +231,7 @@ alias history='fc -il 1'
 # Des couleurs :
 #
 
-source /home/guillaume/.shells/scripts/couleurs.shell
+# source /home/guillaume/.shells/scripts/couleurs.shell
 
 ###########################
 # Alias spécifiques à zsh :
@@ -240,7 +242,10 @@ autoload colors ; colors
 # Quel programme employer selon la terminaison d'un fichier que je nommme :
 #
 alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
-alias -s {txt,yml,yaml,conf,md,sh,list}=vim
+
+# Des alias spéciaux qui associent une extension à une appli:
+
+alias -s {txt,yml,yaml,conf,md,sh,list}="vim"
 alias -s html="firefox"
 alias -s org="firefox"
 
@@ -254,7 +259,7 @@ alias -s org="firefox"
 
 alias -g C='| wc -l'
 alias -g CA="2>&1 | cat -A"
-alias -g DN=/dev/null
+alias -g DN="/dev/null"
 alias -g NE="2> /dev/null"
 alias -g EG='|& egrep'
 alias -g EH='|& head'
@@ -290,13 +295,13 @@ setopt pushd_to_home            # `pushd` = `pushd $HOME`
 # compacked complete list display
 setopt list_packed
 
-# Alias utiles pour zshmarks :
+# Alias utiles pour zshmarks (désactivé) :
 
-alias g="jump"
-alias s="bookmark"
-alias d="deletemark"
-alias p="showmarks"
-alias l="showmarks"
+# alias g="jump"
+# alias s="bookmark"
+# alias d="deletemark"
+# alias p="showmarks"
+# alias l="showmarks"
 
 ##############
 # Fonctions :
@@ -312,7 +317,6 @@ alias ffi='sudo find / -iname $1'
 
 # Gestion des processus :
 myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
-pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
 # Faire répéter une commande n fois :
 function repeat()       # Repeat n times command.
@@ -471,10 +475,10 @@ alias psgrep='ps aux |grep -v grep |grep -i'
 alias count='du -a | cut -d/ -f2 | sort | uniq -c | sort -nr'
 alias findn='find . -iname '"${1}"''
 alias tu='top -o cpu' #cpu
-alias tm='top -o vsize' #memory
+# alias tm='top -o vsize' #memory
 alias biggest='BLOCKSIZE=1048576; du -chx | sort -rh'
 alias tf='tail -f '
-alias dn='OPTIONS=$(\ls -F | grep /$); select s in $OPTIONS; do cd $PWD/$s; break;done'
+# alias dn='OPTIONS=$(\ls -F | grep /$); select s in $OPTIONS; do cd $PWD/$s; break;done'
 alias path='echo -e ${PATH//:/\\n}'
 alias xs="cd"
 alias vf="cd"
@@ -495,7 +499,7 @@ alias plonk="pkill plank && nohup plank & ; rm -f nohup.out"
 
 # Administration :
 #
-alias reload='source ~/.bashrc'
+# alias reload='source ~/.bashrc'
 alias confctrl='grep "^[^#]" $1'
 alias nslookup='nslookup -sil'
 alias LOG="coltail /var/log/*log /var/log/*/*log"
@@ -691,8 +695,6 @@ bindkey '\e,' run-help
 #
 # Des fonctions qui vont bien pour fzf :
 #
-# alias joue='cd ~/Musique && mpv "$(fzf  --reverse --height=30% --prompt="𝄠 𝅘𝅥𝅰 " --margin=2,15% --preview "file {}" --preview-window "down:1" )" ; cd -'
-
 alias film='cd ~/Vidéos && mpv "$(fzf)"; cd -'
 
 # Des options pour fzf ( <3 ) :
@@ -751,6 +753,5 @@ alias son="pulseaudio -k && pulseaudio -D"
 
 # HSTR configuration - add this to ~/.zshrc
 alias hh=hstr                    # hh to be alias for hstr
-setopt histignorespace           # skip cmds w/ leading space from history
 export HSTR_CONFIG=hicolor       # get more colors
 #
