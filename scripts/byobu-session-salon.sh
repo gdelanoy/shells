@@ -84,26 +84,30 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Cinq'
  byobu split-window -v
+ byobu split-window -v
+ byobu split-window -v
  byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'grosse'
+ byobu-tmux send-keys -t 2 '"TERM=rxvt-unicode-256color cava"' 'C-m'
+ byobu-tmux send-keys -t 3 'alsamixer' 'C-m'
 
 # LOL jk :-P
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Six'
  byobu-tmux send-keys 'su - testeur' 'C-m'
-
- # THERE is the last one ;-)
+ wait
+ byobu-tmux send-keys 'beta' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'
  byobu split-window -h
- byobu-tmux send-keys -t 0 'bat ~/.zshrc' 'C-m'
- byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml' 'C-m'
+ byobu-tmux send-keys -t 0 'bat ~/.zshrc --theme Dracula --line-range 259:' 'C-m'
+ byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml --line-range 189:' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'

@@ -37,19 +37,17 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #
-# Créé le: mercredi_26/05/2021 à 22h56
+# Créé le: lundi_08/11/2021 à 18h07
 #####################################################
 #
-
-#!/usr/bin/env bash
-set -e
+et -e
 
 main() {
   previous_file="$1"
     file_to_edit=`select_file $previous_file`
 
   if [ -n "$file_to_edit" ] ; then
-          "vim" "$file_to_edit"
+          "micro" "$file_to_edit"
               main "$file_to_edit"
                 fi
             }
