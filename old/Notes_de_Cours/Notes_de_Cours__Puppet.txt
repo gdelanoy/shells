@@ -1,0 +1,867 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Configuration Management :
+___________________________________
+
+Déploiement continu :
+
+https://fr.wikipedia.org/wiki/D%C3%A9ploiement_continu
+
+Approvisionnement / Provisioning :
+
+https://fr.wikipedia.org/wiki/Provisionnement
+
+
+	Puppet :
+________________
+
+La forge collaborative :
+
+https://forge.puppet.com/
+
+Comparaison de la version entreprise avec la version opensource :
+
+https://puppet.com/product/puppet-enterprise-and-open-source-puppet 
+
+
+
+	INSTALLATION :
+______________________
+
+Dépôt RedHat : http://yum.puppetlabs.com/
+
+
+
+
+	Installation côté Serveur :
+___________________________________
+
+
+Pré-requis :
+
+# hostnamectl set-hostname <nom_serveur>
++ renseignez le fichier /etc/hosts avec le nom + IP du serveur et des clients
+
+Le « Puppet Master », ou serveur Puppet, fonctionne nécessairement en tant que démon Unix
+
+Son port d’écoute par défaut est le TCP/8140
+
+Il s’installe lui aussi depuis les repository de PuppetLabs, exemple sur une distribution CentOS7 :
+
+$ sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+$ sudo yum -y install puppetserver
+$ sudo systemctl start puppetserver
+$ sudo systemctl enable puppetserver
+$ sudo systemctl status puppetserver
+
+
+Pour info, les règles firewalld qui vont bien (sur le master ET chaque client) :
+# firewall-cmd --permanent --add-port=8140/tcp
+Sur le master seul :
+# firewall-cmd --permanent --add-port=8081/tcp
+
+Son fichier de configuration se trouve par défaut dans « /etc/puppetlabs/puppet/puppet.conf »
+
+Les variables correspondantes au serveur Puppet se trouve dans la section « [master] » :
+
+[master]
+vardir = /opt/puppetlabs/server/data/puppetserver
+logdir = /var/log/puppetlabs/puppetserver
+rundir = /var/run/puppetlabs/puppetserver
+pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+codedir = /etc/puppetlabs/code
+hiera_config = $confdir/hiera.yaml
+# puppetdb
+storeconfigs = true
+storeconfigs_backend = puppetdb
+reports = store,puppetdb
+
+
+
+	Installation côté client :
+____________________________________
+
+Pré-requis :
+
+# hostnamectl set-hostname <nom_client>
++ renseignez le fichier /etc/hosts avec le nom + IP du serveur
+
+
+Exemple sur une distribution CentOS7 :
+
+$ sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+$ sudo yum -y install puppet-agent
+
+Tester :
+$ puppet --version
+
+L’agent Puppet sous Linux peut être lancé en mode démon (avec le paramètre « runinterval » de la section « [main] » 
+du fichier de configuration « /etc/puppetlabs/puppet/puppet.conf » (toutes les 30 minutes par défaut). 
+
+Il peut néanmoins être désactivé :
+$ puppet agent --disable
+
+
+La   configuration   des   agents   se   fait   grâce   au   fichier   « puppet.conf »
+Par   défaut   il   est   situé   dans « /etc/puppetlabs/puppet/puppet.conf » et n'est pas vide
+
+Il existe 3 balises qu'on note entre crochets :
+
+[main] - Les réglages sous cette balise seront appliqués au lancement de Puppet indépendamment de son rôle (agent ou master)
+
+[agent] - Les réglages sous cette balise seront appliqués seulement si Puppet lancé en tant  qu'agent
+
+[master] - Les réglages sous cette balise seront appliqués seulement si Puppet lancé en tant que master
+
+
+Il existe de nombreux paramètres mais voici les plus intéressants :
+
+certname - Le nom local unique du nœud (Nécessaire si les noms DNS ne sont pas utilisés)
+server - Le nom du serveur Puppet
+pluginsync - Utilisation des plugins depuis les modules (Il est conseillé de mettre ce paramètre à 'true') => Automatique et « deprecated » depuis les dernières version de Puppet
+report -  Choisir d'envoyer ou non les rapports au Puppet Master (Il est conseillé de mettre ce paramètre à 'true')
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Une fois l’agent installé, Puppet peut être exécuté directement sans avoir besoin d’un « puppetmaster »
+$ /opt/puppetlabs/bin/puppet --version
+
+Pour mettre à jour les PATH et finaliser l'installation, exécutez :
+
+$ source /etc/profile.d/puppet-agent.sh 
+
+
+L’agent Puppet sous Linux peut être lancé :
+
+En mode démon (avec le paramètre « runinterval » de la section « [main] » du fichier de configuration 
+« /etc/puppetlabs/puppet/puppet.conf » (toutes les 30 minutes par défaut). 
+Il peut néanmoins être désactivé :
+# puppet agent –-disable
+
+En mode interactif en spécifiant cette commande :
+$ puppet agent --one-time
+
+Avec systemctl. D'ailleurs, ça sera fort utile :
+
+# systemctl enable puppet
+# systemctl start puppet
+# systemctl status -l puppet
+
+La   configuration   des   agents   se   fait   grâce   au   fichier   « puppet.conf » (commencez par le sauvegarder !!!)
+Par   défaut   il   est   situé   dans « /etc/puppetlabs/puppet/puppet.conf » et n'est pas vide
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Mise en place :
+_______________________
+
+
+
+
+Sur le client, avoir dans /etc/hosts une entrée avec l'@IP du serveur sous le nom "puppet" (au moins)
+
+Service installé et lancé, fichier puppet.conf configuré comme exliqué ci-dessus.
+
+
+Tapez :
+
+# puppet agent --verbose --test
+
+Il vosu répond par un message d'erreur. Ce n'est pas grave ca r il a généré le certificat et envoyé la demande de signature au serveur.
+(il n'a juste pas obtenu de réponse).
+
+Une fois ceci fait, allez sur le serveur voir la liste des certificats en attente de signature :
+
+# puppet cert list
+
+Il doit vous répondre quelque chose qui ressemblerait à 
+
+"Mon_Client.capen.sis" (SHA256) 0F:A0:09:27:65:8B:BC:53:96:4E:87:51:A4:53:4C:46:CF:5F:9A:1B:A5:FF:71:2F:19:C6:FA:B3:44
+
+
+Du coup, signez le certificat avec :
+
+# puppet cert sign Mon_Client.capen.sis
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Récap' côté client :
+
+   19  vim /etc/hosts
+
+192.168.20.XXX	puppetmaster.capen.sis	puppetmaster master puppet
+							    ^^^^^^
+
+   20  rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+   21  yum -y install puppet-agent
+   22  systemctl start puppet
+   23  systemctl enable puppet
+   24  systemctl status -l puppet
+   25  puppet --version
+   26  source /etc/profile.d/puppet-agent.sh 
+   27  puppet --version
+   28  cp /etc/puppetlabs/puppet/puppet.conf ~
+   29  vim /etc/puppetlabs/puppet/puppet.conf
+
+
+[main]
+server = puppetmaster.capen.sis 
+
+[agent]
+certname = Nom_du_Client
+pluginsync = true
+report = true
+
+   30  systemctl restart puppet
+   31  systemctl status puppet
+   32  puppet agent --verbose --test
+
+--> erreur, ce n'est pas grave, on va voir sur le serveur.
+
+
+Côté serveur :
+
+# puppet cert list
+
+ ... voir apparaître le hostname du client  + son certificat
+
+# puppet cert sign Nom_du_Client
+
+... pour accepter le certificat du client.
+
+
+Voir toutes les machines ayant signé :
+
+# puppet cert list --all
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	CYCLE DE VIE DANS PUPPET :
+__________________________________
+
+	P D C A
+
+1	Écrire des manifests.
+
+2	Déposer les manifests sur le Puppet Master.
+
+3	Appliquer les manifests sur les clients Puppet.
+
+4	Consulter les rapports.
+
+
+	
+
+PREMIERS PAS :
+______________________
+
+
+Application d’un manifest Puppet en local (extension « .pp »)
+
+On sauvegardera ce fichier sous « example.pp » dans le dossier 
+« /etc/puppetlabs/code/environments/production/manifests/»
+
+
+Un premier exemple trivial :
+
+exemple_trivial.pp
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+file { '/tmp/trivial.txt':
+	content => 'Kikoo lol',
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Mise en place du manifeste :
+
+# puppet apply exemple_trivial.pp
+
+
+
+Pour que la synchronisation se fasse plus rapidement que toutes les 30 minutes (par défaut),
+rajoutez sous [main] dans votre fichier puppet.conf :
+
+runinterval = 90
+
+
+
+un autre exemple (toujours trivial) :
+
+exemple2.pp
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+file {'testfile.txt':                     # une ressource fichier nommée : 'testfile'
+         path => '/tmp/testfile.txt',     # localisée à '/tmp/testfile'
+         ensure => present,               # qui doit exister
+         mode => '644',                   # avec les droits 644 (rw­-r--­­r--­­) 
+         content => "Ceci est un test\n", # contenant : "Ceci est un test" suivi d'un retour à la ligne.
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+	Validation syntaxique d’un manifest Puppet :
+____________________________________________________
+
+La syntaxe (ruby) des manifestes est sévère.
+Le langage Puppet DSL peut être validé par l’intermédiaire de l’utilitaire « puppet-lint »
+
+Installation via « gem » :
+
+# yum install rubygems
+# gem install puppet-lint
+
+Validation syntaxique de notre manifest puppet
+$ puppet-lint /etc/puppetlabs/code/environments/production/manifests/example.pp
+
+
+
+
+	LES MANIFESTES :
+________________________
+
+
+https://puppet.com/docs/puppet/6.3/type.html
+
+
+Les  ressources  sont la base de  Puppet  et  des   modifications qu'il apporte  sur un hôte.
+Il en existe plusieurs types dont :
+
+file – qui permet de gérer les fichiers (et donc les répertoires), leurs contenus, leurs détenteurs et leurs permissions
+package – qui permet de gérer les paquets
+service – qui permet de gérer les services (arrêt, mise en route, redémarrage, …)
+user – qui permet la gestion des utilisateurs
+exec – qui permet d'exécuter des commandes
+notify – qui permet d'ajouter des messages de log pendant l'exécution des agents
+
+
+Hint (merci Paulin) : 
+Installer plusieurs paquets en une seule directive :
+
+
+package { [ 'sl', 'figlet', ]: ensure => latest, }
+
+
+
+
+
+	T.P. 1 :
+________________
+
+ Installation de LAMP
+
+ - httpd
+ - mariadb
+ - mariadb-server
+ - Recopier un fichier index.php avec l'instruction phpinfo();
+ - Valider que les services httpd et mariadb sont lancés et en mode 'enable'
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Corrigé (Paulin) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+case $operatingsystem {
+centos, redhat:   { $apache = "httpd" }
+debian, ubuntu : { $apache = "apache2" }
+default : { fail("OS non reconnu") }  # ici, la fonction fail a pour seul but de faire
+}                                             # échouer la compilation.
+package { 'apache' :
+name => $apache,
+ensure => latest,
+}
+package { [ 'php', 'mariadb-server', ]: ensure => latest, }
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# ensure info.php file exists
+file { '/var/www/html/index.php':
+  ensure => file,
+  content => '&lt;?php  phpinfo(); ?>',    # phpinfo code
+  require => Package['httpd'],        # require 'httpd' package before creating
+} 
+
+# ensure httpd service is running
+service { 'httpd':
+  ensure => running,
+  enable => true,
+}
+
+# ensure mariadb service is running
+service { 'mariadb':
+  ensure => running,
+  enable => true,
+}
+
+
+
+
+
+	T.P. Utilisation des facts :
+___________________________________
+
+Poussez sur les agents un fichier /etc/motd, de sorte que le message du jour dise :
+
+Bienvenue sur <non_de_l_hote> . Mon adresse est <@_IP> et je tourne sur <@_OS> <@release> avec Puppet <@Puppet_version>
+
+Aidez-vous de :
+
+https://puppet.com/docs/facter/3.4/core_facts.html
+
+
+S'affranchir de la limite de 140 caractères par ligne :
+
+http://puppet-lint.com/checks/140chars/
+
+
+
+	T.P. : Expressions conditionnelles :
+______________________________________________
+
+
+- Démarrez deux containers supplémentaires et échangez les clefs avec le puppet master.
+
+- écrivez un manifeste qui :
+	- installera nginx + php SI Apache ou httpd n'est pas déjaà installé.
+	- installera Dokuwiki aussi bien sur Apache que sur nginx
+	- Démarrera tous les services apache et/ou nginx
+
+
+
+
+	 Pour Debian :
+
+wget https://apt.puppetlabs.com/puppet6-release-buster.deb
+OU :
+curl https://apt.puppetlabs.com/puppet6-release-buster.deb -o puppet6-release-stretch.deb
+
+sudo dpkg -i puppet6-release-buster.deb
+
+sudo apt-get update && sudo apt-get install puppet-agent
+
+
+Confirmer la version : 
+
+dpkg-query -W puppet-agent
+
+$ source /etc/profile.d/puppet-agent.sh 
+
+
+
+
+apache.pp :
+
+~~~~~~~~~~~~~~~~
+package { 'httpd':
+        ensure => latest,
+}
+  ->
+service {'httpd':
+        ensure          => running,
+        require         => Package['httpd'],
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+sshd.pp :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+file { '/home/formation/sshd_config':
+ensure => file,
+mode => '0600',
+source => '/tmp/sshd_config',
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+fqdn.pp :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+if $fqdn == $hostname {
+	notify { "pas glop":}
+}
+else {
+	notify { "le DNS a l'air bon": }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+	THE FOREMAN :
+_____________________
+
+
+https://theforeman.org/
+
+
+outil de provisioning !
+
+
+It does with a mix of:
+
++ hardware via network boot and automated install
++ virtual by connecting to the hypervisors
++ AMI customisation
++ Network
+
+
+For network installation, it signals the target server to network boot,by communicating with the BMC or hypervisor, and creates the
+appropriate network boot PXE setup via the foreman proxy to installthe OS.
+
+The contents of the network boot file are built from templates andcustomised before starting the installation. 
+It relies on a third partysource for the installation media, and has templates available for Jumpstart, Kickstart, Preseed, AutoYast.
+
+Image based (AMI)
+
+For cloud based compute resources, new systems are provisioned
+using images, rather than running an installation. These are then
+finished by Foreman logging into the instance via ssh.
+
+
+Inputs
+
+When creating a system via foreman, it requires a number of details
+about the new system which then are used in the templates and finish scripts.
+This includes things like, disk size, cpus, memory, networks, puppet classes,
+host groups, variables, owner, availbility zone, vpc, os, architecture or AMI image
+
+Managed systems
+
+If you have provisioning turned on for a system, in some cases, you
+will have access to the system console, and the ability to
+delete/rebuild the machine from the foreman console. 
+
+
+
+Turning off provisioning
+
+For basic usage of foreman with puppet, as I am describing in this
+talk, the provisioning component can be disabled. It is disabled as
+per below:
+
+
+/etc/foreman/settings.yaml
+
+# Disable foreman provisioning
+:unattended: true
+
+
+
+	SETUP :
+_______________
+
+yum -y update
+
+Setup a Hostname
+You'll have to edit the /etc/hosts file using any text editor, and Add your server.
+hostnamectl set-hostname server.capen.sis
+
+(déjà fait pour l'installation du puppet-server !!)
+
+rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+rpm -ivh http://yum.theforeman.org/releases/1.9/el7/x86_64/foreman-release.rpm
+
+yum-config-manager --enable rhel-7-server-optional-rpms rhel-server-rhscl-7-rpms
+
+yum -y install foreman-installer
+
+
+Puis : 
+
+# foreman-installer
+
+
+Note down initial username and password, you need this for accessing Foreman’s dashboard.
+
+Username :: admin
+Password :: toto
+
+
+Enfin, accédez au serveur via :
+
+https://&lt;Hostname_OR_IP_Foreman_Server>
+
+By default foreman server itself is registered in foreman dashboard. To check the host information,
+
+click on Hosts options —> then all hosts.
+
+
+
+~~~~~~~~~~~~~ Méthode d'installation proposée par Jeremy : ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTA BENE : pour commencer, faites figure le nom complet ( FQDN ) de votre serveur dans /etc/hosts, sinon foreman refusera de finaliser l'installation.
+
+
+Exemple :
+
+192.168.20.108  puppetmaster.capen.sis  puppetmaster master puppet
+
+
+yum -y install yum-utils
+
+  269  rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+  270  rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  271  rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+  272  rpm -ivh http://yum.theforeman.org/releases/1.9/el7/x86_64/foreman-release.rpm
+  273  yum-config-manager --enable rhel-7-server-optional-rpms rhel-server-rhscl-7-rpms
+  274  yum -y install foreman-installer
+  275  rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+  276  yum -y install epel-release
+
+
+  277  rpm -ivh http://yum.theforeman.org/releases/1.9/el7/x86_64/foreman-release.rpm
+  278  yum -y install foreman-installer
+  279  rpm -ivh http://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
+  280  yum -y install foreman-installer
+  282  vim /etc/yum.repos.d/foreman.repo 
+
+
+Remplacer 1.9 par latest
+
+Enregister puis yum update -y
+
+
+  283  rpm -ivh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+  285  yum -y install foreman-installer
+  286  rpm -ivh https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-multi_json-1.12.2-3.el7.noarch.rpm
+  287  yum -y install foreman-installer
+  290  foreman-installer
+  291  vim /etc/yum.repos.d/foreman.repo 
+ 
+rpm -ivh https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-kafo-3.0.0-1.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-highline-1.7.8-4.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-clamp-1.1.2-4.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-kafo_parsers-1.0.0-1.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-logging-2.2.2-3.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-multi_json-1.12.2-3.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-little-plugger-1.1.4-1.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-powerbar-2.0.1-1.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-kafo_wizards-0.0.1-2.el7.noarch.rpm https://yum.theforeman.org/releases/1.23/el7/x86_64/rubygem-hashie-3.6.0-1.el7.noarch.rpm http://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/r/rubygem-ansi-1.4.3-2.el7.noarch.rpm
+
+  294  vim /etc/yum.repos.d/foreman.repo 
+  
+  297  yum remove foreman-release
+  298  rpm -ivh https://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
+  299  yum install -y foreman-installer
+  300  foreman-installer 
+ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La méthode de Vincent : 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+yum install -y epel-release
+rpm -ivh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+rpm -ivh https://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
+yum install foreman-installer
+echo "192.168.20.IP puppet.capen.sis puppet" >> /etc/hosts
+echo "puppet" > /etc/hostname
+hostnamectl set-hostname puppet
+foreman-installer
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+
+Note down initial username and password, you need this for accessing Foreman’s dashboard.
+
+Username :: admin
+Password :: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Enfin, accédez au serveur via :
+
+https://<Hostname_OR_IP_Foreman_Server>
+
+By default foreman server itself is registered in foreman dashboard. To check the host information,
+
+click on Hosts options —> then all hosts.
+
+
+
+
+
+Turning off provisioning
+
+For basic usage of foreman with puppet, as I am describing in this
+talk, the provisioning component can be disabled. It is disabled as
+per below:
+
+
+/etc/foreman/settings.yaml
+
+# Disable foreman provisioning
+:unattended: true
+
+
+
+
+
+
+	NTP :
+_____________
+
+
+
+# puppet module install puppetlabs-ntp
+
+
+Now import the NTP module from dashboard. Click on Configure —-> Classes
+
+Click on Import option, it will import the NTP module in foreman dashboard
+
+Select the Module and click on Update.
+
+Click on  ‘ntp’ class name and the select ‘Smart Class Parameter’
+
+Sélectionner la catégorie "Server" dans le menu de gauche.
+
+
+['0.fr.pool.ntp.org','1.fr.pool.ntp.org','2.fr.pool.ntp.org','3.fr.pool.ntp.org']
+
+
+Select the override option in case you want to specify your own NTP  Servers.
+Change the Key type Value from “String” to “Array” and Specify the NTP Server’s name
+in the Default value Box and then click on Submit.
+
+Now it’s time to add ntp class to the host, for that go to Hosts options and Select the host 
+Click on Edit. Go to the ‘Puppet Classes‘ Tab and Click on ‘+‘ option to add ntp class on the host and then click on submit
+
+Now Run the following puppet command from the foreman server to configure the NTP Service
+ automatically.
+
+
+# puppet agent --test
+
+
+Now Check the reports from the Dashboard for the host.
+
+Go To Hosts—> Click on hosts{foreman.example.com —> Click on Reports.
+
+
+
+
+
+As we know that puppet makes the use of SSL Certificates to set up the secure communication 
+between puppet server and its nodes.
+Once Puppet Server sign the certificates of its node, then only communication can occur.
+
+Let’s create a autosign entry for puppet nodes which are on the domain.
+
+In the Forman Dashboard , Go To Infrastructure —> Select Smart Proxies —> 
+Select Autosign  under Action Tab
+
+Click on New to create new ‘autosign’ entry. 
+Specify the domain name and then click on Save.
+
+At this point, now we can say that our foreman server is ready to manage servers.
+
+
+
+
+Step:4 Add New hosts to Foreman Dashboard.
+
+To add new hosts or servers in the foreman dashboard we have to install puppet agent on the hosts and execute the following puppet command from the host.
+
+
+Let’s suppose we want to add Ubuntu server : 
+sudo apt install puppet
+puppet agent -td --server=foreman.capen.sis
+
+Now verify the host in dashboard.
+
+
+Now Add puppet Classes to this host in the same way  that we do for the host “foreman.example.com” in the above steps.
+
+
+
+
+
+
+
+	LIENS :
+_______________
+
+
+https://docs.puppet.com/puppetdb/2.2/connect_puppet_master.html
+
+https://mypads.framapad.org/mypads/?/mypads/group/poe-2019-2-6c4lg779d/view
+
+https://docs.puppet.com/puppetdb/2.2/connect_puppet_master.html
+
+https://ask.puppet.com/question/28990/error-500-on-server-server-error-failed-when-searching-for-node-host/
+
+
+
+
+
+
+
+
+
+
+
+
+

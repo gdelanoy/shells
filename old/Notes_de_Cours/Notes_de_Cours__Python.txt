@@ -1,0 +1,156 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+
+	Python :
+________________
+
+Exercices sur les noms, astuces :
+
+import random
+random.randint(0, len(tableau)-1)
+noms = ["toto", "tata", "tutu"]
+surnoms = ["le poney", "l'ours", "la pomme de terre"]
+print(noms[0] + " " + surnoms[0])
+
+
+Exercices sur les années bissextiles :
+Pour vérifier si un nombre est multiple de 5 : nb % 5 == 0
+
+Exercice sur les chaines de caractères :
+Pour séparer une chaine de caractère en tableau, en prenant un caractère séparateur ( ex : # ) : var_str.split("#")
+Une chaine de caractère est représentée comme un tableau en mémoire, ce qui permet de tester si "i" se trouve dans "pingpong" en faisant : "i" in "pingpong"
+Pour accéder à la dernière valeur d'un tableau : tbl[-1]
+Pour construire une chaine avec séparateur ";"  on peut utiliser : ";".join(tableau)
+
+Exercice sur les erreurs :
+Faire une fonction qui, suite à un input utilisateur, traduit la chaine en int, puis la multiplie par 3, et si la chaine ne peut pas etre traduite, afficher "Nope"
+Astuce : int("toto") raise ValueError
+
+
+Exercice sur les requetes :
+Créez un script qui prend en paramètre une URL ( obligatoire ), une méthode REST ( Obligatoire et de la forme : POST, PUT, GET etc ), et un chemin vers un fichier ( optionnel )
+Exemple : ./monscript.py --url https://httpbin.org -p 80 -m POST -f toto/tata.txt
+
+Une correction possible :
+
+#!/usr/bin/env python3
+
+import requests
+import os.path
+from argparse import ArgumentParser
+
+def determine_method(method):
+    if method == "POST":
+        return requests.post
+    elif method == "GET":
+        return requests.get
+    elif method == "PUT":
+        return requests.put
+    elif method == "DELETE":
+        return requests.delete
+    else:
+        return None
+
+def check_if_file_exists(filepath):
+    return os.path.isfile(filepath)
+
+def send_request(args):
+    method = args.method[0].upper()
+    method_func = determine_method(method)
+    if method_func is None:
+        raise Exception("Unknown method")
+    url = args.url[0]
+    try:
+        file = args.file[0]
+        if not check_if_file_exists(file):
+            print("Please provide a valid file")
+            return
+    except TypeError:
+        if method == "GET":
+            pass
+        else:
+            print("Please provide a file")
+            return
+    data = None
+    if method != "GET":
+        with open(file, "r") as file_to_read:
+            data = file_to_read.read().encode()
+
+    result = method_func(url, data=data)
+    result_str = result.text
+    if args.output != None:
+        with open(args.output[0], "w+") as outputfile:
+            outputfile.write(result_str)
+    else:
+        print(result_str)
+    if result.status_code != requests.status_codes.codes.OK:
+        print("There's an issue, code is : <{code}>".format(code=result.status_code))
+
+parser = ArgumentParser(description="")
+parser.add_argument('-u', '--url', required=True, type=str, nargs=1)
+parser.add_argument('-m', '--method', type=str, nargs=1, required=True)
+parser.add_argument('-f', '--file', type=str, nargs=1)
+parser.add_argument('-o', '--output', type=str, nargs=1)
+
+args = parser.parse_args()
+send_request(args)
+
+
+Bot discord :
+https://discord.gg/jXGVPy
+https://realpython.com/how-to-make-a-discord-bot-python/

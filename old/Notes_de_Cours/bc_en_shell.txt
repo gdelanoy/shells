@@ -1,0 +1,45 @@
+Si dans les scripts bash vous avez besoin d'effectuer des opérations mathématique il existe une méthode très simple.
+
+Une addition:
+
+# echo $((7+4))
+# 11
+
+Une soustraction:
+
+# echo $((8-2))
+# 6
+
+Une multiplication:
+
+# echo $((4*7))
+# 28
+
+Une division:
+
+# echo $((8/2))
+# 4
+
+Il est bien entendue possible d'effectuer ces opérations avec des variables comme par exmple:
+
+# i=4
+# echo $(($i/2))
+# 2
+
+Vous pouvez aussi utiliser les opérateurs logiques.
+
+Il est aussi possible d'utiliser le mot clef "let" exemple:
+
+Incrémentation:
+
+# i=4
+# let i++
+# echo $i
+# 5
+
+Décrémentation:
+
+# i=5
+# let i--
+# echo $i
+# 4

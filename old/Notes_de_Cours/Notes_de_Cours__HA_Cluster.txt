@@ -1,0 +1,725 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	H.A. :
+_______________
+
+
+
+Installation de Corosync : 
+
+# yum install -y pacemaker pcs psmisc policycoreutils-python
+# firewall-cmd --permanent --add-service=high-availability
+# firewall-cmd --reload
+
+Si vous rencontrez des difficultés,  désactivez Selinux ainsi que le firewall :
+
+# setenforce 0
+# sed -i.bak "s/SELINUX=enforcing/SELINUX=permissive/g" /etc/selinux/
+# systemctl disable firewalld.service
+# systemctl stop firewalld.service
+# iptables --flush
+
+Une fois que vos deux machines virtuelles sont lancées et configurées, pourquivez l'installation :
+
+
+Démarrez les service pcsd qui gère le clustering ::
+
+# systemctl start pcsd.service
+# systemctl enable pcsd.service
+# ln -s '/usr/lib/systemd/system/pcsd.service' '/etc/systemd/system/multi-user.target.wants/pcsd.service'
+
+Donnez à l‘utilisateur hacluster le MÊME mot de passe sur chaque noeud du cluster : 
+
+# passwd hacluster
+
+Lancez l‘authentification, puis la création du cluster :
+
+# pcs cluster auth vmcluster1 vmcluster2
+# pcs cluster setup --name monjolicluster vmcluster1 vmcluster2
+
+
+Une fois l'installation réalisée, on démarre le cluster avec :
+
+# pcs cluster start --all
+
+Pour qu'il soit actif dès le démarrage :
+
+# pcs cluster enable --all
+
+On contrôle la bonne communication au sein du cluster :
+
+# corosync-cfgtool -s
+
+
+On contrôle l'appartenance au cluster avec : 
+
+# corosync-cmapctl | grep members
+
+# pcs status corosync
+# pcs status
+
+
+On contrôle la validité de la configuration avec : 
+
+# crm_verify -L -V
+
+... erreurs !
+
+
+Désactiver STONITH dans pacemaker :
+
+# pcs property set stonith-enabled=false
+
+Du coup, crm_verify -L -V ne renvoie plus d'erreur :).
+
+
+
+Voir un export XML de la configuration corosync :
+
+# pcs cluster cib 
+
+Éventuellement, une commande :
+
+# pcs cluster cib > pcs-cib-moncluster-$(date +%F-%T)
+
+... peut être utile s'il faut ensuite restaurer une ancienne config'  ;-) 
+
+
+
+	AJOUTER UNE RESSOURCE DE TYPE VIP :
+__________________________________________
+
+
+# pcs resource create ClusterIP ocf:heartbeat:IPaddr2 ip=192.168.20.XXX cidr_netmask=32 op monitor interval=30s
+
+
+# pcs status
+
+(pour vérifier).
+
+On peut immédiatement vérifier la validité du cluster en tentant d'entrer en ssh sur l'@IP de la VIP :
+
+ssh formation@192.168.20.XXX
+formation@192.168.20.126's password: 
+Last login: Fri Nov 17 15:20:18 2017 from hote
+[formation@vmcluster1 ~]$ 
+
+
+... on peut valider un fonctionnement de base du cluster en faisant (indifféremment, sur n'importe quel node du cluster)
+un :
+# pcs cluster stop 
+
+
+et en testant à nouveau un ssh sur l'@IP de la VIP :
+
+ssh formation@192.168.20.XXX
+formation@192.168.20.126's password: 
+Last login: Fri Nov 17 15:20:18 2017 from hote
+[formation@vmcluster2 ~]$ 
+           __________
+
+
+
+	SETUP D'APACHE COMME SERVICE CLUSTER :
+______________________________________________
+
+
+
+
+# yum install -y httpd wget
+# firewall-cmd --permanent --add-service=http
+# firewall-cmd --reload
+
+Important
+Do not enable the httpd service. Let the cluster rule it.
+
+Créer une page index.html pour chacun des deux serveurs Apache :
+(Nota Bene : pour ce lab, la page index.html donne le nom du noeud, pour qu'on le voie passer d'un neaud à l'autre.
+ Dans la réalité, on veut bien évidemment masquer au contraire ce comportement !) 
+
+# cat &lt;&lt;-END >/var/www/html/index.html
+&lt;html>
+&lt;body>My Test Site - $(hostname)&lt;/body>
+&lt;/html>
+END
+
+Faire émettre par Apache son URL de statut pour chacun des deux serveurs Apache :
+Corosync en a besoin pour monitorer l'activité de chacun des noeuds :
+# cat &lt;&lt;-END >/etc/httpd/conf.d/status.conf
+&lt;Location /server-status>
+SetHandler server-status
+Require local
+&lt;/Location>
+END
+
+Puis :
+
+
+# pcs resource create WebSite ocf:heartbeat:apache configfile=/etc/httpd/conf/httpd.conf statusurl="http://localhost/server-status" op monitor interval=1min
+
+# pcs resource op defaults timeout=240s
+
+# pcs resource op defaults
+
+
+Faire fonctionner la ressource WebSite SUR la ressource ClusterIP :
+
+# pcs constraint colocation add WebSite with ClusterIP INFINITY
+
+
+Vérifier :
+
+pcs constraint 
+
+
+Accéder en http à l'@IP de la VIP pour valider le bon fonctionnement
+
+
+Pour faire en sorte qu'une ressource démarre avant une autre  :
+
+pcs constraint order ClusterIP then WebSite
+
+
+
+
+Faire préférer au cluster l'exécution d'une ressource sur un node donné plutôt qu'un autre :
+
+# pcs constraint location WebSite prefers supervm1=50
+# pcs constraint location WebSite prefers supervm2=40
+
+Du coup, le WebSite sera actif de préférence sur vm1 ... mais le score de la stickiness peut être plus élevé,
+et du coup la ressource ne déménage pas forcément (pour séviter des interruptions de services inutiles en cas de bagotage).
+Pour établir une préférence absolue, tapez plutôt :
+
+# pcs constraint location WebSite prefers supervm1=INFINITY
+
+
+# pcs constraint --full
+
+... pour voir aussi les identifiants de la contrainte.
+
+
+
+
+	INSTALLATION DE L'ACCÈS via interface web :
+___________________________________________________
+
+
+
+# yum install fence-agents lvm2-cluster resource-agents psmisc gfs2-uils
+
+... puis on y accède via : 
+
+https://ip:2224/
+
+Et on se loggue avec le compte + le MdP hacluster
+
+N.B. : si on ne voit pas tout de suite son cluster, il faut cliquer "Add Existing" + préciser l'IP et se logguer à nouveau.
+
+
+
+
+
+	INSTALLATION DE CRMsh :
+_______________________________
+
+
+# OSVERSION=$(cat /etc/centos-release | sed -rn 's/.* ([[:digit:]]).*/\1/p')
+# cd /etc/yum.repos.d/
+# wget http://download.opensuse.org/repositories/network:/ha-clustering:/Stable/CentOS_CentOS-${OSVERSION}/network:ha-clustering:Stable.repo
+# yum install crmsh
+
+	Usage :
+_______________
+
+Commencer par là :
+http://crmsh.github.io/start-guide/
+
+
+
+
+crm &lt;entrée> → entrer dans le shell
+
+help  &lt;entrée> → Accès à une aide documentée.
+
+configure  &lt;tab>&lt;tab> → affiche toutes les options de configuration possibles (explorer)
+
+show → voir la configuration active.
+
+edit → éditer la configuration (dans vim, nano …)
+
+	verify → à passer après chaque modification de la configuration. /!\
+
+	commit → appliquer la configuration modifiée.
+
+end  = quitter
+
+
+
+	resource &lt;entrée> → puis &lt;tab>&lt;tab> pour voir toutes les ressources 
+    que l‘on peut gérer.
+
+	Créer un groupe (utile ensuite) :
+
+	configure → group Mon_Joli_Groupe ClusterIP WebSite &lt;tab> ...
+
+	Migrer un groupe de ressources d‘un noeud à l‘autre (par ex. Avant une maintenance) :
+
+	migrate Mon_Joli_Groupe vmcluster1 
+
+	Déclarer une ressource : ir la configuration active.
+
+primitive newip ocf:heartbeat:&lt;tab> → et voir tous les scripts disponibles !
+
+ En cas de „Failed Actions“ sur une ressource : 
+
+	cleanup Ma_ressource  (ex: cleanup WebSite).
+
+
+
+
+	T.P. :
+_____________
+
+L'idée générale est d'installer WordPress en cluster.
+
+Le cluster devra tenir compte de la BdD MySQL nécessaire à Wordpress, et la prépliquer de sorte que Wordpress affiche la même chose
+quel que soit le noeud de cluster actif.
+
+N'oubliez pas de démonter D'ABORD vos points de montage NFS !!!!
+
+
+
+Une configuration DRBD / GlusterFS et Mysql sera donc nécessaire. Il en figure un exemple ici :
+
+https://www.lisenet.com/2016/activepassive-mysql-high-availability-pacemaker-cluster-with-drbd-on-centos-7/
+
+Pour GlusterFS :
+
+https://www.howtoforge.com/tutorial/high-availability-storage-with-glusterfs-on-centos-7/
+https://jamesnbr.wordpress.com/2017/01/26/glusterfs-and-nfs-with-high-availability-on-centos-7/
+
+
+Pour WordPress :
+
+https://www.microlinux.fr/wordpress-centos-7/
+
+
+
+	DRBD :
+______________
+
+
+https://www.learnitguide.net/2016/07/integrate-drbd-with-pacemaker-clusters.html
+
+Setup :
+
+# rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+# rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+
+# yum install -y kmod-drbd84 drbd84-utils
+
+Allouer un volume à DRBD :
+
+pvcreate /dev/sdb
+vgcreate drbdtest /dev/sdb
+lvcreate -n drbddemo -l100%FREE drbdtest 
+
+
+	Configuration de DRBD :
+_______________________________
+
+
+
+cat &lt;&lt;END >/etc/drbd.d/wwwdata.res
+resource wwwdata {
+protocol C;
+meta-disk internal;
+device /dev/drbd1;
+syncer {
+verify-alg sha1;
+}
+net {
+allow-two-primaries;
+}
+on vmcluster1 {
+disk
+/dev/drbdtest/drbddemo;
+address 192.168.20.114:7789;
+}
+on vmcluster2 {
+disk
+/dev/drbdtest/drbddemo;
+address 192.168.20.115:7789;
+}
+}
+END
+
+
+[root@node1 ~] drbdadm create-md testdata1
+[root@node2 ~] drbdadm create-md testdata1
+
+
+pcs -f drbd_cfg resource create WebData ocf:linbit:drbd drbd_resource=wwwdata op monitor interval=60s
+
+pcs -f drbd_cfg resource master WebDataClone WebData master-max=1 master-node-max=1 clone-max=2 clone-node-max=1 notify=true
+
+pcs -f drbd_cfg resource show
+
+pcs cluster cib-push drbd_cfg
+
+
+
+
+
+
+
+	GlusterFS :
+___________________
+
+
+NOTA BENE : GlusterFS fonctionne à partir de trois noeuds.
+
+Pour ce qui suit il vous faut donc déployer une troisième VM, et l'intégrer au sein de votre cluster.
+
+Une fois Ceci fait, assurez-vous d'avoir sur chacune des VM un disque secondaire de 1Go /dev/sdb .
+
+
+
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
+
+yum -y install epel-release
+
+yum -y install yum-priorities
+
+yum -y update
+
+yum -y install centos-release-gluster
+
+yum -y install glusterfs-server
+
+
+Lancer le démon :
+
+systemctl enable glusterd.service
+systemctl start glusterd.service
+
+
+Contôler :
+
+glusterfsd --version
+
+Sur chaque hôte, taper :
+gluster peer probe supervmX
+
+où X est le n° d'un voisin.
+Une fois les serveurs appairés, contrôler avec :
+
+gluster peer status
+
+
+Démarrer un partage :
+
+
+gluster volume create br0 replica 3 transport tcp supervm1:/data/br0 supervm2:/data/br0 supervm3:/data/br0
+
+gluster volume start br0 force --mode=script
+
+
+gluster volume info br0
+
+gluster volume set br0 nfs.disable off
+
+LE répertoire br0 est à considérer comme un device partagé par glusterfs.
+Pour accéder aux fichiers et les partager, il faut le mounter sur un autre rép. et
+c'est via celui-ci que l'on se partage des fichiers !
+
+Donc, sur chaque hôte :
+
+mkdir /mnt/partage
+
+mount.glusterfs localhost:/br0 /mnt/partage/
+
+
+ls /mnt/partage
+
+sur le noeud 1 : mkdir /mnt/partage/html
+
+sur le noeud 2 ls -la /mnt/partage
+
+sur le noeud 3 : touche /mnt/partage/html/index/html
+
+
+
+
+Enfin, dans /etc/fstab on rajoute une ligne du genre :
+
+
+
+localhost:/br0      /mnt/partage  glusterfs   defaults,_netdev  0  0
+
+
+
+
+	HAPROXY :
+_________________
+
+
+INSTALLATION :
+
+# yum install haproxy
+
+Pour installer le T.P. rapidement, on peut récupérer les deux VMs précédentes et leur faire stopper
+corosync pacemaker, puis démarrer Apache.
+
+On installera alors une 3ème VM avec haproxy, qui gèrera l'accès à ces deux-là .
+
+systemctl stop pcsd
+systemctl stop corosync
+systemctl stop glusterd / drbd
+systemctl start httpd
+
+
+
+
+vim /etc/haproxy/haproxy.cfg
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+global
+    log         127.0.0.1 local2     #Log configuration
+ 
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000                
+    user        haproxy             #Haproxy running under user and group "haproxy"
+    group       haproxy
+    daemon
+ 
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+ 
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+ 
+listen haproxy3-monitoring *:8080                #Haproxy Monitoring run on port 8080
+    mode http
+    option forwardfor
+    option httpclose
+    stats enable
+    stats show-legends
+    stats refresh 5s
+    stats uri /stats                             #URL for HAProxy monitoring
+    stats realm Haproxy\ Statistics
+    stats auth mon_user:mon_mot_de_passe            #User and Password for login to the monitoring dashboard
+    stats admin if TRUE
+    default_backend app-main                    #This is optionally for monitoring backend
+ 
+frontend main
+    bind *:80
+    option http-server-close
+    option forwardfor
+    default_backend app-main
+ 
+backend app-main
+    balance roundrobin                                     #Balance algorithm
+    option httpchk HEAD / HTTP/1.1\r\nHost:\ localhost    #Check the server application is up and healty - 200 status code
+    server apache 192.168.20.82:80 check                 #Apache
+    server apache 192.168.20.83:80 check                 #Apache
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tester avec :
+
+haproxy -c -f /etc/haproxy/haproxy.cfg 
+
+S'il n'y a pas d'erreur, démarrez le service :
+
+systemctl start haproxy
+systemctl enable haproxy
+
+
+
+	T.P. : 
+______________
+
+
+Faire en sorte qu'on accède à vos deux serveurs Web en https, en ne modifiant QUE la configuration de haproxy.
+
+
+
+
+
+
+
+	SSL / TLS :
+___________________
+
+Générez les certificats grâce à OpenSSL, par défaut dans des sous-dossiers
+de /etc/pki/ ou /etc/ssl .
+
+
+# Générer un PEM :
+
+openssl req -newkey rsa:4096 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
+
+# Générez une clef privée :
+openssl genrsa -out ca.key 4096
+
+# Générez le CSR 
+openssl req -new -key ca.key -out ca.csr
+
+# Générez la clef auto-signée : 
+openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt
+
+# Copiez les fichiers aux endroits appropriés :
+
+cp ca.crt /etc/pki/tls/certs/
+cp ca.key /etc/pki/tls/private/
+cp ca.csr /etc/pki/tls/private/
+
+
+
+Ensuite, implantez la clef dans Haproxy afin qu'il acceppte le trafic entrant en https, et transmette
+à des serveurs http .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	Liens utiles :
+______________________
+
+Liens de référence :
+https://fr.wikipedia.org/wiki/Corosync_Cluster_Engine
+https://www.suse.com/documentation/sle_ha/book_sleha/data/book_sleha.html
+
+https://www.lisenet.com/2015/active-passive-cluster-with-pacemaker-corosync-and-drbd-on-centos-7-part-1/
+
+
+
+!!!
+https://www.sebastien-han.fr/blog/2011/07/04/introduction-au-cluster-sous-linux/
+
+!!!
+http://clusterlabs.org/doc/en-US/Pacemaker/1.1-pcs/html/Clusters_from_Scratch/ch09.html
+
+
+Préférences dans le cluster :
+http://clusterlabs.org/doc/en-US/Pacemaker/1.1-pcs/html/Clusters_from_Scratch/_specifying_a_preferred_location.html
+
+Faire démarrer et stopper les services d'un cluster dans un ordre spécifuque :
+http://clusterlabs.org/doc/en-US/Pacemaker/1.1-pcs/html/Clusters_from_Scratch/_controlling_resource_start_stop_ordering.html
+
+
+Floating IP et IP reassignment sur CentOS 7 :
+https://www.digitalocean.com/community/tutorials/how-to-create-a-high-availability-setup-with-pacemaker-corosync-and-floating-ips-on-centos-7
+
+
+https://www.lisenet.com/2015/active-passive-cluster-with-pacemaker-corosync-and-drbd-on-centos-7-part-1/
+
+http://clusterlabs.org/quickstart-redhat.html
+
+
+Interface de management graphique à Pacemaker :
+
+https://github.com/ClusterLabs/hawk

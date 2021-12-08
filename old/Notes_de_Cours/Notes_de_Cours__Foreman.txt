@@ -1,0 +1,244 @@
+
+- Backups (local + serveur)
+
+
+
+
+	Foreman :
+_________________
+
+outil de provisioning !
+
+It does with a mix of:
+
++ hardware via network boot and automated install
++ virtual by connecting to the hypervisors
++ AMI customisation
++Network
+
+
+For network installation, it signals the target server to network boot,by communicating with the BMC or hypervisor, and creates the
+appropraite network boot PXE setup via the foreman proxy to installthe OS.
+The contents of the network boot file are built from templates andcustomised before starting the installation. 
+It relies on a thrid partysource for the installation media, and has templates available forJumpstart, Kickstart, Preseed, AutoYast.
+
+
+
+
+Image based (AMI)
+
+For cloud based compute resources, new systems are provisioned
+using images, rather than running an installation. These are then
+finished by Foreman logging into the instance via ssh.
+
+
+Inputs
+
+When creating a system via foreman, it requires a number of details
+about the new system which then are used in the templates andfinish scripts.
+This includes things like, disk size, cpus, memory,networks, puppet classes,
+host groups, variables, owner, availbility zone, vpc, os, architecture or AMI image
+
+
+Managed systems
+
+If you have provisioning turned on for a system, in some cases, you
+will have access to the system console, and the ability to
+delete/rebuild the machine from the foreman console. 
+
+
+
+Turning off provisioning
+
+For basic usage of foreman with puppet, as I am describing in this
+talk, the provisioning component can be disabled. It is disabled as
+per below:
+
+/etc/foreman/settings.yaml
+
+# Disable foreman provisioning
+:unattended: true
+
+
+Voir  lca2014-glen_ogilvie-keep_track_of_puppet_with_foreman.pdf
+
+
+
+
+
+
+	SETUP :
+_______________
+
+yum -y update
+
+Setup a Hostname
+You'll have to edit the /etc/hosts file using any text editor, and Add your server.
+hostnamectl set-hostname server.capen.sis
+
+
+rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+rpm -ivh http://yum.theforeman.org/releases/1.9/el7/x86_64/foreman-release.rpm
+
+yum-config-manager --enable rhel-7-server-optional-rpms rhel-server-rhscl-7-rpms
+
+
+yum -y install foreman-installer
+
+Puis : 
+
+# foreman-installer
+
+Note down initial username and password, you need this for accessing Foreman’s dashboard.
+
+Username :: admin
+Password :: toto
+
+
+
+
+Enfin, accédez au serveur via :
+
+https://<Hostname_OR_IP_Foreman_Server>
+
+By default foreman server itself is registered in foreman dashboard. To check the host information,
+
+click on Hosts options —> then all hosts.
+
+
+NTP :
+
+# puppet module install puppetlabs-ntp
+
+
+Now import the NTP module from dashboard. Click on Configure —-> Classes
+Click on Import option, it will import the NTP module in foreman dashboard
+Select the Module and click on Update.
+Click on  ‘ntp’ class name and the select ‘Smart Class Parameter’
+
+Select the override option in case you want to specify your own NTP  Servers.
+Change the Key type Value from “String” to “Array” and Specify the NTP Server’s name
+in the Default value Box and then click on Submit.
+
+Now it’s time to add ntp class to the host, for that go to Hosts options and Select the host 
+Click on Edit. Go to the ‘Puppet Classes‘ Tab and Click on ‘+‘ option to add ntp class on the host and then click on submit
+
+Now Run the following puppet command from the foreman server to configure the NTP Service automatically.
+
+# puppet agent --test
+
+
+Now Check the reports from the Dashboard for the host.
+
+Go To Hosts—> Click on hosts{foreman.example.com}—> Click on Reports.
+
+As we know that puppet makes the use of SSL Certificates to set up the secure communication between puppet server and its nodes.
+Once Puppet Server sign the certificates of its node, then only communication can occur.
+
+Let’s create a autosign entry for puppet nodes which are on the domain.
+
+In the Forman Dashboard , Go To Infrastructure —> Select Smart Proxies —> Select Autosign  under Action Tab
+
+Click on New to create new ‘autosign’ entry. Specify the domain name and then click on Save.
+
+At this point, now we can say that our foreman server is ready to manage servers.
+
+Step:4 Add New hosts to Foreman Dashboard.
+
+To add new hosts or servers in the foreman dashboard we have to install puppet agent on the hosts and execute the following puppet command from the host.
+
+
+Let’s suppose we want to add Ubuntu server : 
+sudo apt install puppet
+puppet agent -td --server=foreman.capen.sis
+
+Now verify the host in dashboard.
+
+
+Now Add puppet Classes to this host in the same way  that we do for the host “foreman.example.com” in the above steps.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	règles de Firewall pour foreman :
+_________________________________________
+
+
+firewall-cmd --permanent --add-port=53/tcp
+firewall-cmd --permanent --add-port=67-69/udp
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --permanent --add-port=443/tcp
+firewall-cmd --permanent --add-port=3000/tcp
+firewall-cmd --permanent --add-port=3306/tcp
+firewall-cmd --permanent --add-port=5910-5930/tcp
+firewall-cmd --permanent --add-port=5432/tcp
+firewall-cmd --permanent --add-port=8140/tcp
+firewall-cmd --permanent --add-port=8443/tcp
+firewall-cmd --reload
+
+
+
+
+	Liens :
+______________
+
+https://connect.ed-diamond.com/GNU-Linux-Magazine/GLMF-134/Rangez-vos-poupees-avec-Puppet-Dashboard-et-Foreman
+
+
+
+https://theforeman.org/manuals/1.9/index.html#3.2.2InstallerOptions
+https://theforeman.org/manuals/1.9/index.html
+
+https://www.linuxtechi.com/install-and-configure-foreman-on-centos-7-x/
+
+
+
+
+

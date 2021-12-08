@@ -1,0 +1,607 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Jenkins	:
+__________________
+
+
+
+https://fr.wikipedia.org/wiki/Jenkins_(logiciel)
+
+http://jenkins-le-guide-complet.github.io/html/book.html
+
+
+
+
+
+	Intégration continue :
+______________________________
+
+https://fr.wikipedia.org/wiki/Int%C3%A9gration_continue
+
+https://fr.wikipedia.org/wiki/Test_unitaire
+
+https://fr.wikipedia.org/wiki/Jenkins_(logiciel)
+
+
+
+
+
+Installation sous CentOS :
+__________________________
+
+
+###############################################
+Installation de Jenkins dans un Apache Tomcat :
+###############################################
+
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-7-on-centos-7-via-yum
+
+D'abord, on installe une couche apache + TomCat :
+
+yum install tomcat tomcat-webapps tomcat-admin-webapps tomcat-docs-webapp tomcat-javadoc
+
+
+	Pour SELinux :
+
+setsebool -P httpd_unified on
+setsebool httpd_can_network_connect true -P
+
+
+
+	Pour Firewalld :
+
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=jenkins
+firewall-cmd --reload
+
+
+
+Modifier l'allocation mémoire donnée à Java :
+
+sudo vim /usr/share/tomcat/conf/tomcat.conf
+
+
+... et ajouter la ligne :
+
+JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"
+
+
+Démarrage des services :
+
+systemctl enable tomcat.service
+systemctl start tomcat.service
+
+
+Pour accéder à l'interface d'administration de Tomcat, ouvrez :
+
+/usr/share/tomcat/conf/tomcat-users.xml
+
+
+
+Et décommentez (ôtez les balises &lt;!-- et --!> avant et après le contenu suivant) :
+
+&lt;user name="admin" password="adminadmin" roles="admin,manager,admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status" />
+
+
+Redémarrez Tomcat :
+
+systemctl restart tomcat
+systemctl status tomcat
+
+Une fois que Tomcat fonctionne et est démarré (voir sur le port 8080), accédez à l'interface de management
+à l'adresse :
+
+http://Votre_@IP:8080/host_manager/html
+
+... avec le compte admin et le mot de passe adminadmin (ou tout autre MdP que vous aurez précisé).
+
+
+
+	INSTALLATION DE JENKINS DANS TOMCAT :
+_____________________________________________
+
+
+Récupérez le .war d'installation de Jenkins :
+
+# wget http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war
+
+Recopiez jenkins.war dans le répertoire /var/lib/tomcat/webapps de TomCat :
+
+# cp ~/jenkins.war /var/lib/tomcat/webapps
+
+Tomcat installe directement les .war qu'on lui confie ( ! ).
+
+
+En retournant dans l'interface de management, vous devriez dans la liste des apps
+
+voir une ligne créée pour jenkins, et accéder à l'application via :
+
+http://Votre_@IP:8080/jenkins/
+
+
+
+Jenkins vous demande un mot de passe pour débloquer l'installation, à recopier dans :
+
+/usr/share/tomcat/.jenkins/secrets/initialAdminPassword
+
+
+Finalisez l'installation en acceptant les plugins recommandés,
+Créez-vous un compte par défaut, et logguez-vous avec une fois l'installation terminée.
+
+
+Installez aussi git, nous en aurons l'usage en combinaison avec Jenkins :
+
+
+# yum install git-core -y
+
+
+Vérifiez votre version de Java avec :
+
+# java -version
+
+( 1.8.xxx ?)
+
+
+
+Vous pouvez forker le dépôt des exemples utilisés dans le tutoriel de base de Jenkins à cette adresse :
+
+https://github.com/wakaleo/game-of-life
+
+$ git clone git@github.com:wakaleo/game-of-life.git
+
+
+Dans JENKINS :
+
+
+Rendez-vous à "Administrer Jenkins" --> "Gestion des Plugins" et installez les plugins :
+
+Green Balls
+Blue Ocean
+Dashboard for Blue Ocean
+Git pipeline for Blue Ocean
+Github pipeline for Blue Ocean
+i18n for Blue Ocean
+Personalization for Blue Ocean
+
+
+
+
+	PREMIER TEST DE FONCTIONNEMENT DE JENKINS :
+___________________________________________________
+
+
+
+	Nouveau Item --> Donner un nom ( "test1" par exemple) 
+	
+	cliquer sur "construire un projet free-style"
+	OK
+
+	En bas dans la section "Build", choisir "exécuter un script shell"
+
+	Dans le champ commande, tapez :
+
+	echo "Ca marche !"
+
+	Cliquer "Apply" PUIS "sauver".
+
+	Dans le menu de gauche, cliquer sur lancer un build.
+
+	On obtient le résultat en bas à gauche.
+
+	Cliquer sur le build, puis sur "console output" --> on voit les détails;
+
+
+	...
+	Si on revient à la section Build dans le champ commande, et que l'on ajoute :
+
+	bash /tmp/test.sh
+
+	--> "Apply", puis "Sauver"
+
+	On relance un build, et on constate que ça passe au rouge : le script /tmp/test.sh
+	n'existe pas.
+	si on le crée (touch) et qu'on relance le build, ça repasse au vert :
+	Jenkins contrôle la présence des fichiers et la sortie standard des commandes,
+	mais il ne lit pas le code !
+
+
+
+
+	Qu’est ce qu’un pipeline ?
+__________________________________
+
+
+Un pipeline Jenkins, c’est un job qui va être décomposé sous forme :
+
+    d’étapes qui se succèdent (stage)
+    d’étapes s’exécutant en parallèle (parallel)
+
+Les pipelines donnent également la possibilité de choisir précisément quels agents pourront exécuter telle partie de code.
+
+
+Ces pipelines sont donc décrits par du code, dans un langage qui est un DSL 
+(Domain Specific Language) de Groovy. 
+
+Le choix de ce langage s’explique par le fait que c’est le langage historique de Jenkins. 
+Il s’avère pratique pour du scripting et facilement interfaçable avec du Java.
+
+
+« Declarative pipeline » vs « Scripted pipeline ».
+La version « Scripted » est la première a voir été créée, elle utilise directement le langage groovy et permet 
+une très grande flexibilité étant donné que c’est un langage de programmation. 
+
+La version « Declarative » est plus simple d’utilisation, mais moins extensible car basée sur des mots clefs.
+
+Dès qu’il faut décrire les actions à exécuter, Jenkins propose deux choix : 
+soit écrire le script directement dans l’interface graphique de Jenkins, 
+soit dans un Jenkinsfile placé par défaut à la racine du projet. 
+
+
+Exemple de Jenkinsfile en syntaxe déclarative :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pipeline { (1)
+agent any  (2)
+stages {
+         stage("Prepare"){ (3)
+       steps{
+         sh '''
+           echo "Prepare continuous delivery env"
+           '''
+         }
+     }
+
+     stage ("Build"){
+       steps {
+         sh '''
+           echo "Building app"
+         '''
+       }
+     }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(1) agent any: peut s’exécuter sur n’importe quel worker Jenkins, ici il n’y en a qu’un.
+(2) stage : ce sont les étapes auxquelles on donne un petit nom, le nom se retrouve ensuite sur l’interface graphique des pipeline
+(3) step : le détail des actions à effectuer
+
+
+
+Un autre exemple plus fonctionnel :
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Les JenkinsFiles s'enregistrent dans le répertoire de chaque projet à sa racine, soit :
+
+/usr/share/tomcat/.jenkins/workspace / &lt; NOM_DU_PROJET >
+
+
+
+
+	T.P. : Maths :
+______________________
+
+
+	continuous integration --> continuous delivery
+
+
+	Jenkins (old Hudson) s'est adapté à cet environnement en proposant un service de PIPELINE :
+
+	Faire en sorte que la configuration soit fournie avec le code.
+
+
+	Exemple :
+	Soit n fichiers ( des *.go faits par Benj' + un dockerfile)
+
+	On a un jenkinsfile qui décrit les étapes de test, et de déploiement (il faudrait aussi un build)
+
+	Jenkins va faire ces deux étapes :
+
+	On va chercher la dernière version du code
+	on va déployer une image docker qui va faire les tests
+	si les tests passent, étape suivante : on va builder une image docker avec les binaires,
+	puis la pousser sur dockerhub.
+
+	Le Jenkinsfile décrit toutes ces étapes, et dans l'interface de Jenkins lorsqu'on lance la tâche, il exécute
+	ce qui est prévu dans le jenkinsfile
+
+	Jenkinsfile déclarative (à la puppet)
+
+	Jenkinsfile de script, dans lequel on code.
+
+	stage = un ensemble d'actions
+	
+	le 2ème stage gère le déploiement
+	
+
+	Si les tests échouent, le déploiement ne se fera pas : il faut que tous les tests soient au vert.
+	Si KO --> on rollbacke
+
+
+
+Dans le fichier Jenkinsfile de Benjamin il faut ajouter la ligne 
+
+args '-u root --privileged'
+
+a la suite de la ligne (7)
+
+image 'golang'
+
+
+<Correction par Vincent : >
+
+Afin de forcer l'image docker a utiliser l'utlisateur Root.
+
+De base Docker via Tomcat tentera d'utiliser le user du systeme sur lequel
+il tourne (Tomcat). Si votre docker ne connait pas le user en question, il
+retournera une erreur de permission a la premiere action en demandant une.
+Ici la commande `go test`.
+
+
+<Correction par Jeremy : >
+
+
+Pour résoudre les problèmes de deploy vers dockerhub,voici des étapes à suivre:
+
+-Ouvrez votre Jenkinsfile,
+- Relever la ligne docker.withRegistry('https://registry.hub.docker.com', 'Docker')
+
+Ici, l'ID est 'Docker'.
+
+-Sur votre site Jenkins, rendez vous dans Identifiants, puis sur global => add credential.
+
+-Ajoutez vos identifiants DockerHub, avec l'ID Docker ( ou vous le modifiez ici mais aussi dans le Jenkinsfile: 
+les deux doivent correspondre (case sensitive).
+
+-De là , testez a nouveau le deploy, il devrait fonctionner sans problème, cela devrait apparaitre sur votre Docker-hub.
+
+
+
+
+
+
+________________________________________
+
+
+Pipeline = différentes étapes dans le processus de déploiement
+
+
+
+Pré-requis :
+
+- un compte Docker Hub
+- un compte github
+
+sur son github, créer un nouveau repository "maths"
+
+
+
+
+	T.P. 2 :
+________________
+
+
+Getting started with Jenkins :
+
+https://jenkins.io/doc/pipeline/tour/hello-world/
+
+
+
+
+	Tomcat sur le port 80 :
+_______________________________
+
+Tomcat ne nous laisse pas changer de port facilement.
+
+J'ai triché avec IPtables :
+
+# iptables -A PREROUTING -t nat -i p2p1 -p tcp --dport 80 -j REDIRECT --to-port 8080
+
+Una autre solution consisterait à utiliser auth-bind, voire à installer un reverse proxy devant le Tomcat
+(mais est-il vraiment raisonnable d'installer un serveur web devant un autre serveur web ?)
+
+
+	TomCat en TLS / SSL :
+_____________________________
+
+Créer un keystore ( espace de stockage protégé de Tomcat pour les clefs & certificats) :
+
+mkdir /etc/tomcat/keystore
+
+$JAVA_HOME/bin/keytool -genkey -alias [youralias] -keyalg RSA -keystore /etc/tomcat/keystore/My_Shiny_Key
+
+Répondez à toutes les questions, mais c'est surtout le mot de passe qui est important.
+
+
+Maintenant que le Keystore est généré, il faut indiquer à Tomcat quel connecteur (port) utiliser pour communiquer via SSL.
+Par défaut, il s'agit du port 8443 mais il n'est pas activé.
+Nous allons donc aller dans notre fichier /etc/tomcat/server.xml pour modifier la configuration de notre Tomcat.
+
+La configuration du connecteur SSL est déjà présente dans le fichier /etc/tomcat/server.xml ,
+ il faut dé-commenter ce  paragraphe ( trouvez-le en recherchant "https" dans le fichier enlevez les &lt;!-- avant et --!&gt; après )
+ et ajoutez-y quelques informations :
+
+&lt;Connector port="8443" protocol="org.apache.coyote.http11.Http11Protocol"
+               maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
+                keystoreFile="/etc/tomcat/keystore/Ma_clef"
+                keystorePass="formation"
+               clientAuth="false" sslProtocol="TLS" />
+
+Il faut ajouter les 2 lignes commençant par keystoreFile et keystorePass
+
+Redémarrez Tomcat.
+
+Accédez-y via https://&lt;Ma_machine>:8443
+
+Pour un accès simplifié via le port 443, j'ai (encore) triché avec IPtables :
+
+# iptables -A PREROUTING -t nat -i p2p1 -p tcp --dport 443 -j REDIRECT --to-port 8443
+
+Bonus :
+
+firewall-cmd --permanent --add-port 443/tcp
+firewall-cmd --permanent --add-port 8443/tcp
+firewall-cmd --reload
+
+
+
+
+	LIENS UTILES :
+______________________
+
+https://www.formatux.fr/formatux-devops/develop/module-040-jenkins/index.html
+
+https://medium.com/@teeks99/continuous-integration-with-jenkins-and-gitlab-fa770c62e88a
+
+http://jenkins-le-guide-complet.github.io/html/book.html
+
+http://jenkins-le-guide-complet.github.io/html/sect-subversion.html#git-plugin
+
+http://jenkins-le-guide-complet.github.io/
+
+
+https://youtu.be/1ZUqb9mkS30
+
+https://wiki.jenkins.io/display/JENKINS/Installing+Jenkins+on+Red+Hat+distributions
+
+
+Liste complète des plugins :
+http://wiki.jenkins-ci.org/display/JENKINS/Pluginss
+
+
+
+https://blog.pascal-martin.fr/post/integration-continue-jenkins-installation-configuration.html
+
+http://igm.univ-mlv.fr/~dr/XPOSE2010/Lecharpentier_Jenkins/functionality.html
+
+http://mirrors.jenkins-ci.org/war/latest/jenkins.war
+
+http://jenkins-le-guide-complet.github.io/html/sect-hudson-redhat.html
+http://jenkins-le-guide-complet.github.io/html/chapter-configuration.html
+
+https://gist.github.com/misterbrownlee/3708738
+
+https://medium.com/@teeks99/continuous-integration-with-jenkins-and-gitlab-fa770c62e88a
+
+https://blog.papirux.com/tyyr-5-afc9c13e8295
+
+
+http://jenkins-le-guide-complet.github.io/html/sect-hudson-redhat.html
+http://jenkins-le-guide-complet.github.io/html/chapter-configuration.html
+
+https://gist.github.com/misterbrownlee/3708738
+
+https://medium.com/@teeks99/continuous-integration-with-jenkins-and-gitlab-fa770c62e88a
+
+https://blog.papirux.com/tyyr-5-afc9c13e8295
+
+http://objis.com/tutoriel-maven-n14-build-automatises-avec-jenkins/
+
+https://www.infoq.com/fr/presentations/ansible-jean-christophe-sirot-ansible-et-jenkins#
+
+http://igm.univ-mlv.fr/~dr/XPOSE2010/Lecharpentier_Jenkins/use.html
+
+https://go.cloudbees.com/docs/cloudbees-documentation/cookbook/book.html#_continuous_delivery_with_jenkins_pipeline
+
+https://wiki.jenkins.io/display/JENKINS/Use+Jenkins
+
+Jenkinsfile :
+https://go.cloudbees.com/docs/cloudbees-documentation/use/automating-projects/jenkinsfile/
+
+https://medium.com/@mightywomble/jenkins-pipeline-beginners-guide-f3868f715ed9
+
+http://www.anniehedgie.com/jenkinsfile
+
+https://jenkins.io/doc/pipeline/examples/
+
+
+https://blog.pascal-martin.fr/post/integration-continue-jenkins-installation-configuration.html
+
+https://spoonless.github.io/epsi-b3-deploiement-continu/jenkins.html
+
+
+
+
+
+
+
+

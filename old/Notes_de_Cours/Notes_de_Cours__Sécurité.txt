@@ -1,0 +1,1758 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+	Sécurité :
+__________________
+
+
+https://www.xkcd.com/936/
+
+Installlez et utilisez KeepassXC / VeraCrypt
+
+
+Rebooter un système sur clef usb :
+
+
+Générer une clef :
+
+	dd if=/mnt/donnees/VM/mon_super.iso of=/dev/sdb
+
+
+
+Accès via un système secondaire :
+
+- Rebooter sur un système via Live-CD / USB
+- fdisk -l pour localiser la partition / du disque
+- mounter cette partition (vgscan pour un système en LVM ;-) )
+- cd dans ce point de montage
+- chroot .
+- passwd (ou modifier /etc/shadow)
+- sur un système avec SElinux, faire un 
+	# touch .autorelabel
+
+
+
+Accès via le prompt de grub :
+
+Pour RedHat / CentOS :
+
+Au prompt, taper 'e' pour éditer les options de démarrage de grub
+
+- à la ligne commençant par 'linux16', aller au bout de la ligne et ajouter les mots :
+	rd.break selinux=0
+- puis ctrl-X pour booter avec ces options.
+- On arrive à un prompt JUSTE APRÈS le chargement de l'init ramdisk, il faut donc
+ remonter le filesystem du disque en lecture-écriture :
+
+# mount -o remount,rw /sysroot
+# cd /sysroot
+# chroot .
+# passwd ...
+
+
+Pour Debian / Ubuntu :
+
+
+- à la ligne commençant par 'linux16', aller au bout de la ligne et ajouter les mots :
+	systemd/unit=emergency.target
+- puis ctrl-X pour booter avec ces options.
+... et ensuite appliquer la meme procédure.
+
+
+	Protéger Grub par un mot de passe MAIS le laisser booter normalement si on ne change pas les options :
+______________________________________________________________________________________________________________
+
+
+( CentOS / RedHat )
+
+Restricting only GRUB menu entry editing
+
+If you only want to simply prevent users from entering the grub command line and edit menu entries
+ (as opposed to completely locking menu entries), then all that is needed is execution of grub2-setpassword command.
+
+Méthode :
+
+# cp /boot/grub/grub.cfg /boot/grub/old.grub.cfg
+
+# grub2-setpassword ( en root ET en prenant garde que le mot de passe soit accessible aussi en QWERTY ;-) )
+
+This creates a file /boot/grub2/user.cfg if not already present, which contains the hashed GRUB bootloader password.
+
+Example /boot/grub2/user.cfg file :
+
+
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+Reboot the server and verify.
+
+# shutdown -r now
+
+
+	Chiffrement :
+_____________________
+
+
+alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
+
+	Cryptsetup Easy :
+________________________
+
+
+Chiffrement LUKS
+Outil: cryptsetup
+Note : cryptsetup peut chiffrer grâce à LUKS, AES ou TrueCrypt.
+
+Installer Haveged [https://issihosts.com/haveged/]
+# yum install haveged
+# systemctl enable haveged
+# systemctl start haveged
+Tout chiffrement a besoin de beaucoup données vraiment aléatoires (entropie). En cas de génération de clés (GPG, SSH, SSL) et/ou de chiffrement fort le sytème s'épuise vite. Haveged est un daemon qui le recharge plus rapidement.
+
+Créer un conteneur (ex: 1GiB)
+$ dd if=/dev/urandom of=conteneur.bin bs=1M count=1024
+ou utiliser /dev/zero sans haveged mais moins sûr.
+
+Chiffrer le conteneur (AES/SHA256 par défaut)
+La commande demande de fournir un mot de passe
+$ cryptsetup -y -v luksFormat conteneur.bin
+
+Création du périphérique bloc à partir du conteneur (la chaîne "secret" arbitraire)
+# cryptsetup luksOpen conteneur.bin secret
+va créer /dev/mapper/secret en demandant le mot de passe créé plus haut
+
+Creation d'un système de fichier (ex: ext2)
+# mkfs.ext2 /dev/mapper/secret
+
+Montage du système de fichier
+# mkdir -p /mnt/img && mount /dev/mapper/secret /mnt/img
+
+Opérations inverses
+Démontage propre du système de fichier
+# umount /mnt/img
+
+Destruction du périphérique bloc (ceci détruit la relation entre le fichier conteneur et le périphérique bloc)
+# cryptsetup luksClose /dev/mapper/secret
+
+Le fichier conteneur.bin peut à nouveau servir.
+
+
+
+
+
+
+	FIREWALLS APPLICATIFS :
+_______________________________
+
+
+Sous Debian / Ubuntu, le firewall applicatif s'appelle AppArmor.
+Il est en mode permissif.
+
+Mode permissif = loggue mais n'interdit pas.
+
+
+
+Sous RedHat, CentOS, il s'agit de SElinux.
+
+
+
+	SElinux :
+_________________
+
+
+Par défaut il est actif sur le système = enforcing.
+
+3 modes :
+
+ENFORCING : sécurité activée + Log
+
+PERMISSIVE : sécurité désactivée mais loggue toujours
+
+DISABLED : SElinux entièrement désactivé ( reboot OBLIGATOIRE ).
+
+Pour voir dans quel mode vous vous trouvez :
+
+# getenforce
+
+Pour passer dynamiquement de enforcing à permissive et inversement :
+
+# setenforce 0 ( permissive)
+
+# setenforce 1 ( enforcing)
+
+Pour gérer de façon permanente l'état de SELINUX :
+
+vim /etc/sysconfig/selinux
+
+
+
+Chaque objet ( fichier, répertoire, dossier ... ) a un LABEL SElinux.
+
+Pour les voir :
+
+# ls -Z
+
+# ps -auxZ
+#     ps -Z
+# id -Z
+# netstat -Z
+# cp -Z
+# mkdir -Z
+
+
+Les concepts importants sont le LABELING (type, processus,ports, etc)
+et le TYPE ENFORCEMENT ( ce qui isole les processus les uns des autres pour chaque type).
+
+Le format standard d'un LABEL est :      user:role:type:level (optional).
+
+L'utilitaire pour gérer le status de SElinux :
+
+# sestatus
+
+
+Exemple de labeling pour un serveur web apache :
+
+    Binary: /usr/sbin/httpd 			→	httpd_exec_t
+
+    Configuration directory: /etc/httpd		→	httpd_config_t
+    Logfile directory: /var/log/httpd 		→ 	httpd_log_t
+    Content directory: /var/www/html 		→ 	httpd_sys_content_t
+    Startup script: /usr/lib/systemd/system/httpd.service → httpd_unit_file_d
+    Process: /usr/sbin/httpd -DFOREGROUND 	→ 	httpd_t
+    Ports: 80/tcp, 443/tcp 			→ 	httpd_t, http_port_t
+
+
+
+Pour débugguer un problème de labelling :
+
+    If you know the label:
+    # semanage fcontext -a -t httpd_sys_content_t '/var/www(/.*)?'
+    If you know the file with the equivalent labeling:
+    # semanage fcontext -a -e /var/www /srv/myweb
+    Restore the context (for both cases):
+    # restorecon -vR /srv/myweb
+
+If SELinux needs to know HTTPD listens on port 8585, tell SELinux:
+
+# semanage port -a -t http_port_t -p tcp 8585
+
+
+Pour -par exemple- autoriser httpd à envoyer des mails, utilisez les booléens :
+
+# setsebool -P httpd_can_sendmail 1
+
+To see all booleans: # getsebool -a
+To see the description of each one: # semanage boolean -l
+To set a boolean execute: # setsebool [_boolean_] [1|0]
+
+To configure it permanently, add -P. For example:
+# setsebool httpd_enable_ftp_server 1 -P
+
+
+Si vous vous trouvez dans une situation inextricable, vous pouvez en dernière instance
+refaire le labeling de tout le filesystem (Attention, ça peut être long !!!!!)
+
+# cd /
+# touch .autorelabel
+
+# reboot
+
+
+Outils de dev SELinux pour les modules de policy :
+
+# yum -y install setroubleshoot setroubleshoot-server
+
+
+Utiliser journalctl pour les logs de setroubleshoot :
+
+# journalctl -t setroubleshoot --since=14:20
+
+Pour voir les logs relatifs à un LABEL particulier :
+
+# journalctl _SELINUX_CONTEXT=system_u:system_r:policykit_t:s0
+
+
+SElinux loggue à plusieurs endroits :
+
+    /var/log/messages
+    /var/log/audit/audit.log
+    /var/lib/setroubleshoot/setroubleshoot_database.xml
+
+
+Rechercher des erreurs dans audit.log :
+
+# ausearch -m AVC,USER_AVC,SELINUX_ERR -ts today
+
+Rechercher pour un service particulier :
+
+# ausearch -m avc -c httpd
+
+
+Pour générer une description compréhensible d'un accès refusé et de comment le résoudre,
+utilisez audit2allow :
+
+# audit2allow -w -a
+
+To view the type enforcement rule that allows the denied access: # audit2allow -a
+
+To create a custom module: # audit2allow -a -M mypolicy
+The -M option creates a type enforcement file (.te) with the name specified and compiles the rule into a policy package (.pp): mypolicy.pp mypolicy.te
+
+To install the custom module: # semodule -i mypolicy.pp
+
+Pour passer en mode permissif SEULEMENT sur un module :
+
+# semanage permissive -a httpd_t
+
+
+Pour voir les règles selinux relatives aux logins des usagers :
+
+ # semanage login -l
+
+
+To correct the label on the user's home directory (if needed): 
+
+# chcon -R -l s2:c100 /home/john
+
+
+Installez les produits suivants pour faciliter la gestion et le déboguage :
+
+yum -y install setools
+yum -y install policycoreutils-gui
+
+
+
+
+http://web.mit.edu/rhel-doc/5/RHEL-5-manual/Deployment_Guide-en-US/ch-selinux.html
+
+https://opensource.com/article/18/7/sysadmin-guide-selinux?sc_cid=70160000001273HAAQ
+
+
+
+
+yum -y install policycoreutils-gui
+
+
+ls -Z 		fichier
+ps -auxZ	processus
+id -Z		utilisateur
+
+restorecon -R /etc/ssh	# Restaurer les labels
+
+getsebool -a
+
+semanage fcontext -a -t mon_beau_label /mon/arborescence
+
+
+
+désactiver temporairement :
+
+setenforce 0
+
+désactiver totalement :
+
+Dans /etc/sysconfig/selinux, changer 
+
+SELINUX=enforcing
+
+en 
+
+SELINUX=disabled
+
+... et rebooter.
+
+Si vous l'avez laissé en mode permissif, pour le repasser en mode enforcing :
+
+setenforce 1.
+
+Là, s'il faut corriger des labels:
+
+diagnostiquez en lisant /var/log/audit/audit.log
+
+Adaptez les labels avec restorecon, chcon  et / ou semanage
+
+Dans le doute, pour refaire complètement les labels d'un système de fichiers :
+
+
+cd /
+touch.autorelabel
+reboot
+
+# ( ça peut être long !!! )
+
+
+
+
+
+	IPtables :
+__________________
+
+
+Voir les règles IPtables :
+
+# iptables -L
+
+
+Chain INPUT (policy ACCEPT)
+target prot opt source destination
+
+Chain FORWARD (policy ACCEPT)
+target prot opt source destination
+
+Chain OUTPUT (policy ACCEPT)
+target prot opt source destination
+
+# iptables -L -t nat
+
+
+Forwarding :
+
+http://www.ducea.com/2006/08/01/how-to-enable-ip-forwarding-in-linux/
+https://rhel7tutorial.wordpress.com/how-to-enable-ip-forwarding/
+
+echo 1 > /proc/sys/net/ipv4/ip_forward 	# Ancienne méthode
+
+OU :
+
+Commande sysctl :
+
+sysctl -w net.ipv4.ip_forward=1
+
+Ou (paramétrage permanent) :
+
+éditez /etc/sysctl.conf :
+
+sysctl net.ipv4.ip_forward
+
+net.ipv4.ip_forward = 1
+
+
+Les tables IP (IP tables)
+
+Netfilter prend en charge un paquet arrivant et le passe à son système d’évaluation de règles que sont les tables IP.
+Une table est constituée d’un nombre arbitraire et non limité de chaînes.
+Une chaîne est une suite linéaire de règles.
+
+Une règle est constituée d’un motif (pattern) destiné à reconnaître des paquets selon un nombre indéterminé de critères
+(matches) et d’une décision, appelée cible (target), à prendre en cas de reconnaissance du paquet.
+
+Les tables IP sont gérées par un cœur (core) responsable de :
+
+- l’enregistrement et le désenregistrement des tables
+- l’enregistrement et le désenregistrement des critères de reconnaissance et des cibles auprès d’une table
+- l’interface entre l’espace utilisateur et l’espace noyau pour la manipulation des règles dans une table
+- l’évaluation des paquets lors de la traversée des tables
+
+
+Les opérations possibles sur les chaînes :
+
+-P CHAINE : fixe la politique par défaut de la chaîne (limitée aux chaînes de base)
+
+-A CHAINE : Ajouter la chaine
+
+-I CHINE : Insérer la chaîne
+
+-N CHAINE : crée la chaîne utilisateur CHAINE
+
+-L CHAINE : liste les règles de la chaîne CHAINE (on peut ajouter l’option –v)
+
+-F CHAINE : vide la chaîne CHAINE de ses règles
+-X CHAINE : supprime la chaîne utilisateur CHAINE
+
+-Z CHAINE : remet à zéro les compteurs de la chaîne CHAINE
+
+-E OLD_CHAINE NEW_CHAINE : renomme la chaîne OLD_CHAINE en NEW_CHAINE
+
+
+	T.P. :
+______________
+
+
+
+# Au départ, on commence par donner la politique de base (policy) :
+
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+# On dialogue librement avec son interface de loopback :
+
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# On accepte les Pings :
+
+# Soit j'accepte de répondre au ping, mais je n'en émets pas :
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Soit j'émets des pings, mais je ne réponds pas aux pigns extérieurs :
+iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+
+# soit j'accepte tous les pings, et dans ce cas autant faire simple :
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+
+
+# commande magique :
+
+iptables -A INPUT -i MON_INTERFACE -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o MON_INTERFACE -m state --state NEW,ESTABLISHED -j ACCEPT
+# Toutes les connexions émises par la machine locale peuvent sortir.
+# Toutes leurs RÉPONSES seront acceptées !!
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#!/bin/bash
+# 
+# Script pour vider les règles iptables :
+# _______________________________________
+#
+# On remet la policy par défaut à ACCEPT
+#
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+#
+# On remet les polices par défaut pour la table NAT
+#
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+
+#
+# On vide (flush) toutes les règles existantes
+#
+iptables -F
+iptables -t nat -F
+
+#
+# Et enfin, on efface toutes les chaînes qui ne
+# sont pas à defaut dans la table filter et nat
+
+iptables -X
+iptables -t nat -X
+
+# Message de fin
+echo " [Les règles IPtables ont toutes été flushées.]"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Exemple de NAT :
+
+# autoriser la traversée des paquets dans les deux sens ( attention, ceci est très permissif ! ):
+
+iptables -A FORWARD -i $INTERFACE_INTERNE -o $MON_INTERFACE -j ACCEPT
+iptables -A FORWARD -i $MON_INTERFACE -o $INTERFACE_INTERNE -j ACCEPT
+
+
+# Le NAT proprement dit :
+
+iptables -t nat -A POSTROUTING -s 10.11.12.0/24 -o $MON_INTERFACE -j MASQUERADE
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Le script du formateur : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~é
+# NOTA BENE : Il faudra adapter les noms de vos interfaces ( ce n'est pas un cours e copier-coller ;-) ) !!
+#!/bin/bash
+# 
+#
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+#
+# On remet les polices par défaut pour la table NAT
+#
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+
+#
+# On vide (flush) toutes les règles existantes
+#
+iptables -F
+iptables -t nat -F
+
+#
+# Et enfin, on efface toutes les chaînes qui ne
+# sont pas à defaut dans la table filter et nat
+
+iptables -X
+iptables -t nat -X
+
+# La configuration proprement dite :
+
+
+# Activer le forwarding de paquets dans le kernel :
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Au départ, on commence par donner la politique de base (policy) :
+
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+# On dialogue librement avec son interface de loopback :
+
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# On accepte les Pings :
+
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+
+
+# commande magique :
+
+iptables -A INPUT -i enp0s8 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+# Autoriser ssh depuis l'extérieur :
+iptables -A INPUT -i enp0s8 -p tcp -s 192.168.20.0/24 --dport 22 -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -p tcp -d 192.168.20.0/24 --sport 22 -j ACCEPT
+
+# NAT : 
+
+iptables -A FORWARD -i enp0s3 -o enp0s8 -j ACCEPT
+iptables -A FORWARD -i enp0s8 -o  enp0s3 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# Le NAT proprement dit :
+
+iptables -t nat -A POSTROUTING -s 10.11.12.0/24 -o enp0s8 -j MASQUERADE
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+	T.P. 2 : PAT
+____________________
+
+Autoriser l'accès à la passerelle sur le port 80, et ce trafic sera redirigé vers le client à destination du port 8080.
+
+
+
+# D'abord, j'assouplis les règles au niveu de mon réseau interne pour pouvoir dialoguer avec lui :
+
+iptables -A INPUT -i enp0s3 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o enp0s3 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Pour que ça marche, je dois autoriser l'accès à mon interface externe sur le port 80 :
+
+iptables -A INPUT -i enp0s8 -p tcp -s 192.168.20.0/24 --dport 80 -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -p tcp -d 192.168.20.0/24 --sport 80 -j ACCEPT
+
+
+# ensuite, la règle de P.A.T :
+
+iptables -t nat -A PREROUTING -p tcp -d 192.168.20.60 --dport 80 -j DNAT --to 10.11.12.2:8080
+
+
+
+~~~~~~~~~~~~~~~~~~~ Le script du formateur a changé :-) ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# commande magique :
+iptables -A INPUT -i enp0s8 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+iptables -A INPUT -i enp0s3 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o enp0s3 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# NAT : 
+iptables -A FORWARD -i enp0s3 -o enp0s8 -j ACCEPT
+iptables -A FORWARD -i enp0s8 -o  enp0s3 -j ACCEPT
+
+# Le PAT : 
+
+iptables -t nat -A PREROUTING -p tcp -d 192.168.20.60 --dport 80 -j DNAT --to 10.11.12.2:8080
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Pour sauvegarder efficacement un jeu de règles IPtables :
+
+# iptables-save > ~/mes_regles_IPtables_de_ouf.fw
+
+ou :
+
+/sbin/iptables-save > /root/iptables-works-$(date +%F)
+
+
+Une fois sauvegardées, vous restaurez très facilement ces règles IPtables avec :
+
+# iptables-restore < ~/mes_regles_IPtables_de_ouf.fw
+
+
+
+Sous Debian, il existe un utilistaire excellent, qui s'appelle
+
+# iptables-apply
+
+
+En l'absence d'un binaire iptables-apply sur votre système, je vous invite à des règels de prudence
+pour ne pas vous couper définitivement la main (ça n'arrive jamaiiiiiis !!).
+Exemple de règle de prudence :
+
+Dans une crontab :
+
+# au boot :
+@reboot iptables-restore < truc.fw
+
+# pour éviter de se couper la main pendant qu'on configure un firewall (à commenter une fois la conf' établie : ) 
+# */15 * * * *  iptables-flush
+
+
+
+Sur tout système avec systemd :
+
+# yum install iptables-services
+
+Puis :
+
+cp -r etc/systemd/system/iptables.service /etc/systemd/system/
+cp -r etc/systemd/system/ip6tables.service /etc/systemd/system/
+
+systemctl daemon-reload
+
+systemctl enable iptables.service
+systemctl enable ip6tables.service
+
+systemctl start iptables.service
+systemctl start ip6tables.service
+
+.. et vous modifiez /etc/iptables avec vos propres règles.
+
+
+
+
+
+Quelques alias utiles pour IPtables :
+
+alias iptl='sudo /sbin/iptables -L -n -v --line-numbers'
+
+alias iptlin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
+alias iptlout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
+alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
+
+
+# Exemple de PAT ( Port Address Translation, pour publier un serveur en DMZ sur le firewall) :
+
+iptables -t nat -A PREROUTING -p tcp -d  IP_EXTERNE_DU_FIREWALL --dport 80 -j DNAT --to IP_SERVEUR_WEB:80
+iptables -t nat -A PREROUTING -p tcp -d  IP_EXTERNE_DU_FIREWALL --dport 443 -j DNAT --to IP_SERVEUR_WEB:443
+
+iptables -t nat -A PREROUTING -p tcp -d  IP_EXTERNE_DU_FIREWALL --dport 25 -j DNAT --to IP_SERVEUR_MAIL:25
+
+
+
+Quelques exemples utiles :
+
+
+# Allow outbound DHCP request
+iptables -A OUTPUT -o eth0 -p udp --dport 67:68 --sport 67:68 -j ACCEPT
+
+# Allow outbound email
+iptables -A OUTPUT -i eth0 -p tcp -m tcp --dport 25 -m state --state NEW  -j ACCEPT
+
+# Outbound Network Time Protocol (NTP) requests
+iptables -A OUTPUT –o eth0 -p udp --dport 123 --sport 123 -j ACCEPT
+
+
+# Réguler des règles dans le temps :
+iptables iptables -A OUTPUT -p tcp -m multiport --dport http,https -i eth0 -o eth1 -m time --timestart 09:00 --timestop 18:00 –d 31.13.64.0/18  -j ACCEPT
+
+# Limiter le nbre de connexions :
+
+iptables –A INPUT –p tcp --syn -m multiport -–dport http,https –m connlimit --connlimit-above 20 –j REJECT -–reject-with-tcp-reset
+
+# monitorer les règles :
+iptables -L -v -n –line-numbers
+
+# Supprimer les règles qui ne "matchent" jamais :
+
+iptables -nvL | grep -v "0     0"
+
+
+# Monitorer le fonctionnement :
+
+watch --interval=5 'iptables -nvL | grep -v "0     0"'
+
+
+Replace ACCEPT with DROP to block port:
+
+## open port ssh tcp port 22 ##
+iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 22-j ACCEPT
+ 
+## open cups (printing service) udp/tcp port 631 for LAN users ##
+iptables -A INPUT -s 192.168.1.0/24 -p udp -m udp --dport 631 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -p tcp -m tcp --dport 631 -j ACCEPT
+ 
+## allow time sync via NTP for lan users (open udp port 123) ##
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+ 
+## open tcp port 25 (smtp) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 25 -j ACCEPT
+ 
+## open tcp port 110 (pop3) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 110 -j ACCEPT
+ 
+## open tcp port 143 (imap) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 143 -j ACCEPT
+
+
+# open dns server ports for all ##
+iptables -A INPUT -m state --state NEW -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 53 -j ACCEPT
+ 
+## open http/https (Apache) server port to all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+ 
+## open access to Samba file server for lan users only ##
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 137 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 138 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 139 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 445 -j ACCEPT
+
+To insert rule between 1 and 2, enter:
+# iptables -I INPUT 2 -s 202.54.1.2 -j DROP
+
+
+Log and Drop Packets
+
+Type the following to log and block IP spoofing on public interface called eth1
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix "IP_SPOOF A: "
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+By default everything is logged to /var/log/messages file.
+# tail -f /var/log/messages
+# grep --color 'IP SPOOF' /var/log/messages
+
+
+Dropper des paquets par mac-address :
+# iptables -A INPUT -m mac --mac-source 00:0F:EA:91:04:08 -j DROP
+## *only accept traffic for TCP port # 8080 from mac 00:0F:EA:91:04:07 * ##
+# iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:0F:EA:91:04:07 -j ACCEPT
+
+
+How to redirect port AA to BB
+
+The syntax is as follows:
+iptables -t nat -A PREROUTING -i $interfaceName -p tcp --dport $srcPortNumber -j REDIRECT --to-port $dstPortNumber
+
+
+How to reset packet counters
+
+To see iptables counters run:
+# iptables -L -n -v
+
+To clear/reset the counters for all rules:
+# iptables -Z
+# iptables -L -n -v
+
+To reset the counters for INPUT chain only:
+# iptables -Z INPUT
+
+To reset the counters for rule # 13 in the INPUT chain only:
+# iptables -Z INPUT 13
+
+
+
+
+	
+	FIREWALLD :
+___________________
+
+
+C'est un service systemd :
+
+# systecmctl start|stop|status -l firewalld
+
+À chaque modification, il faut recharger la configuration avec 
+
+firewall-cmd --reload 
+
+
+
+
+Les zones prédéfinies de firewalld sont les suivantes :
+
+
+drop: The lowest level of trust. All incoming connections are dropped without reply and only outgoing connections are possible.
+
+block: Similar to the above, but instead of simply dropping connections, incoming requests are rejected with an 
+	icmp-host-prohibited or icmp6-adm-prohibited message.
+ 
+public: Represents public, untrusted networks. You don't trust other computers but may allow selected incoming connections
+	on a case-by-case basis.
+
+external: External networks in the event that you are using the firewall as your gateway. It is configured 
+	for NAT masquerading so that your internal network remains private but reachable.
+
+internal: The other side of the external zone, used for the internal portion of a gateway. 
+	The computers are fairly trustworthy and some additional services are available.
+
+dmz: Used for computers located in a DMZ (isolated computers that will not have access to the rest of your network).
+	Only certain incoming connections are allowed.
+
+work: Used for work machines. Trust most of the computers in the network. A few more services might be allowed.
+
+home: A home environment. It generally implies that you trust most of the other computers and that a few more services
+	 will be accepted.
+
+trusted: Trust all of the machines in the network. The most open of the available options and should be used sparingly.
+
+
+
+Pour bien paramétrer firewalld, il faut prendre garde à la zone dans laquelle on a assigné son interface réseau !
+
+$ firewall-cmd --get-default-zone
+
+$ firewall-cmd --get-active-zones
+
+
+Lister l'ensemble des règles :
+
+$ sudo firewall-cmd --list-all
+
+$ sudo firewall-cmd --zone=public --list-all
+
+
+Changer l'interface réseau d'une zone à une autre :
+
+# sudo firewall-cmd --zone=home --change-interface=enp0s3
+# sudo firewall-cmd --set-default-zone=home
+
+
+Voir et ajouter des services à une zone donnée :
+
+# firewall-cmd --get-services
+
+Tous ces services sont décrits dans des fichiers de config au format XML.
+
+
+Vous en avez des exemples ici :
+
+/usr/lib/firewalld/services
+
+
+Pour ajouter un service à la configuration existante :
+
+# firewall-cmd --zone=public --add-service=NOM_DU_SERVICE
+
+Pour que cette règle soit permanente, n'oubliez pas :
+
+# firewall-cmd --zone=public --permanent --add-service=NOM_DU_SERVICE
+suivi de :
+# firewall-cmd --reload
+
+Lister les services :
+
+# firewall-cmd --zone=public --permanent --list-services
+
+Pour ajouter un accès à un port personnalisé :
+
+# firewall-cmd --permanent --zone=public --add-port=31337/tcp
+						   ^^^^^^
+... ou une plage de ports :
+
+# firewall-cmd --zone=public --add-port=4990-4999/udp
+
+Vérifiez :
+
+# sudo firewall-cmd --zone=public --list-ports
+
+
+
+Pour appliquer facilement des règles en XML, il suffit de les recopier dans le répertoire de travail :
+
+cp /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services/example.xml
+
+
+Et modifiez-le selon votre usage. Par exemple :
+
+nano /etc/firewalld/services/example.xml
+
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;service>
+  &lt;short>Example Service</short>
+  &lt;description>This is just an example service.  It probably shouldn't be used on a real system.</description>
+  &lt;port protocol="tcp" port="7777"/>
+  &lt;port protocol="udp" port="8888"/>
+&lt;/service>
+
+
+Créer une règle ipset permanente pour blacklister des adresses :
+
+# firewall-cmd --permanent --new-ipset=blacklist --type=hash:ip
+
+# firewall-cmd --reload
+# firewall-cmd --ipset=blacklist --add-entry=192.168.1.30
+# firewall-cmd --ipset=blacklist --add-entry=192.168.1.31
+
+Vérifier :
+
+# firewall-cmd --ipset=blacklist --get-entries
+
+Supprimer une entrée :
+
+# firewall-cmd --ipset=blacklist --remove-entry=192.168.1.31
+
+Supprimer tout un ipset :
+
+# firewall-cmd --permanent --delete-ipset=blacklist
+
+
+https://doc.fedora-fr.org/wiki/Parefeu_-_firewall_-_FirewallD
+
+https://www.it-connect.fr/centos-7-utilisation-et-configuration-de-firewalld/
+
+
+A l’identique du fonctionnement d’iptables, il est également possible de sauvegarder la configuration complète du pare-feu 
+grâce aux commandes suivantes (ip6tables –S pour IPv6):
+
+# iptables –S > firewalld_rules
+
+
+
+	Proxy Squid :
+_____________________
+
+
+# yum install squid
+
+# systemctl start squid
+# systemctl enable squid
+# systemctl status squid -l
+
+Nota Bene :
+
+Pour voir des exemples de configuration avec toutes les options, affichez et lisez : 
+
+/usr/share/doc/squid-3.5.20/squid.conf.documented
+
+
+
+Configuration de base :
+
+vim /etc/squid/squid.conf
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+acl localnet src 192.168.20.0/24	# RFC1918 possible internal network
+
+acl Safe_ports port 80		# http
+acl Safe_ports port 443		# https
+acl CONNECT method CONNECT
+
+http_access deny !Safe_ports
+
+http_access allow localhost manager
+http_access deny manager
+
+http_access allow localnet
+http_access allow localhost
+
+http_access deny all
+
+http_port 8080
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pour recharger la config plus rapidement :
+
+# squid -k reconfigure
+
+
+	Restriction d'accès aux heures d'ouverture :
+
+Acl Type:
+
+time
+
+Description
+Time of day, and day of week
+
+Usage
+
+acl aclname time [day-abbreviations] [h1:m1-h2:m2]
+
+day-abbreviations:
+S - Sunday
+M - Monday
+T - Tuesday
+W - Wednesday
+H - Thursday
+F - Friday
+A - Saturday
+h1:m1 must be less than h2:m2
+
+Exemple :
+
+acl ACLTIME time M 9:00-17:00
+# ACLTIME refers day of Monday from 9:00 to 17:00.
+
+acl ouvrable time MTWHF 9:00-17:00
+http_access allow localnet ouvrable
+http_access deny localnet
+
+Pour recharger la config plus rapidement :
+
+# squid -k reconfigure
+
+
+Pour des acls évoluées :
+https://workaround.org/squid-acls/
+
+
+
+
+
+	Accès authentifié :
+___________________________
+
+
+- Créer plusieurs comptes locaux et plusieurs groupes.
+- Paramétrer squid pour autoriser certains utilisateurs / groupes et pas d'autres.
+
+
+
+Accès autorisé aux utilisateurs locaux ( PAM ) : 
+
+
+Dans /etc/squid/squid.conf :
+
+--------------------------------------
+# Authentification via PAM :
+
+# dans /etc/squid/squid.conf :
+
+auth_param basic program /usr/lib64/squid/basic_pam_auth
+auth_param basic children 5
+auth_param basic realm Squid proxy-caching web server
+auth_param basic credentialsttl 2 hours
+# auth_param basic casesensitive off
+
+acl password proxy_auth REQUIRED
+
+http_access allow password
+
+
+Les modifications dans /etc/pam.d/squid ne sont plus nécessaires.
+Il faut par contre adapter les droits d'un fichier pour l'authentification PAM :
+
+chmod u+s /usr/lib64/squid/basic_pam_auth
+
+Et redémarrez squid avant de contrôler son fonctionnement.
+
+
+	Authentification LDAP ( extrait)  :
+___________________________________________
+
+c -w azerty123 -f uid=%s capen.sis
+
+#auth_param basic program /usr/lib64/squid/basic_ldap_auth -v 3 -b "dc=capen,dc=sis" -D cn=admin,dc=capen,dc=sis
+auth_param basic program /usr/lib64/squid/basic_ldap_auth -h 192.168.20.250 -R -b 'cn=Users,DC=capen,DC=sis' -D 'admin@capen.sis' -w 'azerty123' -f 'sAMAccountName=%s'
+
+auth_param basic children 5
+auth_param basic realm Web-Proxy
+auth_param basic credentialsttl 1 minute
+
+acl ldap-auth proxy_auth REQUIRED
+
+http_access allow ldap-auth
+#http_access allow localhost
+http_access deny all
+
+https://frama.link/Tuto-LDAP-squid-Redhat
+
+https://pastebin.com/xtN99Pzf
+
+
+	Authentification Active Directory :
+___________________________________________
+
+
+Liens d'info :
+
+https://docs.diladele.com/administrator_guide_6_4/active_directory/index.html
+
+https://www.unix-experience.fr/security/pam_auth_activedirectory/
+
+https://wiki.squid-cache.org/ConfigExamples/Authenticate/WindowsActiveDirectory
+
+http://wiki.bitbinary.com/index.php/Active_Directory_Integrated_Squid_Proxy#squid.conf
+
+https://doc.ubuntu-fr.org/tutoriel/comment_mettre_en_place_un_proxy_squid_avec_authentification_active_directory
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+On commence par ça :
+
+https://www.unix-experience.fr/security/pam_auth_activedirectory/
+
+apt-get install krb5-user samba winbind libpam-winbind libnss-winbind
+
+/etc/bkrb5.conf :
+
+[libdefaults]
+    default_realm = UNIX-EXPERIENCE.FR
+    dns_lookup_realm = true
+    dns_lookup_kdc = true
+
+[realms]
+    UNIX-EXPERIENCE.FR = {
+        kdc = ad1.unix-experience.fr:88
+        kdc = ad2.unix-experience.fr:88
+        admin_server = ad1.unix-experience.fr
+        default_domain = unix-experience.fr
+    }
+    unix-experience.fr = {
+        kdc = ad1.unix-experience.fr:88
+        kdc = ad2.unix-experience.fr:88
+        admin_server = ad1.unix-experience.fr
+        default_domain = unix-experience.fr
+    }
+
+[domain_realm]
+    .unix-experience.fr = UNIX-EXPERIENCE.FR
+    unix-experience.fr = UNIX-EXPERIENCE.FR
+
+[login]
+    krb4_convert = true
+    krb4_get_tickets = false
+
+
+
+/etc/samba/smb.conf :
+
+
+[global]
+        workgroup = UNIX-EXPERIENCE
+        security = ads
+        realm = unix-experience.fr
+        password server = unix-experience.fr
+        idmap uid = 10000-20000
+        idmap gid = 10000-20000
+        winbind enum users = yes
+        winbind enum groups = yes
+        winbind use default domain = yes
+        domain master = no
+        local master = no
+        preferred master = no
+        template shell = /bin/bash
+        template homedir = /home/%U
+
+
+
+
+Contrôle et lancement des services :
+
+# testparm
+# systemctl start nmbd smbd
+# systemctl status nmbd smbd
+
+
+Pour PAM :
+
+Modifiez /etc/nsswitch.conf :
+
+
+
+passwd: files winbind
+group: files winbind
+shadow: files winbind
+
+hosts:          files myhostname mdns4_minimal [NOTFOUND=return] dns
+networks:       files
+
+protocols:      db files
+services:       db files
+ethers:         db files
+rpc:            db files
+
+netgroup: nis
+
+
+
+Modifiez aussi /etc/pam.d/common-session , pour qu'il ait ces options  :
+
+ session    [default=1]            pam_permit.so
+ session    requisite            pam_deny.so
+ session    required            pam_permit.so
+ session optional            pam_umask.so
+ session    required    pam_unix.so
+ session    optional            pam_winbind.so
+ session optional    pam_mkhomedir.so umask=0022 skel=/etc/skel
+ session    optional    pam_systemd.so
+
+
+
+Puis on s'enregistre sur le domaine :
+
+/usr/bin/net ads join -U ADJoinAccount%"myPassw0rd" # pour vous, -U admin%C4p3ns1s
+
+
+Et on démarre Winbind
+
+# systemctl start winbind
+# systemctl enable winbind
+
+
+Ensuite, on suit celui-là :
+
+https://wiki.squid-cache.org/ConfigExamples/Authenticate/WindowsActiveDirectory
+
+
+Ajouter le contrôleur de domaine dans /etc/hosts.
+
+Dans /etc/resolv.conf, vous aurez :
+
+domain example.local
+search example.local
+nameserver 192.168.0.1
+nameserver 192.168.0.2
+
+
+Validez que vous dialoguez librement entre machines bien sûr.
+
+Installez squid (3)
+
+Démarrez kerberos :
+
+# kinit admin
+
+( ... MdP ... )
+
+# klist
+
+Installez msktutil 
+
+Puis invoquez-le comme suit :
+
+msktutil -c -b "CN=COMPUTERS" -s HTTP/squidproxy.example.local -k /etc/squid3/PROXY.keytab \
+--computer-name SQUIDPROXY-K --upn HTTP/squidproxy.example.local --server dc1.example.local --enctypes 28 --verbose
+
+
+chgrp proxy /etc/squid/PROXY.keytab
+chmod g+r /etc/squid/PROXY.keytab
+
+
+Détruisez puis recréez les comptes :
+# kdestroy
+# msktutil --auto-update --verbose --computer-name mon_proxy
+
+
+Il pourra être utile d'automatiser ceci pour qu'il se fasse régulièrement :
+dans une crontab :
+00 4  *   *   *     msktutil --auto-update --verbose --computer-name squidproxy-k | logger -t msktutil
+
+
+dans /etc/default/squid :
+
+
+KRB5_KTNAME=/etc/squid3/PROXY.keytab
+export KRB5_KTNAME
+
+
+Rejoignez le domaine :
+
+# net ads join -U Admin
+
+# wbinfo -t
+(en cas d'erreur, googlez le msg d'erreur pour y remédier. Cette commande doit marcher sans erreur)
+
+# gpasswd -a proxy winbindd_priv
+
+
+Créez dans l'AD un utilisateur squid utile à l'authent'.
+Créez sur le proxy les fichiers correspondants :
+
+echo 'squidpass' > /etc/squid3/ldappass.txt
+chmod o-r /etc/squid3/ldappass.txt
+chgrp proxy /etc/squid3/ldappass.txt
+
+
+Installez negotiate_wrapper :
+
+
+# cd /usr/local/src/
+# wget "http://downloads.sourceforge.net/project/squidkerbauth/negotiate_wrapper/negotiate_wrapper-1.0.1/negotiate_wrapper-1.0.1.tar.gz"
+# tar -xvzf negotiate_wrapper-1.0.1.tar.gz
+# cd negotiate_wrapper-1.0.1/
+# ./configure
+# make
+# make install
+
+
+Puis ajustez votre squid.conf :
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Exemple de /etc/squid/squid.conf : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+acl localnet src 192.168.20.0/24
+auth_param ntlm program /usr/bin/ntlm_auth --diagnostics --helper-protocol=squid-2.5-ntlmssp --domain=EXAMPLE
+auth_param ntlm children 10
+auth_param ntlm keep_alive off
+auth_param basic children 10
+auth_param basic realm Le BO proxy de Guillaume
+auth_param basic credentialsttl 2 minutes
+acl Users proxy_auth REQUIRED
+http_access deny !Users
+http_access allow Users
+acl SSL_ports port 443
+acl CONNECT method CONNECT
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost manager
+http_access deny manager
+http_access allow localnet
+http_access allow localhost
+http_access deny all
+http_port 8080
+coredump_dir /var/spool/squid
+refresh_pattern ^ftp:		1440	20%	10080
+refresh_pattern ^gopher:	1440	0%	1440
+refresh_pattern -i (/cgi-bin/|\?) 0	0%	0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Redémarrez tous les services et testez l'accès avec un compte AD via le navigateur.
+
+
+
+
+
+
+	Filtrage squidGuard :
+_____________________________
+
+
+Procédure qui marche :
+
+https://blog.microlinux.fr/squidguard-centos/
+
+
+yum install -y squidGuard
+
+Dans /etc/squid/squid.conf :
+
+
+----------------------------------------------------------------
+
+url_rewrite_program /usr/bin/squidGuard
+
+request_header_access Referer deny all		     
+request_header_access X-Forwarded-For deny all
+request_header_access Via deny all
+request_header_access Cache-Control deny all
+
+forwarded_for off
+----------------------------------------------------------------
+
+
+
+
+Récupérez les Blacklists de l'université de Toulouse  ( ou dnas le répertoire de la formation ) :
+
+$ cd /tmp
+$ wget http://dsi.ut-capitole.fr/blacklists/download/blacklists.tar.gz
+
+Puis :
+
+$ tar -xzf blacklists.tar.gz
+$ sudo su
+# mkdir -p /var/squidGuard/blacklists.db
+
+# cp -R blacklists/* /var/squidGuard/blacklists.db
+
+
+
+Dans /etc/squid/squidGuard.conf :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# CONFIG FILE FOR SQUIDGUARD
+#
+# Caution: do NOT use comments inside { }
+#
+
+dbhome /var/lib/squidguard/db
+logdir /var/log/squidguard
+
+dest agressif {
+	domainlist agressif/domains
+	urllist agressif/urls
+}
+
+dest adult {
+	domainlist adult/domains
+	urllist adult/urls
+	expressionlist adult/very_restrictive_expression
+}
+
+dest celebrity {
+        domainlist celebrity/domains
+        urllist celebrity/urls
+}
+
+dest ddos {
+        domainlist ddos/domains
+}
+
+dest mixed_adult {
+        domainlist mixed_adult/domains
+        urllist mixed_adult/urls
+}
+
+dest drogue {
+        domainlist drogue/domains
+        urllist drogue/urls
+}
+
+dest download {
+        domainlist download/domains
+        urllist download/urls
+}
+
+dest games {
+        domainlist games/domains
+        urllist games/urls
+}
+
+dest gambling {
+        domainlist gambling/domains
+        urllist gambling/urls
+}
+
+
+dest malware {
+        domainlist malware/domains
+        urllist malware/urls
+}
+
+dest marketingware {
+        domainlist marketingware/domains
+        urllist marketingware/urls
+}
+
+dest mobile-phone {
+        domainlist mobile-phone/domains
+        urllist mobile-phone/urls
+}
+
+dest phishing {
+        domainlist phishing/domains
+        urllist phishing/urls
+}
+
+dest publicite {
+        domainlist publicite/domains
+        urllist publicite/urls
+}
+
+dest remote-control {
+        domainlist remote-control/domains
+        urllist remote-control/urls
+}
+
+dest strict_redirector {
+        domainlist strict_redirector/domains
+        urllist strict_redirector/urls
+        expressionlist strict_redirector/expressions
+}
+
+dest sect {
+        domainlist sect/domains
+        urllist sect/urls
+}
+
+dest shortener {
+        domainlist shortener/domains
+        urllist shortener/urls
+}
+
+dest tricheur {
+        domainlist tricheur/domains
+	urllist tricheur/urls
+}
+
+dest warez {
+        domainlist warez/domains
+        urllist warez/urls
+}
+
+dest associations_religieuses {
+        domainlist associations_religieuses/domains
+}
+
+dest arjel {
+        domainlist arjel/domains
+}
+
+dest astrology {
+        domainlist astrology/domains
+        urllist astrology/urls
+}
+
+
+dest dangerous_material {
+        domainlist dangerous_material/domains
+        urllist dangerous_material/urls
+}
+
+
+acl {
+	default {
+	pass !agressif !adult !mixed_adult !celebrity !ddos !drogue !download !games !gambling !malware !marketingware !mobile-phone !phishing !publicite !remote-control !strict_redirector !sect !shortener !tricheur !warez !associations_religieuses !arjel !astrology !dangerous_material all
+	redirect http://192.168.20.81/denied.html
+	}
+}
+------------------------------------------------------------------
+
+Puis : 
+
+# squidGuard -d -b -P -C all
+
+
+# ln -s /etc/squidguard/squidGuard.conf /etc/squid3/''
+
+# chown -R proxy:proxy /var/log/squid3 /var/lib/squidguard''
+
+# squidGuard -d -b -P -C all''			**( à chaque changement du fichier squidGuard.conf )**
+
+# chown -R proxy:proxy /var/log/squid3 /var/lib/squidguard''
+
+# systemctl restart squid3	''		**( à chaque modification des fichiers de configuration squid3 et squidGuard )**
+
+**Vérifiez le fonctionnement de squidGuard avec un navigateur en passant par le proxy port 3128/ 8080 
+(sur firefox extension pratique: Proxy Switcher), le site blacklisté sera redirigé.**
+
+
+
+
+
+	Antivirus :
+___________________
+
+Limites pour résister (un peu ) à une fork bomb :
+
+https://wiki.archlinux.org/index.php/Limits.conf
+
+	ClamAV :
+__________________
+
+https://www.hostinger.com/tutorials/how-to-install-clamav-centos7
+
+
+
+yum -y install epel-release
+
+yum -y install clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
+
+
+Configurer SElinux (en FIN d'installation !! ) !
+
+setsebool -P antivirus_can_scan_system 1
+setsebool -P clamd_use_jit 1
+
+Vérifiez avec :
+
+getsebool -a | grep antivirus
+
+
+	CONFIGURER CLAMAV :
+
+Dans /etc/clam.d/scan.conf :
+
+Commentez la mention Example 
+
+( sed -i -e "s/^Example/#Example/" /etc/clamd.d/scan.conf )
+
+
+Décommentez la ligne suivante :
+
+LocalSocket /var/run/clamd.scan/clamd.sock
+
+
+Des options de configuration supplémentaires et intéressantes sont disponibles ici :
+
+
+https://hackademics.fr/forum/syst%C3%A8me/serveur/administration/76474-installer-et-configurer-clamav-sur-centos-7
+
+ ( ou https://frama.link/ClamAV )
+
+
+
+Mettre à jour la base antivirale :
+
+# freshclam
+
+
+Pour activer le service :
+
+# systemctl start clamd@scan
+# systemctl enable clamd@scan
+
+
+Testez votre anti-virus avec le fichier de eicar.org :
+
+http://securite-informatique.info/virus/eicar/
+
+ou :
+
+# wget  http://www.eicar.org/download/eicar.com
+
+Pour scanner un répertoire :
+
+# sudo clamscan -r /home
+
+# sudo clamscan --infected --remove --recursive /home
+
+
+Pour un serveur  de fichier, faites récupérer les signatures virales au moins une fois par jour,
+et faites scanner les répertoires partagés à intervalles réguliers (30 min. ?) via CRON.
+
+
+Pour faire fonctionner ClamAV en combinaison avec squid :
+
+Vous devez récupérer un plugin ClamAV pour squid.
+
+wget https://www.ophyde.com/wp-content/uploads/2014/02/squidclamav-6.10.tar.gz 
+
+Puis :
+
+tar zxvf squidclamav-6.10.tar.gz
+cd squidclamav-6.10
+./configure --with-c-icap
+make
+sudo make install
+
+
+
+
+
+
+
+
+
+
+
+
+

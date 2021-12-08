@@ -1,0 +1,35 @@
+syntax on
+set number
+colorscheme slate
+
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+
+set nocompatible
+set encoding=utf-8
+filetype off
+set signcolumn=yes
+set hidden
+set number
+set background=dark
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set nobackup
+set smarttab
+set softtabstop=4
+set wildmenu
+set wildmode=longest:list
+set modeline
+set laststatus=2
+set wrap linebreak nolist
+set cc=85
+set textwidth=0
+set wrapmargin=0
+set formatoptions+=1
+set hlsearch
+set ruler
+set showcmd
+set incsearch
+set backspace=indent,eol,start
+filetype plugin indent on
+

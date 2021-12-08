@@ -1,0 +1,33 @@
+
+
+	TMUX en quelques commandes :
+
+
+
+
+	Ctrl - B + "	Splitter les terminaux à l'horizontale
+
+	Ctrl - B + %	Splitter les terminaux à la verticale
+
+	Ctrl - B + z	Focus d'un terminal à un autre
+
+	Ctrl - B + c	Nouveau Tab
+
+	Ctrl - B + m	Tab suivant
+
+	Ctrl - B + p	Tab précédent
+
+	Ctrl - B + o	nouvelle fenêtre
+
+	Ctrl - B + d	Detacher
+
+
+
+tmux list--session	--> Liste tous les terminaux tmux
+tmux a n°_session	--> entrer dans une session active !!!
+
+
+
+	tmux cheat sheet dans duckduckgo
+
+

@@ -1,0 +1,822 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+
+
+
+	Virtualisation  :
+_________________________
+
+
+	Virtualisation complète :
+_________________________________
+
+
+Contrôler que le BIOS de votre machine accepte la virtualisation matérielle :
+
+# egrep '^flags.*(vmx|svm)' /proc/cpuinfo >/dev/null && echo OK
+
+
+
+	Virtualbox :
+____________________
+
+
+CentOS :
+________
+
+
+Configurer les dépôts EPEL
+
+yum install -y epel-release
+yum update
+
+Puis on redémarre pour démarrer sur le nouveau noyau.
+
+reboot
+
+Une fois redémarré, on installe les paquets qui nous permettront de compiler, et d'installer les additions :
+
+yum install gcc dkms make kernel-devel kernel-headers bzip2
+
+Maintenant, via VirtualBox, on insère les additions invités :
+
+Menu 'Devices' --> 'Insert Guest Additions CD image'
+On se rend ensuite dans le dossier contenant les additions (le chemin peut varier)
+cd /media/VBOXADDITIONS*
+./VBoxLinuxAdditions.run
+reboot
+
+
+Debian :
+________
+
+https://tecadmin.net/install-virtualbox-debian-9-stretch/
+
+Ou : 
+
+Créez /etc/apt.sources.list.d/virtualbox.list :
+
+## wget https://www.virtualbox.org/download/oracle_vbox_2016.asc
+## sudo apt-key add oracle_vbox_2016.asc
+deb http://download.virtualbox.org/virtualbox/debian stretch contrib
+
+Puis :
+
+apt update
+apt search virtualbox
+
+apt install virtualbox-XXXX
+
+Dans un terminal de la VM Debian, tapez les commandes suivantes avec les droits root :
+apt-get install build-essential dkms gcc linux-headers-`uname -r`
+mkdir /tmp/vboxadd
+cp -r /media/cdrom0/* /tmp/vboxadd/
+cd /tmp/vboxadd/
+./VBoxLinuxAdditions.run
+
+
+Ubuntu :
+
+(apt-get)
+    Installer le paquet virtualbox-guest-additions-iso,
+    Si l'invité est un Ubuntu installez également le paquet virtualbox-guest-utils.
+
+
+
+Récupérer des images pré-installées :
+
+https://virtualboxes.org/images/	# (pas super à jour)
+
+https://www.osboxes.org/virtualbox-images/
+
+
+
+	KVM côté serveur :
+__________________________
+
+Installation :
+
+# apt update
+# apt install qemu-kvm libvirt0 libvirt-daemon libvirt-daemon-system libvirt-dev libvirt-clients virtinst libosinfo-bin
+
+Démarrez les service : 
+
+# systemctl enable libvirtd
+# systemctl start libvirtd
+# systemctl status libvirtd
+
+
+Ajoutez l'utilisateur courant aux groupes kvm et libvirt :
+
+# adduser $USER kvm
+# adduser $USER libvirt
+
+Référence des commandes Libvirt (pour CentOS / RedHat):
+https://libvirt.org/sources/virshcmdref/html-single/
+
+
+ man qemu-img
+
+Exemples de manipulations :
+
+# qemu-img create -f qcow2 MaVM.qcow2 10G
+
+Le format qcow2) est un format d'espace de stockage optimisé, c'est à dire que l'espace occupé par le fichier image disque
+sera très nettement inférieur à l'espace disponible sur le support de données, mais à mesure que des données seront écrites
+ sur le disque la taille du fichier va augmenter. 
+
+# qemu-system-i386 -cdrom Damn_Small_Linux.iso -m 1024
+
+... vous permettra de démarrer un Damn Small Linux sur CD très rapidement.
+
+
+
+
+Exemples de commandes avec virt-install :
+
+
+Si vous avez déjà créé précédemment une machine virtuelle avec qemu 
+ou qemu-kvm vous pouvez importer cette machie virtuelle pour 
+qu'elle soit gérée via virt-manager et par conséquent 
+qu'elle utilise libvirt.
+
+Par exemple, si vous avez une image qui se trouve dans /srv/vms/Fedora12.img,
+effectuez ces opérations:
+
+su -
+virt-install --import --disk path=/srv/vms/Fedora12.img
+--os-type linux --os-variant fedora11 --ram 512 --name Fedora12
+
+Si vous désirez utiliser la gestion de l'accélération
+(c'est à dire, de passer par kvm et non pas qemu seulement):
+
+virt-install --import --accelerate --disk path=/srv/vms/Fedora12.img
+ --os-type linux --os-variant fedora11 --ram 512 --name Fedora12
+
+Les options --name, --ram sont obligatoires.
+ Les options --os-type et --os-variant ne sont pas obligatoires mais permettent
+tout de même une meilleure gestion pour le démarrage et mémoire au boot.
+
+Pour les machines virtuelles Windows, c'est toujours aussi simple:
+
+virt-install --import --accelerate --disk path=/srv/vms/WinXP.img
+--os-type windows --os-variant winxp --ram 512 --name WindowXP
+
+
+
+dans /etc/libvirt, vous pouvez paraméter qemu.conf, notamment en modifiant
+group="root" 
+en
+group="kvm"
+
+virt-install --cpu host --boot cdrom --accelerate --cdrom Fedora-Workstation-Live-x86_64-29-1.2.iso --disk F29-HDD.qcow2 --os-type linux --os-variant fedora26 --ram 2048 --name Fedora29
+
+
+Pour se créer un bridge virtuel :
+
+
+$ sudo vim /etc/network/interfaces.d/br0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+auto br0
+iface br0 inet static
+	address 192.168.2.23        ## set up/netmask/broadcast/gateway as per your setup
+	broadcast 192.168.2.255
+	netmask 255.255.255.0
+	gateway 192.168.2.254
+	bridge_ports eth0    # replace eth0 with your actual interface name
+	bridge_stp off       # disable Spanning Tree Protocol
+        bridge_waitport 0    # no delay before a port becomes available
+        bridge_fd 0          # no forwarding delay
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+	LXC :
+_____________
+
+
+CentOS / RedHat :
+
+# yum -y install lxc lxc-templates lxc-extra libcap-devel libcgroup busybox bridge-utils
+
+
+Debian / Ubuntu :
+
+apt-get install bridge-utils debootstrap lxc lxc-dev
+
+# systemctl start lxc 
+# systemctl enable lxc 
+# systemctl status -l lxc 
+
+
+Configurez /etc/lxc/default.conf :
+
+lxc.network.type = veth
+lxc.network.link = lxcbr0
+lxc.network.flags = up
+lxc.network.hwaddr = 00:FF:AA:xx:xx:xx
+
+
+Pour que le réseau soit actif, éditez /etc/default/lxc-net :
+
+USE_LXC_BRIDGE="true"
+
+
+Dans /etc/ modules :
+
+veth
+
+et rebootez.
+
+Dans /etc/sysctl.conf :
+
+net.ipv4.ip_forward=1
+
+
+Appliquez avec :
+
+sysctl -p
+
+puis vous redémarrez le bridge réseau :
+
+systemctl restart lxc-net.service
+
+
+
+Assurez-vous d'avoir une configuration iptables valides pour les containers :
+
+Ajoutez ceci à /etc/network/iptables.up.rules :
+
+
+
+
+
+et appliquez avec :
+
+iptables-apply
+
+
+
+
+
+Créer un premier container :
+
+# lxc-create -n deb9 -t download
+
+
+
+Une fois créé, démarrez votre container : 
+
+# lxc-start -n deb9 -d
+
+
+
+Pour voir le statut des containers :
+
+# lxc-ls --fancy
+
+Pour ouvrir un shell dans votre nouveau container :
+
+# lxc-attach -n deb9
+
+
+
+Pour créer la configuration réseau des containers, suivez ce tutoriel :
+
+https://wiki.debian.org/fr/LXC/SimpleBridge
+
+
+
+Pour voir le statut des containers :
+
+# lxc-ls --fancy
+
+Pour ouvrir un shell dans votre nouveau container :
+
+# lxc-attach -n deb9
+
+... et ctrl-d pour en sortir.
+
+Vérifier votre configuration LXC :
+
+# lxc-checkconfig
+
+Avoir des infos détaillées sur votre container :
+
+# lxc-info -n deb9
+
+
+Vos containers sont stockés dans /var/lib/lxc/ .
+
+Pour supprimer un container :
+
+# lxc-destroy -n deb9
+
+
+
+
+ T.P. :
+
+
+
+dans votre nouveau container :
+
+- validez votre adresse IP.
+- validez votre accès réseau (ping + DNS)
+- Installez sshd / openssh-server + sudo + vim + net-tools htop glances 
+- Démarrez sshd de manière automatique
+- Créez un compte utilisateur de votre choix
+- Faites-en un sudoer.
+- Déconnectez-vous.
+- Vérifiez que vous accédez à votre container en ssh.
+- Ajoutez une clef ssh publique avec ssh-copy-id.
+
+
+
+Une fois ceci fait, sortez de votre container et stoppez-le.
+
+Puis vous clonez le système existant, de manière à en réaliser 
+un template :
+
+# lxc-copy -n deb9 -N template-debian9
+
+OU :
+
+# lxc-clone deb9 template-debian9
+
+
+Du coup, chaque fois que vous aurez besoin ultérieurement d'un 
+environnement de test, il vous suffira de le recopier à partir de votre
+template pour avoir un système préconfiguré prêt à l'usage, avec vos options.
+
+
+	Archiver des containers :
+
+
+# cd /var/lib/lxc
+# tar -zcpvf lxc-template-debian9.tgz template-debian9
+
+... Puis déplacez votre archive pour la sauvegarder à un endroit appropié.
+
+
+	Restaurer des containers :
+
+
+# cd /var/lib/lxc
+# tar -zxvf /chemin/de/backup/lxc-template-debian9.tgz
+
+...
+
+# lxc-start lxc-template-debian9
+
+
+
+	ProxMox :
+_________________
+
+
+https://community.capensis.org/t/nouveautes-installation-et-configuration-de-proxmox-5-2/133
+
+Suivre les conseils pour l'installation.
+
+Après avoir mis à jour le système, créé un utilisateur "formation" et l'avoir rendu sudoer,
+vous aurez besoin d'une interface graphique.
+
+Tapez au choix :
+
+
+# apt install task-gnome-desktop
+# apt install task-kde-desktop
+# apt install task-xfce-desktop
+
+
+Ajoutez les entrées qui vont bien dans votre /etc/hosts.
+
+Pour plus de confort, ajoutez quelques programmes de base :
+
+# apt install sudo net-tools dnsutils ntp htop glances strace most netcat vim tree telnet tmux screen lynx nmap tcpdump vim byobu 
+
+
+Créez un utilisateur 'formation', mot de passe 'formation'.
+
+# adduser formation
+
+Rendez-le sudoer :
+
+# usermod -aG sudo formation
+
+Puis modifiez /etc/ssh/sshd_config , pour passer PermitRootLogin à no
+
+Pour des raisons de sécurité, ces manipulations de départ sont INDISPENSABLES !!
+
+
+
+Support VirtIO pour Windows :
+
+ https://docs.fedoraproject.org/en-US/quick-docs/
+
+
+
+
+	NAT & PAT IPtables pour le noeud d'hyperviseur local :
+______________________________________________________________
+
+N.B. : dans mon exemple, mon hyperviseur a l'IP externe 192.168.20.253 sur vmbr0,
+Et la plage IP interne des VMs sur vmbr1 est 10.0.0.0/24
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#!/bin/bash
+
+# Activer le forwarding :
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# On commence par accepter tout, pour ne rien casser :
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+#
+# On remet les polices par défaut pour la table NAT :
+#
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+
+#
+# On vide (flush) toutes les règles existantes
+#
+iptables -F
+iptables -t nat -F
+
+#
+# Et enfin, on efface toutes les chaînes qui ne
+# sont pas à defaut dans la table filter et nat
+
+iptables -X
+iptables -t nat -X
+
+###############################################
+#
+# La conf d'IPtables proprement dite :
+#
+###############################################
+
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD ACCEPT
+
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+
+iptables -A INPUT -i vmbr0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o vmbr0 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i vmbr0 -s 192.168.20.0/24 -p tcp --dport ssh -j ACCEPT
+
+iptables -A FORWARD -i vmbr1 -o vmbr0 -j ACCEPT
+iptables -A FORWARD -i vmbr0 -o vmbr1 -j ACCEPT
+
+iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -o vmbr0 -j MASQUERADE
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enregistrez ce script, puis chmod 750 mon_script.sh 
+
+./mon_script.sh pour activer la configuration.
+
+Validez que valider que tout les accès fonctionnent depuis l'hyperviseur ET depuis la VM dans vmbr1 .
+
+
+
+Exemple de bonding + bridge
+https://wiki.kogite.fr/index.php/Proxmox_-_configuration_bonding_%2B_bridge
+
+
+
+Le wiki de ProxMox:
+https://pve.proxmox.com/wiki/
+
+
+
+
+	T.P. 2 :
+
+
+- Créez et démarrez un nouveau container.
+- Raccordez-le au bridge interne (vmbr1).
+- Logguez-vous à l'intérieur, et faites une installation de LAMP + PHPmyAdmin.
+- Paramétrez-le à votre guise, puis sortez-en, et sauvegardez-le.
+
+- Relancez-le, et publiez-le sur l'interface externe de votre machine
+  PHYSIQUE grâce à une règle de Port Address Translation (iptables).
+
+
+Exemple de règle de PAT (à adapter !!!) :
+
+iptables -t nat -A PREROUTING -p tcp -d  192.168.20.253 --dport 22001 -j DNAT --to 172.16.17.1:22
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# apt -y install apache2
+# apt -y install mariadb-server
+# apt -y install php php-mysql
+
+# mysql_secure_installation
+
+# vim /var/www/html/info.php
+
+<?php phpinfo(); ?>
+
+:wq
+
+# chmod 644 /var/www/html/info.php
+
+# systemctl enable --now mariadb
+# systemctl enable --now apache2
+# systemctl restart apache2
+
+# apt-get install phpmyadmin
+
+
+
+... là, vous avez accès via	http://IP_du_container/info/php
+				http://IP_du_container/
+				... etpour 	http://IP_du_container/phpmyadmin/  ?
+
+
+
+Pour publier ce serveur web via l'interface de votre machine physique :
+
+SUR LA MACHINE PHYSIQUE :
+
+#!/bin/bash
+
+bash /usr/local/bin/iptables-flush
+wait
+
+# Activer le forwarding de paquets dans le kernel :
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Au départ, on commence par donner la politique de base (policy) :
+
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD ACCEPT
+
+# On dialogue librement avec son interface de loopback :
+
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# On accepte les Pings :
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+
+iptables -A INPUT -i vmbr0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i vmbr1 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i vmbr0 -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i vmbr1 -p tcp --dport 22 -j ACCEPT
+
+iptables -A INPUT -i vmbr0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i vmbr1 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o vmbr0 -j ACCEPT
+iptables -A OUTPUT -o vmbr1 -j ACCEPT
+
+iptables -A FORWARD -i vmbr1 -o vmbr0 -j ACCEPT
+iptables -A FORWARD -i vmbr0 -o vmbr1 -j ACCEPT
+
+iptables -t nat -A POSTROUTING -s 10.10.10.0/24 -o vmbr0 -j MASQUERADE
+iptables -t nat -A PREROUTING -p tcp -d 192.168.20.97 --dport 80 -j DNAT --to 10.10.10.1:80
+
+
+
+	ZFS :
+_____________
+
+https://journaldunadminlinux.fr/tutoriel-tuto-zfs-linux/
+
+
+Créer un pool :
+
+ zpool create -f monjolipool /dev/sdb
+
+ zpool list
+
+ zpool status
+
+
+Agrandir un poool en ajoutant des devices :
+
+zpool add monjolipool /dev/sdd
+
+Supprimer un device :
+
+zpool remove monjolipool /dev/sdd
+
+
+zfs mount / umount monjolipool
+
+
+Changer le point de montage d'un pool :
+
+zfs set mountpoint=/mnt/zfs monjolipool
+
+
+Partitionner un pool :
+
+zfs create monjolipool/partition1
+
+
+SNAPSHOT :
+
+Créez-en par pool ou par partition :
+
+zfs snapshot monjolipool@310219
+
+zfs snapshot monjolipool/partition1@$(date +%F)
+
+
+Lister les snapshots :
+
+zfs list -t snapshot
+
+
+	Usb dans proxmox (de l'hyperviseur à l'hôte) :
+______________________________________________________
+
+
+
+https://pve.proxmox.com/wiki/USB_Devices_in_Virtual_Machines
+https://pve.proxmox.com/wiki/USB_physical_port_mapping
+
+
+	Convertir des formats Virtualbox vers Proxmox :
+______________________________________________________
+
+
+Formats disponibles :
+#qemu-img --help | tail -n4
+
+qemu-img convert -f raw -O qcow2 image.img image.qcow2
+
+qemu-img convert -O qcow2 disk1.vmdk disk1.qcow2
+
+qemu-img convert -O qcow2 input.vdi output.qcow2
+
+VBoxManage clonehd ~/VirtualBox\ VMs/image.vdi image.img --format raw
+
+
+IMPORTER UNE VM VirtualBox DANS PROXMOX :
+_________________________________________
+
+
+qemu-img 
+qemu-img info
+
+importer son fichier vdi, puis en console :
+
+qemu-img convert -f vdi ma_VM_d_origine.vdi -O qcow2 ma_VM_proxmox.qcow2
+
+
+
+
+Pour les VM en virtualisation complète :
+
+# apt-get install qemu-guest-agent
+
+ou :
+
+# yum install qemu-guest-agent
+
+
+
+
+	CEPH :
+______________
+
+
+# pveceph install 
+
+# pveceph init --network 192.168.20.0/24
+
+# pveceph createmon --mon-address @IP_noeud_Proxmox	# sur chacun des trois noeuds
+
+# pveceph createmgr	# sur un noeud au moins
+
+
+
+Ensuite, dans la console d'administration ProxMox :
+
+Ceph ---> Créez un OSD par noeud
+
+Puis vous les utilisez pour créer un pool Ceph
+
+
+
+
+
+
+
+
+
+
+
+
+	LIENS UTILES :
+
+
+https://pve.proxmox.com/wiki/Firewall
+
+
+https://git.proxmox.com/
+
+https://blog.emaxilde.net/6-Proxmox-VE-4-Migration-de-ext4-vers-LVM-thin.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+

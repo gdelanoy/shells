@@ -1,0 +1,1183 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Configuration Management :
+___________________________________
+
+Déploiement continu :
+
+https://fr.wikipedia.org/wiki/D%C3%A9ploiement_continu
+
+Approvisionnement / Provisioning :
+
+https://fr.wikipedia.org/wiki/Provisionnement
+
+
+
+	Ansible :
+_________________
+
+
+Déploiement du lab :
+
+
+Sur la machine maître Ansible :
+
+# apt install ansible
+
+ou :
+
+# yum install ansible
+
+
+
+
+Sur les clients :
+CentOS 7 :
+
+yum install vim par sudo net-tools htop glances curl openssh-server
+
+
+
+lxc-ls --fancy		# voir le statut des containers 
+
+lxc-start -n centos	# démarrer notre nouveau container
+
+lxc-attach -n centos1   # Entrer dans votre container.
+
+
+yum install openssh-server vim sudo htop glances most tree
+
+	Créez un utilisateur formation, MdP formation + rendre sudoer
+	Modifiez /etc/ssh/sshd_config pour passer PermitRootLogin à no  ( !!! )
+
+
+
+
+Vous pouvez vous simplifier la vie depuis le poste maître Ansible, avec un fichier .ssh/config
+
+En voici un exemple :
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Host lxc*
+        User formateur
+        port 22
+        IdentityFile ~/.ssh/id_rsa.pub  
+Host CentOS
+        User formateur
+        port 22
+        IdentityFile ~/.ssh/id_rsa.pub  
+Host Buster*
+        User formateur
+        port 22
+        IdentityFile ~/.ssh/id_rsa.pub  
+Host Ubuntu*
+        User formateur
+        port 22
+        IdentityFile ~/.ssh/id_rsa.pub  
+Host Fedora*
+        User formateur
+        port 22
+        IdentityFile ~/.ssh/id_rsa.pub
+
+Host CentOS7-1
+        Hostname 192.168.20.98
+Host CentOS7-2
+        Hostname 192.168.20.99
+Host CentOS7-3
+        Hostname 192.168.20.100
+
+Host Buster-1
+        Hostname 192.168.20.101
+Host Buster-2
+        Hostname 192.168.20.102
+Host Buster-3
+        Hostname 192.168.20.103
+
+Host Ubuntu-1
+        Hostname 192.168.20.105
+Host Ubuntu-2
+        Hostname 192.168.20.106
+Host Ubuntu-3
+        Hostname 192.168.20.107
+
+Host Fedora
+        Hostname 192.168.20.104
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Testez :
+
+ansible -m ping localhost
+
+ansible -m ping -i mon_inventaire # Ajoutez vos VM dans l'inventaire !
+
+
+Si vous avez une erreur python, dans la VM, créez un lien symbolique :
+
+# ln -s /usr/bin/python3 /usr/bin/python
+
+
+
+
+Exemple pour apt sur Debian :
+$ ansible -m apt -a "name=cowsay state=latest" -b -i mon_inventaire Buster* -K
+
+Exemple pour Yum sur CentOS : 
+$ ansible -m yum -a "name=epel-release state=latest" -b -K -i mon_inventaire CentOS*
+
+
+Exemple valable sur les deux familles ( marche AUSSI BIEN sur Debian/Ubuntu que CentOS/Fedora et Arch) :
+
+$ ansible -b -K -m package -a "name=tmux state=latest" all
+
+
+# LIST ALL MODULES
+ansible-doc -l
+# VIEW MODULE DOCUMENTATION
+ansible-doc <module_name>
+
+La doc d'Ansible sur le Net est une référence incontournable :
+
+https://docs.ansible.com/ansible/latest/index.html
+
+https://docs.ansible.com/ansible/latest/modules/modules_by_category.html
+
+
+Exemple de redémarrage d'un service :
+
+$ ansible -m service -b -K -a "name=cron state=started" -i mon_inventaire Buster-1
+
+
+
+	LAB 1 :
+_______________
+
+Using Ansible commands, complete the following tasks:
+1.	Test Ansible connection to all your hosts using ping module
+2.	Install EPEL repo on all your hosts
+3.	Install HTTPD only on your web hosts
+4.	Change SELINUX to permissive mode
+
+
+
+Ansible-Pull :	
+
+Il existe un excellent playbook pour pousser ansible-pull en mode push sur des hôtes, et leur permettre ainsi de tirer des playbooks.
+
+https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml
+
+
+
+	LES PLAYBOOKS :
+
+
+NOTA BENE :
+
+Pour avoir de la complétion des commandes ansible plus confortable, recopiez les scripts :
+
+ansible-completion.bash
+ansible-playbook-completion.bash
+ansible-pull-completion.bash
+
+depuis le répertoire de la formation vers /etc/bash_completion.d/
+
+Plus d'infos ici :
+ https://github.com/dysosmus/ansible-completion
+
+
+
+
+
+NOTA BENE 2 :
+
+Pour se simplifier la vie, une pratique uselle sur les serveurs consiste à se créer un utilisateur dédié à ansible (nommé par ex. : ansible)
+et qui sera mentionné dans /etc/sudoers comme ayant le droit de passer des commandes sudo SANS MOT DE PASSE.
+
+ex. dans /etc/sudoers :
+
+ansible		ALL:(ALL:NOPASSWD)	ALL
+
+
+ÇA POSE NÉANMOINS UN PROBLÈME DE SÉCURITÉ QUI N'EST PAS ANODIN !!!
+
+
+
+
+~~~~~~~~~~~~~ exemple : premierping.yml ~~~~~~~~~~~~~~~~~~
+
+---
+- hosts:
+    - all
+  tasks:
+    - action: ping
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+$ ansible-playbook premierping.yml
+
+
+
+~~~~~~~~~~~~~ 2ème exemple : premierping.yml ~~~~~~~~~~~~~~~~~~
+
+---
+- hosts: centos
+  tasks:
+  - name: install tmux
+    package:
+      name: tmux
+      state: latest
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Problème : il faut le jouer avec les droits administrateur :
+
+$ ansible-playbook tmux.yml -b -K
+
+
+~~~~~~~~~~~~~ 3ème exemple : figlet.yml ~~~~~~~~~~~~~~~~~~
+
+---
+- hosts: debian
+  become: yes
+  become_user: root
+  tasks:
+  - name: install figlet
+    package:
+      name: figlet
+      state: latest
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Mais la problématique du mot de passe pour sudo DEMEURE...
+
+
+Vous avez la possibilité de faire un "dry run" (séquence de test) :
+
+$ ansible-playbook play.yml all --check
+
+
+	Loops :
+
+- name: This is a Play
+hosts: web-servers
+remote_user: mberube
+become: yes
+gather_facts: no
+vars:
+state: present
+tasks:
+- name: Install Apache and PHP
+yum: name={{ item }} state={{ state }}
+with_items:
+- httpd
+- php
+
+
+Item est en fait une variable en boucle qui ira lire chaque élément 
+déclaré dans with_items, et installera chacun d'eux !
+
+
+
+
+
+LAB #2
+
+Configurez des groupes de serveurs à l'aide d'un  playbook
+Objectifs :
+Réalisez les tâches suivantes en utilisant un playbook ansible :
+
+0. Créez dans l'iventaire un groupe "web" contenant au moins 4 machines.
+1. Installez httpd uniquement sur les hôtes marqués "web" dans votre inventaire.
+2. Démarrez et "enablez" httpd sur vos hôtes marqués "web" uniquement si le paquetage vient d'êtr installé.
+3. Copiez un fichier motd qui dit "Bienvenue sur mon serveur !" sur tous vos hôtes ( /etc/motd ).
+4. Copiez un fichier index.html contenant "Hello World !" dans /var/www/html sur tous vos hôtes marqués "web"
+5. Modifiez le fichier sshd_config pour passer  "PermitRootLogin" à "yes"
+
+
+SOLUTIONS DU LAB 2 :
+
+---
+- name: Lab2 - All server setup
+hosts: all
+become: true
+vars:
+tasks:
+- name: Copy motd file
+copy: src=motd dest=/etc/motd
+
+- name: Lab2 - Web server setup
+hosts: web
+become: true
+tasks:
+- name: Install Apache for Centos
+yum: name=httpd state=present
+notify: Restart Apache
+
+- name: Install Apache for Debian/Ubuntu
+apt: name=httpd state=present
+notify: Restart Apache
+
+- name: Copy Index.html
+copy: src=index.html dest=/var/www/html/index.html
+
+- name: Set ssh root login at yes
+lineinfile: dest=/etc/ssh/sshd_config
+line="PermitRootLogin yes"
+state=present
+notify: RestartSSH
+
+- name: Restart Apache
+service: name=httpd state=restarted enabled=yes
+- name: RestartSSH
+Service: name=sshd state=restarted enabled=yes
+
+
+
+
+	Un autre exemple :
+
+
+Installer vim :
+
+
+
+---
+- hosts: all
+  tasks:
+  - name: install vim
+   package:
+      name: vim
+     state: latest
+
+
+On veut aussi déployer un fichier de configuration personnalisé ( .vimrc)
+
+Comment faire pour qu'il soit dans le répertoire au nom de l'utilisateur ?
+
+On utilise une variable !!
+
+
+- name: deployer la configuration de vim
+  copy:
+  src: vimrc.j2
+    dest: "/home/{{ user_name }}/.vimrc"
+  tags:
+    - editor
+    - configure
+
+
+
+
+
+
+	VARIABLES :
+___________________
+
+
+
+Variables : par défaut elles s'ajoutent dans le playbook ou dans l'inventaire.
+
+On peut préférer les dossiers group_vars et host_var, 
+qu'on applique respectivement aux hôtes / groupes concernés dans l'inventaire.
+
+
+
+
+
+INSTRUCTIONS PARTICULIÈRES :
+____________________________
+
+
+notify 		: 	effectue une tâche en fonction d'un changement de status
+
+with_items 	:	Parcourir une liste (boucle)
+
+when		:	condition	(sans guillemets, sans accolades / liste )
+
+environment	:	préciser des variables d'environnement
+
+
+
+register 	:	Enregistrer une variable.
+
+
+
+Variables multiples, un exemple :
+
+fruits :
+  - pomme
+  - banane
+
+"{{fruits|length}}" =  2
+
+--> La longueur (length) de la variable fruits est de 2 (deux éléments).
+
+
+
+
+
+
+
+
+Boucles :
+
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html
+
+La syntaxe des variables est en jinja :
+
+https://jinja.palletsprojects.com/en/2.10.x/
+
+
+Exemple de remplacement d'une valeur par une autre dans un fichier de conf (Paulin) :
+
+
+- name: Set ssh root login at yes
+    #lineinfile: dest=/etc/ssh/sshd_config
+    #  line="PermitRootLogin yes"
+    #  state=present
+    replace: 
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin yes$'
+      replace: 'PermitRootLogin no'
+      
+    notify: RestartSSH
+
+  - name: Restart Apache
+    service: name=httpd state=restarted enabled=yes
+  - name: RestartSSH
+    service: name=sshd state=restarted enabled=yes
+
+NOTA BENE :
+ 
+Si vous faites figurer backup: yes Ansible vous créera une sauvegarde du fichier avant sa modification,
+renommé avec un timestamp en fin de nom, dans le même répertoire. Une précaution très utile !!!
+
+
+
+D'excellents exemples ici :
+
+https://relativkreativ.at/articles/how-to-use-ansibles-lineinfile-module-in-a-bulletproof-way
+
+
+Exemples de filtres sur le site de jinja :
+
+https://jinja.palletsprojects.com/en/2.10.x/templates/#filters
+
+Exemples de tests sur le site de jinja :
+
+https://jinja.palletsprojects.com/en/2.10.x/templates/#tests
+
+Exemples de template sur le site de jinja :
+
+https://jinja.palletsprojects.com/en/2.10.x/templates/
+
+
+
+LA doc Ansible sur les filtres Jinja 2 :
+
+https://ansible-docs.readthedocs.io/zh/stable-2.0/rst/playbooks_filters.html
+
+
+#########################################################
+		BEST PRACTICES :
+##########################################################
+
+
+L'ORGANISATION : Structurer vos dossiers.
+
+lorsque vous récupérez un rôle depuis ansible-galaxy, il arrive avec une structure de répertoires / fichiers préexistante.
+Il est néanmoins possible d'en ajouter, ou de modifier cette structure.
+
+
+
+Structurer vos tâches :
+
+Une tâche = UN NOM !!!
+
+Effectuez des vérifications
+
+
+
+	LAB #3 :
+________________
+
+Configuration Management à l'aide de  variables
+Objectifs:
+Modifiez votre playbook  lab2 pour y ajouter ce qui suit :
+
+1. Convertissez votre fichier MOTD en un template qui affichera: "Bienvenue sur <hostname> !"
+2. Installez facter sur tous vos hôtes à l'aide d'une commande ansible.
+3. Convertissez votre fichier index.html en un template qui affichera les informations suivantes :
+Serveurs Web
+web1 192.168.3.52 - free memory: 337.43 MB
+web2 192.168.3.53 - free memory: 346.82 MB
+
+
+
+LAB #3 : AIDE (fichier DEBUG)
+
+---
+- name: debug
+hosts: all
+tasks:
+- name: Show hostvars[inventory_hostname]
+debug: var=hostvars[inventory_hostname]
+- name: Show hostvars[inventory_hostname].ansible_ssh_host
+debug: var=hostvars[inventory_hostname].ansible_ssh_host
+- name: Show group_names
+debug: var=group_names
+- name: Show groups
+debug: var=groups
+
+
+
+
+
+	SOLUTIONS DU LAB #3 :
+_____________________________
+
+
+gather_facts: true
+
+(c'est l'option par défaut de toute façon)
+
+
+
+On modifie motd en motd.j2 :
+
+Bienvenue sur {{ ansible_hostname }} !!
+
+on peut aussi faire comme ça :
+
+Bienvenue sur {{ hostvars[inventory_hostname].inventory_hostname }} !!
+
+La solution de Vincent :
+
+copy: content="Bienvenue sur mon {{ my_hostname.stdout }}" 
+
+
+La solution de Akhmed :
+
+shell: echo "Bienvenue sur {{facter_hostname}} !" > /etc/motd
+
+
+
+
+Dans le playbook, on dira :
+
+- name: Copy motd template
+template: src=motd.j2 dest=/etc/motd
+  owner: "root"
+  
+
+FACTER :
+
+- name : install facter
+package: 
+name: {{ item }}
+state: present
+with_items:
+  - facter
+
+
+Plus simple :
+
+- name : install facter
+package: 
+name: facter
+state: present
+
+
+
+APACHE + INDEX.HTML :
+
+
+
+Le template index.html.j2 :
+
+&lt;html>
+&lt;body>
+Serveurs web :&lt;br>
+
+{% for server in groups.web %}
+{{ server }}   {{ hostvars[server].ansible_default_ipv4.address }}  - M&eacute;moire libre : {{ hostvars[server].ansible_memfree_mb }} MB &lt;br>
+{% endfor %}
+
+&lt;/body>
+&lt;/html>
+
+
+Dans le playbook :
+
+
+tasks:
+- name: Install Apache
+    apt: name=apache2 state=present
+    notify: Restart_Apache
+template: src=index.html.j2 dest=/var/www/html/index.html
+  owner: ww-data
+  group: www-data 
+  mode: 0644
+  notify: Restart_Apache
+
+handlers:
+- name: Restart_Apache
+service: name=apache2 state=restarted enabled=yes
+
+
+
+
+
+	ANSIBLE VAULT :
+_______________________
+
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_vault.html
+
+
+Créer un premier vault :
+
+# ansible-vault create group_vars/host
+
+
+Donner et confirmer un MdP ...
+
+éditer, renseigner le fichier puis enregister.
+Par exemple, il peut contenir des variables vers différents mots de passe :
+
+
+vault_formation_passwd: "{{ 'formation' | password_hash('sha256') }}"
+vault_root_passwd: "{{ 'jesappelleroot' | password_hash('sha256') }}"
+vault_sudo_passwd: "{{ 'monmotdepassedeouf' | password_hash('sha256') }}"
+
+
+Pour y accéder :
+
+# ansible-vault edit group_vars/host
+
+
+Les options --ask-vault-pass ou --vault-password-file des commandes ansible permettent 
+de déchiffrer les fichiers lors de l’exécution de playbooks.
+
+
+On peut ensuite l'appeler dans un playbook.
+Par exemple :
+
+
+---
+- hosts: localhost
+  remote_user: root
+  tasks:
+    - name: ensure 'formation' user exists
+      user:
+        name: formation
+        append: yes
+        groups: wheel
+        shell: /bin/bash
+        password: "{{ formation_passwd }}"
+        generate_ssh_key: yes
+        state: present
+vars:
+    formation_passwd: "{{ vault_formation_passwd }}"  
+    root_passwd:
+
+On l'appelle avec :
+
+ansible-playbook myuser.yml --ask-vault-pass
+
+
+Ça marche, mais c'est un peu lourd car il faut taper le mot de passe vault à chaque exécution du playbook. 
+Heureusement on peut le définir dans un fichier :
+
+
+$ echo "motdepassevault" > .vault_passwd
+$ chmod 600 .vault_passwd
+
+
+On doit ensuite spécifier à Ansible où trouver ce fichier. Vous pouvez le définir au niveau du /etc/ansible/ansible.cfg :
+
+
+vault_password_file = /root/.vault_passwd
+
+Vous devriez maintenant pouvoir exécuter votre playbook sans le --ask-vault-pass.
+
+
+
+
+
+	T.P. :
+______________
+
+Créer un inventaire credentials avec le mot de passe de l'utilisateur qui lance les playbooks.
+
+Chiffrer le fichier credential avec ansible-vault
+
+Créer un  playbook qui crée un nouvel utilisateur toto, et faites en sorte que le mot de passe de toto ( azerty ) n'apparaisse pas en clair dans le playbook
+mais soit demandé depuis le fichier credentials chiffré par vault.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Une alternative ou un complément au Vault d'Ansible consiste à utiliser le Vault de Hashicorp :
+
+https://www.vaultproject.io/
+
+Récupérez vault_1.2.3_linux_amd64.zip
+
+
+Suivez :
+https://learn.hashicorp.com/vault
+
+
+Installation : 
+Décompressez, puis recopiez le binaire "vault" ainsi obtenu dans /usr/local/sbin/
+
+Vérification :
+# vault
+Vous répond avec toutes les options disponinles.
+
+Ajoutez : 
+
+vault -autocomplete-install
+
+Rechargez votre shell : 
+
+exec $SHELL
+
+Du coup :
+
+# vault <tab> <tab> vous donne les options complémentaires
+
+
+Démarrer le serveur : 
+
+# vault server -dev
+
+Récupérez :
+
+
+Unseal Key: Xu3bNpRVzoC8IiQ/dOQhfR8wU1v7/+VN8nvKkxAtLAA=
+Root Token: s.92BDloBG0qDjKfW1eSKifio1
+
+
+export VAULT_DEV_ROOT_TOKEN_ID="s.92BDloBG0qDjKfW1eSKifio1"
+
+
+
+vault kv put secret/formation mdp=formation
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~é
+
+
+Pour les deux derniers T.P., vous avez besoin d'installer une VM KVM en CentOS 7.
+
+Deux méthodes d'installation possibles (choisissez) :
+
+
+
+	Installation à partir du CD Netinstall' :
+_________________________________________________
+
+Récupérer l'iso dans le rép. de la formation.
+
+En cours d'installation, il vous sera demandé le chemin du repository d'installaiton/
+
+C'est celui-ci :
+
+http://mirror.centos.org/centos/7/os/x86_64/
+
+
+
+	Conversion à partir d'un ova CentOS :
+______________________________________________
+
+https://www.itsfullofstars.de/2019/07/import-ova-as-proxmox-vm/
+
+
+Créez d'abord une VM KVM vierge. Ne vous souciez pas de l'installation de l'OS pour le moment.
+
+
+Récupérez l'OVA dans le rép. de la formation.
+
+Pour la conversion :
+
+Dans un terminal Linux on décompresse le package OVA :
+
+# tar -xvf VM.ova
+
+On utilise la commande qemu-img pour convertir le fichier image disk .vmdk en qcow2
+
+# qemu-img convert -O qcow2 VMw.vmdk VM.qcow2
+
+Ou ( version utilisée par Paulin ) :
+
+# qemu-img convert -f vmdk myvm-disk1.vmdk -O qcow2 myvm-disk1.qcow2
+
+
+Ou (Version utilisée par Vincent ) : 
+
+
+qm importdisk VMID CentOS7-Base-disk001.vmdk local-zfs -format qcow2
+(ce qui vous dispense de l'importer dans la VM qui va bien, cette commande le fait directement)
+
+Ensuite il ne reste plus qu'à exporter le fichier VM.qcow2 dans Proxmox,
+dans le dossier : /var/lib/vz/images/100 (où 100 est par exemple le numéro de la machine Proxmox que vous aviez installée au début)
+
+Lancez et vérifiez le bon fonctionnement.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Un fois que vous avez un KVM CentOS fonctionnel :
+
+	- Sauvegardez
+	- Snapshotez
+
+
+
+
+
+	AWX - Ansible Works / Ansible Tower :
+_____________________________________________
+
+
+	Pré-requis :
+____________________
+
+
+
+# Install EPEL repository
+
+yum -y install epel-release
+
+# Disable firewall and SELinux
+
+systemctl disable firewalld
+systemctl stop firewalld
+
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+
+setenforce 0
+
+reboot
+
+Puis :
+
+yum -y install python-pip
+
+pip install --upgrade pip
+
+yum -y install git gettext ansible docker nodejs npm gcc-c++ bzip2
+
+pip install docker-compose
+
+
+#  Start and enable docker service
+systemctl start docker
+systemctl enable docker
+
+
+sudo usermod -aG docker your-user	
+
+
+Pour tester :
+
+# docker run hello-world
+
+
+# Clone repository and deploy (it will take about 20 minutes)
+
+
+wget -r http://formation/formation/awx 
+
+cd awx/installer/
+sudo su
+
+# Modifiez le répertoire des playbooks dans le fichier inventory (!!!)
+
+Décommentez
+#project_data_dir=/var/lib/awx/projects
+et faites-le pointer sur un répertoire de votre choix. Par exemple :
+project_data_dir=/home/formation
+
+
+# ansible-playbook -i inventory install.yml
+
+
+# Monitor migrations status (you still can access AWX while it runs !)
+docker logs -f awx_task
+
+
+Une fois installé, 
+
+Connectez-vous à AWX sur http://Votre_@IP
+avec le compte admin
+et le MdP password
+
+
+
+Premiers pas :
+
+https://developers.redhat.com/blog/2017/10/16/guide-starting-use-awx-top-openshift-upstream-red-hat-ansible-tower/
+
+http://docs.ansible.com/ansible-tower/latest/html/userguide/main_menu.html
+
+Pour aller plus loin :
+https://www.unixarena.com/2018/12/ansible-tower-awx-store-credential-custom-credentials-type.html/
+
+
+
+	T.P. FINAL :
+____________________
+
+
+- Restaurez votre VM CentOS dans l'état d'origine (snapshot avant install' AWS ) .
+- Poussez vos clefs ssh sur la CentOS
+
+Sur la machine physique :
+
+- Ajoutez la VM à votre inventaire.
+- créez-vous un rôle ansible à partir d'un rôle vierge. 
+
+# ansible-galaxy init "mon_role"
+
+Dans ce rôle :
+- Installez :
+	- L'environnement graphique de votre choix (KDE, XFCE, Gnome, Cinnamon ...)
+	- Terminator
+	- vs code (récupérez le .rpm puis exécutez-le localement).
+	- byobu
+	- htop
+	- glances
+	- keepass
+
+ .. vous avez une liste des applis à votre disposition dans le rép. de la formation (liste.txt). Utilisez-la EN PARTIE ! 
+
+
+- Recopiez :
+	- un fichier bashrc préconfiguré.
+	- un fichier dircolors préconfiguré.
+	- votre propre crontab
+	- vos clefs ssh
+	- votre fichier ~/.ssh/config 
+	-  votre répertoire .config   # ( récursif !)
+
+Attention aux noms d'utilisateur : posez des variables !!
+
+
+L'idée est de pouvoir rejouer ce playbook chaque fois que je vous restaure une machine avec fog,
+afin d'automatiser la réinstallation de vos paramètres personnalisés
+
+
+
+
+	LIENS :
+_______________
+
+http://www.projectcartoon.com/cartoon/3
+
+https://github.com/octplane/ansible_stdout_compact_logger
+
+https://www.synbioz.com/blog/tech/partageons-nos-secrets-avec-vault
+
+https://realpython.com/primer-on-jinja-templating/
+
+https://jinja.palletsprojects.com/en/2.10.x/templates/
+
+https://realpython.com/primer-on-jinja-templating/
+
+https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+
+https://linoxide.com/linux-how-to/install-desktop-environments-centos-7/
+
+https://yaml.org/
+
+
+!!!!!!!!!!!!! https://docs.ansible.com   !!!!!!!!!!!
+
+
+https://galaxy.ansible.com/
+
+https://fr.wikipedia.org/wiki/Ansible_(logiciel)
+
+https://www.linuxtricks.fr/wiki/ansible-automatiser-la-gestion-de-serveurs
+
+http://docs.ansible.com/ansible/latest/intro_getting_started.html
+
+https://hackademy.io/tutoriel-videos/ansible-automatiser-gestion-serveur-partie-1
+
+http://blog.ippon.fr/2017/01/12/10-astuces-ansible/
+
+https://galaxy.ansible.com/bennojoy/
+https://github.com/bennojoy/ansible-roles
+https://galaxy.ansible.com/geerlingguy/
+
+
+https://github.com/ansible/ansible
+
+
+#########################################################
+		Jinja2 :
+##########################################################
+
+
+https://realpython.com/blog/python/primer-on-jinja-templating/
+
+http://jinja.pocoo.org/docs/2.10/templates/
+	
+http://ansible-docs.readthedocs.io/zh/stable-2.0/rst/playbooks_filters.html
+
+https://www.infoq.com/fr/presentations/ansible-arnaud-blancher
+
+http://jmespath.org/	
+https://regex101.com/
+
+
+#########################################################
+		Pour windows :
+##########################################################
+
+
+
+	installer WinRM, qui permet de remplacer ssh.
+
+https://www.it-connect.fr/debutez-avec-ansible-et-gerez-vos-serveurs-windows/
+
+https://www.it-connect.fr/powershell-remoting-avec-winrm/
+
+https://gist.github.com/trondhindenes/b9b5b25b11273cc35659
+
+
+Installer Firefox avec Chocolatey:
+
+$ ansible-playbook windows -i hosts playbook-install-firefox.yml
+
+# file: playbook-install-firefox.yml
+---
+- name: test chocolatey with ansible
+  hosts: all
+  tasks:
+    - name: Install Firefox
+      win_chocolatey:
+        name: firefox
+        state: present
+
+https://chocolatey.org/
+https://korben.info/chocolatey-un-gestionnaire-de-paquets-pour-windows.html
+
+
+#########################################################
+		Installation de AWX :
+##########################################################
+
+
+http://khmel.org/?p=1245
+
+
+yum install -y epel-release
+
+
+yum -y install git gettext ansible docker nodejs npm gcc-c++ bzip2
+yum -y install python-docker-py
+
+systemctl start docker
+systemctl enable docker
+
+git clone https://github.com/ansible/awx.git
+
+cd awx/installer/
+
+
+ansible-playbook -i inventory install.yml
+
+
+
+docker logs -f awx_task
+
+
+Une fois installé, 
+
+Connectez-vous à AWX sur http://Votre_@IP
+avec le compte admin
+et le MdP password
+
+
+Premiers pas :
+
+https://developers.redhat.com/blog/2017/10/16/guide-starting-use-awx-top-openshift-upstream-red-hat-ansible-tower/
+
+http://docs.ansible.com/ansible-tower/latest/html/userguide/main_menu.html
+
+https://www.reddit.com/r/ansible/comments/5tkn41/running_tasks_via_a_guest_host_inside_an_lxclxd/
+
+
+
+
+
+

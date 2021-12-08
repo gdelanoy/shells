@@ -1,0 +1,17 @@
+	- Crème CRM
+	- FOG
+	- GLPI
+	- Guacamole
+	- Itop
+	- Joomla + VirtueMart
+	- Magento
+	- Mantis
+	- NextCloud
+	- Odoo (ex. OpenERP)
+	- OnlyOffice
+	- Plux XML
+	- PrestaShop
+	- SonarQube
+	- SuiteCRM
+	- Tuleap
+	- Simple Invoices

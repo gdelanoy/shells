@@ -1,0 +1,1427 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Administration Linu, Niveau 1 :
+_______________________________________
+
+En apparté :
+
+DÉSACTIVER LE COIN SUPÉRIEUR GAUCHE DANS GNOME 3 : 
+
+https://extensions.gnome.org/extension/118/no-topleft-hot-corner/
+
+
+
+
+
+	Historique d'UNIX / Linux :
+___________________________________
+
+https://fr.wikipedia.org/wiki/Ken_Thompson
+
+https://fr.wikipedia.org/wiki/Dennis_Ritchie
+
+https://fr.wikipedia.org/wiki/Brian_Kernighan
+
+https://fr.wikipedia.org/wiki/Richard_Stallman
+
+https://fr.wikipedia.org/wiki/Linus_Torvalds
+
+https://www.gnu.org/
+
+
+Tester un shell sur les tous premiers UNIX :
+
+https://unix50.org/
+
+Norme POSIX :
+
+https://fr.wikipedia.org/wiki/POSIX
+
+
+Naissance de Linux :
+
+https://fr.wikisource.org/wiki/Naissance_de_Linux
+
+
+
+
+
+	Partitions & Systèmes de Fichiers :
+___________________________________________
+
+
+
+
+	Partitionnement & systèmes de fichiers :
+________________________________________________
+
+Répertoire en cours : pwd
+
+
+Chemin absolu : TOUJOURS VRAI. --> /home/user
+
+Chemin relatif : dépend de l'endroit où vous êtes, ou d'une variable système. --> ~ 
+
+cd, ls
+
+cp, mv
+
+rm, rmdir
+
+touch
+
+
+Trouver de l'aide :
+
+man
+info
+whatis
+whereis
+
+macommande --help
+
+
+
+
+Partitionnement :
+
+4 partitions principales uniquement !
+
+OU : 
+
+Prendre la dernière (!!) partition principale pour en créer une partition étendue,
+qui sert de "conteneur" à n partitions logiques (n = 63 maximum).
+
+
+
+$
+
+# yum install epel-release
+# yum install gparted -y
+# gparted
+ 
+
+	Points de montage :
+___________________________
+
+
+Dans /etc/fstab :
+
+
+# Point de montage perso :
+
+# /dev/sdb1     /mnt/compta     ext4    defaults        0 0
+# UUID=14ca37fe-6726-481a-9a88-2189198254c7     /mnt/compta     ext4    defaults        0 0
+
+
+
+	RAID :
+______________
+
+
+ yum -y install mdadm
+ mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+ mkdir /mnt/raid
+ mkfs.xfs /dev/md0
+ mount /dev/md0 /mnt/raid/
+ df
+ vim /etc/fstab 
+
+Dans /etc/fstab :
+
+/dev/md0	/mnt/raid	xfs	defaults	0 0
+
+
+Sous Debian, il faut également paramétrer un fichier /etc/mdadm.conf :
+
+Un exemple fourni par Vincent :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEVICE /dev/sdb1 /dev/sdc1
+ARRAY /dev/md0 devices=/dev/sdb1,/dev/sdc1
+
+HOMEHOST &lt;system>
+
+MAILADDR root
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+	LVM :
+_____________
+
+	3 étapes :
+
+
+Créer les volumes physiques :
+
+# pvcreate /dev/sdc /dev/sdd
+
+Voir :
+
+# pvdisplay
+# pvs
+
+Créer au moins un groupe de volumes :
+
+# vgcreate VG_01 /dev/sdc /dev/sdd
+
+Voir :
+
+# vgdisplay
+# vgs
+
+
+Créer au moins un volume logique dans votre VG :
+
+# lvcreate -n LV_data01 -l 100%FREE VG_01
+
+Voir :
+
+# lvdisplay
+# lvs
+
+
+Maintenant qu'on a un LV, on le formate comme on le ferait d'une partition :
+
+
+# mkfs.ext4
+
+
+
+
+ Étendre un LV :
+
+Pour cela, il faut ajouter un PV : 
+
+# pvcreate /dev/sde
+
+# pvs
+
+Ensuite on ajoute ce nouveau PV à notre VG :
+
+# vgextend VG_compta /dev/sde
+
+Enfin, on agrandit le LV contenu dans ce VG, en n'oubliant pas de redimensionner 
+le système de fichier qui est sur ce LV :
+
+# lvextend --resizefs -l  +100%FREE -n /dev/vg_compta/data01
+
+ou
+
+# lvextend -r -l  +50% -n /dev/vg_compta/data01
+
+
+
+
+
+
+
+	Chap. 3 : du boot au login:
+___________________________________
+
+
+UEFI libre :
+
+https://www.linuxboot.org/
+
+
+
+Grub :
+
+Un exemple de fichier de config' /etc/default/grub :
+
+
+
+# Ce fichier est sourcé par update-grub ou grub-mkconfig, et ses variables sont propagées
+# aux fichiers "fils" dans /etc/grub.d.
+# Entrée choisie automatiquement par défaut, "0" = première entrée du fichier grub.cfg .
+GRUB_DEFAULT=0
+# Durée avant exécution du choix par défaut.
+GRUB_TIMEOUT=4
+# Chargement des modules additionnels, ici RAID, afin que ces volumes soient disponibles dès le
+# menu grub. Indispensable pour des partitions /boot ou / (root) sur raid.
+GRUB_PRELOAD_MODULES="raid mdraid"
+# Options supplémentaires à passer au noyau (resume=/dev/sda2 ,
+# acpi=off...). Concerne aussi les entrées "recovery mode"
+GRUB_CMDLINE_LINUX="acpi=off"
+# Options supplémentaires à passer au noyau, ne concerne QUE les entrées par défaut,pas
+# les entrées "recovery"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash“
+# Image de fond pour le menu grub
+GRUB_BACKGROUND=/boot/grub/mon_image.jpg
+
+
+
+Exemple de commande grub-install AVEC prise en charge UEFI :
+
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="_name" --recheck 
+
+
+
+
+Pour accéder via grub au système et faire un reset de mot de passe root :
+
+https://www.rootusers.com/how-to-reset-root-user-password-in-centos-rhel-7/
+
+
+
+Pour se dépanner : 
+
+https://www.supergrubdisk.org/
+
+
+
+
+
+	Kernel :
+_______________
+
+
+
+
+
+Compilation du noyau :
+
+Mettre à jour :
+
+# yum update -y
+
+# Passer SElinux en mode permissif :
+
+# setenforce 0
+
+Installer les paquets nécessaires :
+
+# yum install -y ncurses-devel make gcc bc bison flex elfutils-libelf-devel openssl-devel grub2
+
+
+Récupérer les sources :
+
+# cd /usr/src
+
+# wget http://192.168.20.81/formation/linux-5.2.9.tar.xz
+
+
+Décompresser les sources :
+
+# tar -xvf linux-5.2.9.tar.xz
+# cd linux-5.2.9/
+
+Recopiez votre fichier de config' actuel dans le rép. :
+
+# cp /boot/config-3.10. .... (le plus récent !) .config
+
+par exemple : 
+
+# cat /boot/config-3.10.0-957.21.3.el7.x86_64 > /usr/src/linux-5.2.9/.config
+(à adapter)
+
+Choisir ses options de compilation :
+
+# make menuconfig
+
+Puis :
+
+# yum install -y rpm-build
+
+# make rpm-pkg -j4
+
+
+Une fois la compilation réalisée :
+
+# cd /root/rpmbuild/RPMS/x86_64
+# rpm -iUv ~/rpmbuild/RPMS/x86_64/*.rpm
+
+
+
+# uname -sr
+
+
+
+
+
+
+VIM :
+
+vimtutor
+ou
+https://vim-adventures.com/
+
+
+Une astuce :
+
+tail -f /var/log/*/*log /var/log/*log
+pour voir tous les fichiers de logs en même temps et en temps réel.
+
+tail -f /var/log/*/*log /var/log/*log /var/log/messages
+pour CentOS
+
+
+
+
+
+	T.P. Utilisateurs & Groupes :
+_____________________________________
+
+
+- Installer cracklib-pam
+
+par exemple :
+https://www.cyberciti.biz/security/linux-password-strength-checker/
+https://linux-audit.com/configure-the-minimum-password-length-on-linux-systems/
+
+configurez le fichier :
+
+/etc/security/pwquality.conf
+
+# par exemple :
+
+difok = 5
+minlen = 12
+dcredit = -1
+ucredit = -1
+
+
+
+	T.P : quotas :
+_____________________
+
+- Créez un DD de 1Go dans Virtualbox. 
+- Formatez une partition ext4 dessus.
+
+Dans /etc/fstab :
+
+/dev/sdb1	/mnt/donnees	ext4	defaults,usrquota	0	0	
+
+
+# yum -y install quota
+# quotacheck -cugv /mnt/donnees/
+# touch aquota.user
+# quotacheck -cugv /mnt/donnees/
+# quotaon /mnt/donnees
+
+exemple de edquota riri :
+Quotas disque pour user riri (uid 1004) :
+ Système de fichiers           blocs       souple     stricte   inodes    souple   stricte
+  /dev/sdb1                         0     184320     204800          0        0        0
+
+https://www.linuxtechi.com/enable-user-group-disk-quota-on-centos-7-rhel-7/
+
+
+
+
+
+	Mode Graphique :
+________________________
+
+
+Utilisation avancée du clavier :
+https://doc.ubuntu-fr.org/tutoriel/utilisation_avancee_du_clavier
+
+
+
+
+https://doc.ubuntu-fr.org/raccourcis_clavier
+
+
+
+Screen cheat sheet :
+
+https://gist.github.com/jctosta/af918e1618682638aa82
+
+
+
+	IP :
+____________
+
+
+http://www.subnet-calculator.com/
+
+
+
+
+
+
+
+
+
+
+
+
+	ADMINISTRATION, NIVEAU 2 :
+__________________________________
+
+
+Debian 10 Buster
+
+Récupérez un ISO en FTP avec Filezilla / ftp en console, sur :
+
+	192.168.20.81
+	compte  : formation
+	MdP	: formation
+
+
+
+- LVM non chiffré
+- partition / et /home séparées (voire /tmp et /var aussi
+
+
+
+	Services et Démarrage :
+_______________________________
+
+
+
+
+	T.P. : SystemV (sur Debian 7)
+
+
+	- Installer une couche LAMP (Linux + Apache + MySQL (ou MariaDB) + PHP )
+	- Contrôlez l'activité de Apache / MySQL --> quelles commandes ?
+	- Passez en runlevel 4 et répétez les commandes précédentes. Que constatez-vous ?
+	- Passez en runlevel 1 et répétez les commandes précédentes. Que constatez-vous ?
+	- Faites démarrer Apache + MySQL dans les runlevels 2 et 3.
+	- Faites arrêter Apache + MySQL dans les runlevels 0, 1, 4, 5 et 6.
+	- Contrôlez ces deux dernières opérations.
+
+
+
+
+
+	NOTA BENE :
+
+Il peut être nécessaire de modifier le fichier /etc/apt/sources.list
+ pour la Debian Wheezy, maintenant ancienne.
+
+Modifiez ce fichier pour y faire figurer uniquement les lignes suivantes en-dehors des commentaires :
+
+
+deb http://archive.debian.org/debian/ wheezy main
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Enregistrez, puis tapez :
+ # apt-get update
+
+# apt-get upgrade
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# apt-get install mysql-server mysql-client
+
+# apt-get install apache2 apache2-doc
+
+# apt-get install php5 php5-mysql libapache2-mod-php5
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# chkconfig --list mysql
+# chkconfig --list apache2
+
+# service apache2 status
+# service mysql status
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ 1) on peut supprimer manuellement les liens symboliques *apache* et *mysql* 
+    dans les répertoires /etc/rc4.d et /etc/rc5.d
+
+ 2) 
+
+# chkconfig --level 0123456 apache2 off
+
+... on constate quelques résultats erratiques avec chkconfig.
+
+
+
+	Systemd :
+_________________
+
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sect-managing_services_with_systemd-unit_files
+
+
+
+
+
+
+
+	T.P. Systemd ( sur CentOS 7 )
+
+	1- Installez une couche LAMP (Linux + httpd + MySQL (ou MariaDB) + PHP )
+	2- Contrôlez l'activité de httpd / MySQL --> quelles commandes ?
+	3- Démarrez httpd / MySQL --> quelles commandes ?
+	4- Faites démarrer httpd / MySQL au lancement du système --> quelles commandes ?
+	5- Arrêtez httpd / MySQL, puis faites en sorte qu'ils ne démarrent pas avec le système ET 
+	  faites en sorte qu'ils ne puissent pas être démarrés à la main  -> quelles commandes ?
+	6- Passez en rescue.target et contrôlez l'activité des services httpd et mysql
+
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1 - 2 - 3 - 4)
+
+yum install httpd -y
+
+systemctl start httpd
+systemctl status httpd
+systemctl enable httpd
+systemctl is-enabled httpd
+
+
+yum install mariadb-server mariadb -y
+
+
+systemctl start mariadb
+systemctl status mariadb
+systemctl enable mariadb
+
+yum install php php-mysql -y
+systemctl restart httpd.service
+
+
+
+Tester PHP :
+
+echo "&lt;?php phpinfo(); ?>" > /var/www/html/info.php
+
+
+ 5)
+
+Au choix :
+
+systemctl disable httpd mariadb
+systemctl mask httpd mariadb
+
+
+ OU (méthode vue par Paulin) :
+
+vim /usr/lib/systemd/system/httpd.service
+ Ajouter RefuseManualStart=yes après [Unit]
+puis :
+systemctl deamon-reload
+
+
+
+ Commandes utiles dans systemctl :
+
+systemctl list-units
+
+systemctl --type service --state active
+
+systemctl list-unit-files --type=service
+
+systemd-analyze blame
+
+systemd-analyze plot
+
+ssytemctl lsit-dependencies
+
+ etc ...
+
+
+	 Pour rendre persistents les logs de journalctl :
+_________________________________________________________
+
+
+
+vim /etc/systemd/journald.conf
+
+
+Changer
+
+[Journal]
+#Storage=auto
+
+en
+
+[Journal]
+Storage=persistent
+
+puis :
+
+mkdir /var/log/journal
+
+systemd-tmpfiles --create --prefix /var/log/journal
+systemctl restart systemd-journald
+
+
+
+
+	T.P. 3 :
+________________
+
+
+
+ Créez un unit systemd qui ait la fonction TIMER.
+ Ce timer devra mettre à jour le système 15 minutes après son lancement, et qui se relance toutes les trente minutes ensuite.
+ Pour vous aider : http://man7.org/linux/man-pages/man7/systemd.time.7.html
+
+
+Exemple de unit MAJ.timer, à enregistrer dans /etc/systemd/system/
+
+[Unit]
+Description=effectue une mise à jour de l'ordinateur quinze minutes après le démarrage de la machine et  itère toutes les trente minutes.
+[Timer]
+OnBootSec=15minutes   
+# le service démarrera 15 minutes après le démarrage de la machine
+OnUnitActiveSec=30minutes  
+# le service démarrera toutes les trente minutes après la dernière activation du timer
+###    voir toutes les possibilités de choix  dans ce  document http://man7.org/linux/man-pages/man7/systemd.time.7.html
+[Install]
+WantedBy=timers.target
+[Service]
+User=root  
+# à renseigner ? root par défaut.
+Group=nogroup
+ExecStart=/etc/init.d/MAJ.sh
+
+
+Exemple de script /etc/init.d/MAJ.sh associé (chmod 755 !) :
+
+#!/bin/bash
+# Debian / Ubuntu :
+apt update && apt upgrade -y
+# CentOS / RedHat / Fedora :
+yum update -y
+
+
+
+
+
+
+
+Selon une documentation CoreOS :
+
+
+
+
+
+
+Timers work directly with services' units. So we have to create /etc/systemd/system/date.service first:
+
+[Unit]
+Description=Prints date into /tmp/date file
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sh -c '/usr/bin/date >> /tmp/date'
+
+Then we have to create timer unit with the same name but with *.timer suffix /etc/systemd/system/date.timer:
+
+[Unit]
+Description=Run date.service every 10 minutes
+
+[Timer]
+OnCalendar=*:0/10
+
+This config will run date.service every 10 minutes. You can also list all timers enabled in your system using systemctl list-timers command or systemctl list-timers --all to list all timers. Run systemctl start date.timer to enable timer.
+
+You can also create timer with different name, i.e. task.timer. In this case you have specify service unit name:
+
+Unit=date.service
+
+
+
+
+
+
+Adapté à notre situration, ceci devient :
+
+
+( dans /etc/systemd/system ) 
+
+
+~~~~~~~~~~~~~~~ MAJ.service ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[Unit]
+
+Description=effectue une mise à jour de l'ordinateur quinze minutes après le démarrage de la machine et  itère toutes les trente minutes.
+
+[Service]
+
+Type=oneshot
+ExecStart=/root/scripts/MAJ.sh
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+~~~~~~~~~~~~~~~ MAJ.timer ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Unit]
+
+Description=Run date.service every 30 minutes
+
+[Timer]
+
+Unit=MAJ.service
+
+OnBootSec=15minutes
+
+AccuracySec=1us
+
+OnActiveSec=1800s
+
+[Install]
+
+WantedBy=multi-user.target
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#!/bin/bash
+# Debian / Ubuntu :
+apt update && apt upgrade -y
+# CentOS / RedHat / Fedora :
+yum update -y | logger
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+	INSTALLATION DE LOGICIELS :
+___________________________________
+
+
+Dépôts supplémentaires, voir :
+
+https://blog.microlinux.fr/yum-config/
+
+
+
+
+Sur Debian, récupérer la liste des paquets de manière à ce qu'elle soit réutilisable :
+
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo dpkg --get-selections > pkglist.txt
+
+
+Puis, si vous voulez la restaurer après formatage ou sur un autre système (archi. identique !) :
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install dselect
+sudo apt-get dselect update
+sudo dpkg --set-selections &lt; pkglist.txt && sudo apt-get -u dselect-upgrade
+
+
+	COMPILATION :
+_____________________
+
+
+T.P :
+
+Récupérez auprès de votre formateur l'archive du serveur FTP ProFTPd
+
+Décompressez et compilez les sources
+Configurez le produit via son fichier proftpd.conf
+Lancez-le et validez son fonctionnement
+Bonus : créez un unit systemd qui le lance au démarrage du système
+
+
+./configure --prefix=/usr --sysconfdir=/etc
+
+
+
+Exemple de unit systemd personnalisé à créer :
+
+https://doc.ubuntu-fr.org/creer_un_service_avec_systemd
+
+
+
+Configuration de ProFTPd :
+
+./configure --prefix=/opt/proftpd --sysconfdir=/etc --localstatedir=/var/proftpd
+
+ http://www.proftpd.org/docs/configs/basic.conf
+
+
+Doc pour unit Systemd :
+
+https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+
+https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/7/html/system_administrators_guide/sect-managing_services_with_systemd-unit_files
+
+
+Recharger systemd :
+
+systemctl --system daemon-reload
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Un unit systemd proftpd.service rédigé par Quentin :
+
+
+
+[Unit]
+Description=Le bo Proftpd de Guillaume
+
+[Install]
+
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/proftpd
+
+
+
+
+
+	CRON :
+______________
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+# MAILTO = gerard@mensoif.fr
+# Toutes les 5 minutes : */5 * * * *  /home/moi/script.sh
+# Toutes les 2 heures de 9h à 17h : 00 9-17/2 * * * ls /etc
+#a
+
+# Truc pour le dernier jour du mois :
+# 0 0 28-31 * * [ "date +%m" != "date --date=tomorrow +%m" ] && command
+
+# @yearly will run at 00:00 on Jan 1st for every year.
+# @monthly will run at 00:00 on 1st of every month.
+# @weekly will run at 00:00 on starting of every week.
+# @daily will run at 00:00 on every day.
+# @reboot will run on each boot.
+#
+# +------------ Minute (0 - 59)
+# | +---------- Heure (0 - 23)
+# | | +-------- Jour du Mois (1 - 31)
+# | | | +------ Mois (1 - 12)
+# | | | | +---- Jour de la semaine (0 - 7) (Dimanche est 0 ou 7)
+# | | | | |
+# * * * * *     commande
+
+
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+
+
+Pour vous aider :
+
+https://crontab.guru/
+
+
+
+	AT :
+____________
+
+
+ at 09:00
+> bash backup.sh
+> ^D
+
+
+https://tecadmin.net/one-time-task-scheduling-using-at-commad-in-linux/
+
+
+
+
+	SERVICES RÉSEAU :
+_________________________
+
+Pour info : retrouver le nommage eth des interfaces réseau :
+
+https://memo-linux.com/debian-9-retrouver-les-noms-des-interfaces-reseaux-eth/	
+Pour Debian Buster : https://aebian.org/story/change-back-ens-to-eth
+
+
+pour éviter de se couper la main en configuration via ssh :
+
+ifdown eth0 && ifup eth0
+
+
+
+Exemple de configuration réseau sur une Debian :
+
+# The primary network interface
+allow-hotplug eth0
+# iface eth0 inet dhcp
+iface eth0 inet static
+        address 192.168.20.47
+        netmask 255.255.255.0
+        gateway 192.168.20.254
+        dns-nameservers 192.168.20.254 1.1.1.1
+        pre-up bash /root/scripts/firewall.sh
+        
+        post-up "mettre à l'heure le système"
+        pre-down "synchroniser les données sur un cloud"
+        post-down "flusher la configuration du firewall"
+
+
+
+
+	SSH :
+____________
+
+
+exemples de commandes rsync :
+
+https://www.linuxsysadmins.com/rsync-command-with-examples-in-linux/
+
+
+Exemple avec sshfs :
+
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 user@host:~/downloads /mnt/downloads -o allow_other,defer_permissions
+
+ou plus simplement :
+
+sshfs formation@192.168.20.82:/home/formation /mnt/test
+
+Démonter :
+
+fusermount -u /mnt/test/
+
+                                                                                  
+Un plugin tout à fait intéressant pour vscodium :     
+
+https://code.visualstudio.com/remote-tutorials/ssh/getting-started
+  
+
+
+	NFS :
+_____________
+
+
+Network File System (ou NFS), pour système de fichiers en réseau, est à l'origine un protocole développé par Sun Microsystems en 19842 qui permet à un ordinateur d'accéder via un réseau à des fichiers distants. Il fait partie de la couche application du modèle OSI et utilise le protocole RPC.
+Ce système de fichiers en réseau permet de partager des données principalement entre systèmes UNIX. Des versions existent pour Macintosh ou Microsoft Windows.
+NFS est compatible avec IPv6 sur la plupart des systèmes.
+Installation
+Installez sur le ou les serveurs le paquet nfs-kernel-server 
+Configuration
+déclaration de l'Export NFS
+La configuration d'un 'export' se fait en éditant le fichier /etc/exports 
+/etc/exports 
+# Un exemple à adapter:
+/Dossier/à/partager/  192.168.0.0/24(rw,all_squash,anonuid=1000,anongid=1000,sync,no_subtree_check)
+/Dossier/numero02/  master(rw) trusty(rw,no_root_squash)
+Dans ce fichier, chaque ligne est définie comme ceci : 
+ &lt;dossier partagé> &lt;hôte>(&lt;options>) &lt;hôte2>(&lt;options>)...
+Les informations se trouvant sur une ligne sont les suivantes1) : 
+    • &lt;dossier partagé> : chemin menant au dossier partagé.
+    • &lt;hôte> : indique quel est l'hôte qui peut accéder à ce partage, l'hôte peut être défini de plusieurs manières :
+        ◦ une IP : on indique simplement l'adresse IP de la machine pouvant accéder à ce partage.
+        ◦ un nom d'hôte : on indique le nom complet de l'hôte (pour peu qu'il soit connu du système au travers d'un ou du fichier hosts).
+        ◦ un nom de groupe réseau NIS (NIS netgroup) qui s'indique sous la forme @&lt;netgroup>.
+        ◦ un domaine avec un joker qui indique les machines d'un domaine ou sous-domaine; par exemple : *.ubuntu-fr.org.
+        ◦ un intervalle d'IP avec le masque de sous-réseau; par exemple : 192.168.0.0/24 ou 192.168.0.*
+    • &lt;options> : indique les options de partage; nous n'allons pas parcourir toutes les options ensemble mais uniquement les plus importantes.
+        ◦ rw : permet la lecture et l'écriture sur un partage pour l'hôte défini (par défaut, les partages sont en mode ro; c'est-à-dire en lecture seule).
+        ◦ async : permet au serveur de violer le protocole et de répondre aux requêtes avant que les changements effectués par la requête aient été appliqués sur l'unité de stockage. Cette option améliore les performances mais a un coût au niveau de l'intégrité des données (données corrompues ou perdues) en cas de redémarrage non-propre (par exemple en cas de crash système).
+        ◦ sync : est le contraire de async. Le serveur respecte le protocole .
+        ◦ root_squash : force le mapping de l'utilisateur root vers l'utilisateur anonyme (option par défaut).
+        ◦ no_root_squash : n'effectue pas de mapping pour l'utilisateur root.
+        ◦ all_squash : force le mapping de tous les utilisateurs vers l'utilisateur anonyme.
+        ◦ anonuid : indique au serveur l'UID de l'utilisateur anonyme (considéré comme tel dans les précédentes options de mapping).
+        ◦ anongid : indique au serveur le GID de l'utilisateur anonyme (considéré comme tel dans les précédentes options de mapping).
+        ◦ subtree_check : Si un sous-répertoire dans un système de fichiers est partagé, mais que le système de fichiers ne l'est pas, alors chaque fois qu'une requête arrive, le serveur doit non seulement vérifier que le fichier accédé est dans le système de fichiers approprié (ce qui est facile), mais aussi qu'il est dans l'arborescence partagée (ce qui est plus compliqué). Cette vérification s'appelle subtree_check.
+        ◦ no_subtree_check : Cette option neutralise la vérification de sous-répertoires, ce qui a des subtiles implications au niveau de la sécurité, mais peut améliorer la fiabilité dans certains cas.
+Ce qui pourrait donner par exemple: 
+/media/NFS 192.168.0.0/24(rw,all_squash,anonuid=1000,anongid=1000,sync,no_subtree_check)
+Si vous obtenez l'erreur suivante au montage : mount.nfs4: access denied by server while mounting, vérifiez les droits d'accès au dossier partagé (le dossier est peut être en mode interdit pour "autres" ce qui le rend impossible à lire pour le serveur ) 
+relancer le service
+Après avoir défini vos partages dans le fichier /etc/exports il suffit de relancer le service nfs: 
+sudo service nfs-kernel-server reload
+Cette commande ne coupe pas les transferts en cours si la nouvelle configuration permet toujours leur accès au serveur. Vous pouvez donc la lancer plus ou moins à n'importe quel moment. 
+Pour vérifier que l'export a bien eu lieu, taper sur le serveur la commande : 
+showmount -e
+Si l'export n'est pas effectif , il faut faire restart du service mais attention cela peut interrompre les transferts en cours : 
+sudo service nfs-kernel-server restart
+
+
+
+
+Debian / Ubuntu :
+
+https://www.system-linux.eu/index.php?post/2009/03/27/Installation-et-configuration-d-un-serveur-nfs
+
+
+
+CENTOS :
+
+côté serveur (VM) :
+
+yum install nfs-utils
+
+Puis lancer les services :
+
+systemctl enable rpcbind
+systemctl enable nfs-server
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+systemctl start rpcbind
+systemctl start nfs-server
+systemctl start nfs-lock
+systemctl start nfs-idmap
+
+editez /etc/exports ...
+
+
+exemple :
+
+
+/mnt/donnees	192.168.20.* (rw,sync,root_squash,no_all_squash)
+/home		192.168.20.81 (ro,sync,root_squash,no_all_squash)
+
+
+Créer un répertoire à partager :
+
+/mnt/donnees
+
+( + créer / recopier des fichiers et répertoires dedans, pour valider l'accès)
+
+
+Validez les modifications :
+
+exportfs -a
+
+Voir les partages que l'on exporte :
+
+showmount -e
+
+Voir ces mêmes partages depuis une autre machine (c'est l'idée) :
+
+
+showmount -e &lt;@IP_du_serveur_NFS>
+... et on doit en voir la liste.
+
+
+Du coup, on peut monter :
+
+mount -t nfs vm:/mnt/donnees /tmp/nfstest/
+
+Pour un montage permanent :
+
+192.168.20.82:/mnt/donnees/	/mnt/nfs	nfs	defaults,noatime,bg,noauto,_netdev	0	0
+                                                                                   ^^^^^^^
+
+Quelques trucs :
+
+
+showmount -e : voir les partages que l'on exporte.
+
+showmount -e 1.2.3.4 : voir les partages exportés par 1.2.3.4 (ou hostname / FQDN).
+
+diagnostiquer : 	nfsstat -m
+			nfsstat -c	# client
+			nfsstat -s 	# Server
+			nfsstat -o rc
+
+
+
+exportfs -v : Displays a list of shares files and export options on a server
+exportfs -a : Exports all directories listed in /etc/exports
+exportfs -u : Unexport one or more directories
+exportfs -r : Reexport all directories after modifying /etc/exports
+
+
+
+Pour réactiver le firewall en autorisant NFS :
+
+firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --reload
+
+
+SELinux :
+
+pour repartir généralement du bon pied :
+
+# cd /
+# touch .autorelabel
+# reboot
+
+
+https://www.system-linux.eu/index.php?post/2009/03/27/Installation-et-configuration-d-un-serveur-nfs
+
+
+https://www.howtoforge.com/tutorial/setting-up-an-nfs-server-and-client-on-centos-7
+
+https://www.server-world.info/en/note?os=CentOS_7&p=nfs&f=1
+
+https://www.server-world.info/en/note?os=CentOS_7&p=nfs&f=2
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~ En apparté : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ Des partages NFS ont été ouverts sur "serveuse", la machine de test de la formation.
+ Vous pouvez les mounter et les utiliser pour disposer de 10 Go d'espace de stockage temporaire !
+
+ Les partages :
+
+/mnt/donnees/stagiaires/akhmed    192.168.20.*
+/mnt/donnees/stagiaires/quentin   192.168.20.*
+/mnt/donnees/stagiaires/paulin    192.168.20.*
+/mnt/donnees/stagiaires/jeremy    192.168.20.*
+/mnt/donnees/stagiaires/jason     192.168.20.*
+/mnt/donnees/stagiaires/vincent   192.168.20.*
+/mnt/donnees/stagiaires/alexis    192.168.20.*
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	SaMBa :
+_______________
+
+
+
+Le protocole SMB (Server Message Block) est un protocole permettant le partage de ressources (fichiers et imprimantes) 
+sur des réseaux locaux avec des PC sous Windows.
+
+Dans l'ancien Windows NT 4, il était appelé CIFS (Common Internet File System).
+
+C’est d’ailleurs redevenu l’appellation actuelle. Dans Vista, Windows 7 et Windows 8, il est appelé SMB 2.
+
+SMB a été à l’origine conçu pour tourner par dessus une des implémentations de NetBEUI nommé aussi NBT.
+Des évolutions du protocole ont été apportées car il n'était pas routable (interconnexion d'un réseau avec un autre).
+Il a été encapsulé dans des trames TCP/IP depuis Windows 2000.
+
+Pour utiliser Samba, installez le paquet samba. 
+Vous pouvez également gérer le partage grâce à des interfaces graphiques pour Samba, 
+la plus simple est system-config-samba, une autre possibilité plus avancée est gsambad. 
+
+Il faudra ouvrir les ports suivants dans le pare-feu.
+
+    137 en UDP
+    138 en UDP
+    139 en TCP
+    445 en TCP
+
+IFACE_LAN=enp0s3 / p2p1 / eno1 /eth0
+
+# iptables  -A INPUT -p udp -i $IFACE_LAN --dport 137:138 -j ACCEPT
+# iptables  -A INPUT -p tcp -i $IFACE_LAN --dport 139 -j ACCEPT
+# iptables  -A INPUT -p tcp -i $IFACE_LAN --dport 445 -j ACCEPT
+
+# iptables -A OUTPUT -o $IFACE_LAN -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+Pour info, des règles SElinux ( à réactiver en FIN de configuration) :
+
+# semanage fcontext -a -t samba_share_t '/srv/samba(/.*)?'
+# restorecon -R -v /srv/samba/
+
+https://likegeeks.com/linux-samba-server/
+
+https://wiki.samba.org/index.php/User_Documentation
+
+yum install samba samba-client
+
+
+Sauvegarder l'original, puis éditer /etc/samba/smb.conf .
+
+
+Les options méritent quelques explications.
+
+    workgroup = WORKGROUP définit le nom du groupe de travail. Les clients Windows doivent tous être membres de ce groupe de travail.
+  
+  netbios name = AMANDINE définit le nom qui apparaîtra dans le Voisinage Réseau de Windows. Théoriquement, on pourrait très bien indiquer deux noms de machine différents pour les protocoles TCP/IP et NetBIOS. En pratique, on essaiera de rester cohérent, et on utilisera le nom d’hôte du serveur (AMANDINE).
+
+    server string = Serveur de fichiers AMANDINE indique le nom avec lequel le serveur s’identifie.
+
+    dns proxy = yes active l’utilisation du serveur DNS local pour résoudre les noms d’hôtes Windows.
+    La directive domain master désigne un serveur Samba “maître” pour le domaine local. On utilisera yes sur le serveur principal et no sur les autres serveurs. “Serveur principal” signifie ici quelque chose comme “la machine la plus fiable” ou “le serveur qu’on éteint le moins souvent”.
+
+    log file = /var/log/samba/log.%m définit la journalisation. Pour chaque client qui utilise Samba, un fichier journal log.client est créé. Quant aux services Samba smbd et nmbd, ils utilisent des événements globaux dans les deux fichiers /var/log/samba/log.smbd et log.nmbd. Ni le nom ni l’emplacement de ces deux fichiers ne peuvent être modifiés.
+
+    log level = 0 signifie que seuls les messages d’erreur sont journalisés. Pour obtenir une journalisation plus “bavarde”, on remplacera la valeur 0 par 1, 2, 3, etc.
+
+    max log size = 1000 limite la taille maximale du fichier journal à 1000 kilooctets. Lorsqu’un fichier journal dépasse cette taille, Samba le renomme en fichier.old.
+    La directive interfaces définit les interfaces réseau par lesquelles Samba est censé communiquer. On veillera à faire apparaître les partages uniquement dans le réseau local. Ne pas oublier localhost, faute de quoi les outils d’administration comme smbclient ne fonctionneront pas sur le serveur.
+    Les directives hosts allow et hosts deny permettent respectivement d’autoriser et d’interdire l’accès de certaines machines du réseau à Samba.
+    La directive security = user définit le modèle de sécurité de Samba.
+
+    passdb backend = tdbsam définit la gestion des mots de passe. TDB signifie Trivial Database et désigne un format de stockage binaire. Les mots de passe sont stockés dans le fichier /var/lib/samba/private/passdb.tdb.
+
+    unix password sync = no désactive la synchronisation des mots de passe Samba avec les mots de passe Linux. Celle-ci est liée à toute une série de restrictions qui risquent de nous compliquer la vie, et il vaut mieux s’en passer.
+
+    guest account = smbguest désigne l’utilisateur Linux auquel on fait correspondre les utilisateurs invités.
+
+    map to guest = bad user renvoie vers le compte invité toute tentative de connexion avec un identifiant inexistant.
+
+    force group = users attribue tous les fichiers et répertoires nouvellement créés au groupe users.
+    Les paramètres create mode = 660 et directory mode = 770 assurent que tous les fichiers (rw-rw----) et répertoires (rwxrwx---) créés par un membre du groupe puissent être lus par tous les autres membres du groupe.
+    Le nom du partage ([Public], [Confidentiel]) ne doit pas dépasser douze caractères.
+
+
+
+Créer un utilisateur SAMBA :
+
+smbpasswd -a USER
+
+Voir les utilisateurs :
+
+pdbedit -L
+
+
+
+Truc :
+
+testparm -s vous CORRIGE la conf de votre smb.conf, mais sa sortie standard va à l'écran. 
+
+
+Le tableau ci-dessous indique le numéro des sections de manuel ainsi que le type de pages qu'elles contiennent.
+
+       1   Programmes exécutables ou commandes de l'interpréteur de commandes (shell)
+       2   Appels système (fonctions fournies par le noyau)
+       3   Appels de bibliothèque (fonctions fournies par les bibliothèques des programmes)
+       4   Fichiers spéciaux (situés généralement dans /dev)
+       5   Formats des fichiers et conventions. Par exemple /etc/passwd
+       6   Jeux
+       7   Divers (y compris les macropaquets et les conventions), par exemple man(7), groff(7)
+       8   Commandes de gestion du système (généralement réservées au superutilisateur)
+       9   Sous-programmes du noyau [hors standard]
+
+
+
+
+
+# Améliorer l'appel des pages de man :
+ function man()
+ {
+     for i ; do
+         xtitle The $(basename $1|tr -d .[:digit:]) manual
+         command man -a "$i"
+     done
+ }
+
+
+
+
+
+
+extract () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1    ;;
+          *.tar.gz)    tar xvzf $1    ;;
+          *.bz2)       bunzip2 $1     ;;
+          *.rar)       rar x $1       ;;
+          *.gz)        gunzip $1      ;;
+          *.tar)       tar xvf $1     ;;
+          *.tbz2)      tar xvjf $1    ;;
+          *.tgz)       tar xvzf $1    ;;
+          *.zip)       unzip $1       ;;
+          *.Z)         uncompress $1  ;;
+          *.7z)        7z x $1        ;;
+          *)           echo "don't know how to extract '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+
+
+
+
+une lecture des logs complète et en direct :
+
+
+tail -f /var/log/alternatives.log /var/log/auth.log /var/log/boot.log /var/log/bootstrap.log /var/log/dpkg.log /var/log/faillog /var/log/fontconfig.log /var/log/gufw.log /var/log/lastlog /var/log/mail.log /var/log/tallylog /var/log/Xorg.0.log /var/log/*/*log /var/log/messages /var/log/secure
+
+
+Introduction aux cgroups :
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01
+
+
+
+Méthode DEBIAN de compilation du noyau :
+
+https://wiki.debian-fr.xyz/Compiler_et_patcher_son_noyau
+
+
+Méthode RedHat :
+
+https://www.tecmint.com/compile-linux-kernel-on-centos-7/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

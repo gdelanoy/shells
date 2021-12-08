@@ -1,0 +1,3116 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Services Réseau :
+__________________________
+
+
+
+	DHCP :
+______________
+
+
+1. Installer (au moins) Deux VMs clientes en Virtualbox (Interface réseau en mode PONT)
+	Sur les clients, validez la présence de l'utilitaire dhclient.
+
+2. Installer le serveur DHCP + iputils + Wireshark sur la machine physique.
+
+	# yum install dhcp
+	
+	# systemctl enable dhcpd
+	# systemctl start dhcpd
+
+	# systemctl status -l dhcpd
+
+
+	- Prenez la documentation utile sur DHCP sur CentOS 7.
+3. Passer en IP fixe sur la machine physique, avec un masque de sous-réseau à 255.255.255.240 .
+4. Démarrer et paramétrer le serveur DHCP :
+	- Plage (range) de @IP +1 à @IP +10
+	- Masque : 255.255.255.0
+	- Passerelle : 192.168.20.254
+	- DNS	:      192.168.20.254
+
+
+	Configuration :
+
+	Client : dhcp dans nmtui + dhclient -v (voir le man)
+
+	Serveur : - établir une IP fixe.
+		  - /etc/dhcp/dhcpd.conf   (sauvegarder, puis modifier)
+
+			Plage (range) : 6 adresses
+			@IP
+			netmask
+			Gateway
+			DNS-nameservers
+
+
+			Bail : 24h
+
+
+	Voir les logs + voir journalctl -xe
+
+
+
+Validez et diagnostiquez éventuellement les problèmes rencontrés.
+
+
+Doc sur le Net :
+
+https://www.linuxtricks.fr/wiki/installer-et-configurer-un-serveur-dhcp-sur-centos-7
+https://www.it-connect.fr/chapitres/configuration-basique-dun-serveur-dhcp-sous-centos/
+
+https://tecadmin.net/configuring-dhcp-server-on-centos-redhat/
+https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/install-and-configure-dhcp-server-on-centos-7-ubuntu-14-04.html
+https://www.tecmint.com/install-dhcp-server-client-on-centos-ubuntu/
+
+
+~~~~~~~~~~~~~~~~~~~~~~ /etc/dhcp/dhcpd.conf~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# DHCP Server Configuration file.
+# see /usr/share/doc/dhcp*/dhcpd.conf.sample
+
+subnet 192.168.20.X netmask 255.255.255.X {
+
+	option subnet-mask              255.255.255.X;
+        range dynamic-bootp 192.168.20.Y 192.168.20.Z;
+        default-lease-time 21600;
+        max-lease-time 43200;
+
+        option domain-name-servers      192.168.20.254;
+                option routers      192.168.20.254;
+
+
+					}
+
+
+#	Bail fixe :
+
+host ma_super_vm {
+		hardware ethernet @la_Mac@_de_ma_super_VM ;
+		fixed-address @mon_ip-de_ouf ;
+		}
+
+
+
+	Mon conseil (perso) :
+
+	Si vos serveurs ont une IP fixe en conf (recommandé)
+	ET AUSSI la même ip fixe en fixed-address dans le serveur DHCP,
+	ils récupềreront la même IP s'ils doivent rebooter pour maintenance.
+
+
+
+
+#	Astuce : Pour BANNIR une machine :
+
+host mon_vilain_hote {
+        hardware ethernet 50:ba:aa:ad:XX:YY;
+        fixed-address 127.0.0.1;
+
+# OU :
+# 	deny booting;
+
+}
+
+
+
+	PXE :
+_____________
+
+
+
+	Juste après l'attribution d'une @IP,
+	le serveur DHCP passe la main à un serveur TFTP (via l'option next-server)
+	qui va envoyer sur le client un environnement propre à démarrer un OS via le réseau.
+
+
+# Installez un serveur TFTP (yum install tftp tftp-server )
+
+
+# systemctl start tftp
+# systemctl enable tftp
+
+Sous CentOS, le serveur TFTP est (encore) géré par xinetd.
+Son fichier de configuration sera donc à :
+/etc/xinetd.d/tftp
+
+
+	Exemple de conf pour tftp ( À ADAPTER !!!) :
+
+TFTP_USERNAME="root"		# Obligatoire ?
+TFTP_DIRECTORY="/var/lib/tftpboot"	# à adapter / C'est là que vous placez netboot.xyz.kpxe !!!
+TFTP_ADDRESS="0.0.0.0:69"
+TFTP_OPTIONS="-s"		# obligatoire ? 
+
+# Récupérez l'image de netboot.xyz.kpxe et recopiez-le dans le répertoire qui va bien pour TFTP.
+
+cp netboot.xyz.* /var/lib/tftpboot
+chmod 777 /var/lib/tftpboot/*
+
+
+Adaptez votre dhcpd.conf :
+
+au début (avant de déclarer le subnet) :
+
+next-server 192.168.20.xx;
+
+Dans le subnet :
+
+ filename "netboot.xyz.kpxe";  # qui doit se trouver dans le rép. du serveur TFTP !!
+
+Redémarrez les services dhcpd et tftp.
+
+Testez l'accès avec une VM.
+
+
+
+
+
+	DNS :
+____________
+
+
+Setup :
+
+
+# yum -y install bind bind-utils
+# systemctl enable named
+# systemctl start named
+# systemctl status -l named
+
+Configuration générale :
+
+/etc/named.conf
+
+
+Ensuite, vous vous créez deux fichiers par zone.
+Par exemple :
+
+prenom.tld.zone
+prenom.tld.rev
+
+Les noms de fichiers importent peu, du moment qu'ils correspondent exactement à ce que vous déclarez
+dans le fichier de configuration.
+
+
+À chaque modification, redémarrez le service et contôlez son état pour avoir des ifos sur 
+si et où un éventuel problème se situe
+
+Vérification : 
+
+# named-checkconf -z ( pour named.conf )
+# named-checkzone    ( pour vos fichiers de zone )
+
+
+Dans une ou plusieurs VM, vous modifiez les paramètres réseau pour pointer vers votre
+serveur DNS. Et vous testez sur ces machines.
+
+
+Pour valider le bon fonctionnement, contrôlez bien dans nmtui que :
+
+- vous avez une IP fixe + netmask.
+- l'IP de votre serveur DNS figure dans le champ 'serveur DNS'
+- Votre passerelle par défaut est bien 192.168.20.254 .
+
+- Votre domaine de recherche est renseigné sur DOMAINE.TLD
+
+Validez tout, puis coupez et relancez l'interface pour faire prendre en compte les modifications ( attention si vous êtes en ssh !!)
+
+testez avec :
+
+nslookup MON_POINTEUR
+host -t MX MON_DOMAINE.TLD
+dig -x @IP
+
+
+
+Une fois que tout fonctionne, adaptez firewalld sur le serveur :
+
+
+# systemctl start firewalld
+# firewall-cmd --permanent --zone=public --add-service=dns
+# firewall-cmd --reload
+
+validez à nouveau que vous accédez au serveur.
+
+
+	Zone :
+
+	Pointeur A 	:	formationX.prenom.tld.	@ip
+	Pointeur A 	:	VM1.prenom.tld
+	Pointeur A 	:	VM2.prenom.tld
+
+	Pointeur CNAME	:	www vers formationX.prenom.tld (nom !)
+	Pointeur CNAME	:	wiki vers formationX.prenom.tld (nom !)
+	Pointeur CNAME	:	blog vers formationX.prenom.tld (nom !)
+	Pointeur CNAME	:	ce que vous voulez vers formationX.prenom.tld (nom !)
+
+	Pointeur MX	:	vers formationX.prenom.tld
+
+
+
+	Une fois que votre zone fonctionne, envoyez-moi via le bouton 'Upload' du site
+	de la formation vos deux fichiers zone ET reverse
+
+
+
+Exemple de named.conf :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[ ... ] 
+
+options {
+        listen-on port 53 { 127.0.0.1; 192.168.20.XX; };
+        directory       "/var/named";
+        dump-file       "/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+        recursing-file  "/var/named/data/named.recursing";
+        secroots-file   "/var/named/data/named.secroots";
+        allow-query     { localhost; 192.168.20.0/24; };
+        forwarders      { 1.1.1.1; 8.8.8.8; };
+
+
+[ ... ]
+
+       recursion yes;
+
+[ ... ]
+
+        version none;
+     
+zone "guillaume.net" IN {
+        type master;
+        file "/var/named/guillaume.net.zone";
+        allow-update { none; };
+};
+  
+zone "20.168.192.in-addr.arpa" IN {
+        type master;
+        file "/var/named/guillaume.net.reverse";
+        allow-update { none; };
+};
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~ Exemple avec la zone capen.sis : ~~~~~~~~~~~~~~~~~~~~
+
+$TTL    3600
+@       IN      SOA     ns.capen.sis. root.capen.sis. (
+                   2007010401           ; Serial
+                         3600           ; Refresh [1h]
+                          600           ; Retry   [10m]
+                        86400           ; Expire  [1d]
+                          600 )         ; Negative Cache TTL [1h]
+;
+@       IN      NS      ns.capen.sis.
+@       IN      MX      10 mail.capen.sis.
+
+ns      IN      A       192.168.20.250
+mail    IN      A       192.168.20.82
+
+formateur       IN      A       192.168.20.81
+
+serveur   IN      A       192.168.20.253
+serveuse    IN      A       192.168.20.252
+
+
+
+selks       IN      A       192.168.20.248
+git         IN      A       192.168.20.247
+win7        IN      A       192.168.20.246
+python      IN      A       192.168.20.245
+zabbix      IN      A       192.168.20.244
+martens     IN      A       192.168.20.243
+
+www         IN      A       192.168.20.241
+
+
+
+
+formation1    IN      A       192.168.20.97
+formation2    IN      A       192.168.20.113
+formation3    IN      A       192.168.20.129
+formation4    IN      A       192.168.20.145
+formation5    IN      A       192.168.20.161
+formation6    IN      A       192.168.20.177
+formation7    IN      A       192.168.20.193
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~~~ Exemple de zone reverse : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@ IN SOA        ns.capen.sis. root.capen.sis. (
+                   2007010401           ; Serial
+                         3600           ; Refresh [1h]
+                          600           ; Retry   [10m]
+                        86400           ; Expire  [1d]
+                          600 )         ; Negative Cache TTL [1h]
+;
+@       IN      NS      ns.capen.sis.
+
+1       IN      PTR     ns.capen.sis.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+https://www.digitalocean.com/community/tutorials/how-to-configure-bind-as-a-private-network-dns-server-on-centos-7
+https://www.server-world.info/en/note?os=CentOS_7&p=dns&f=1
+https://www.lecoindesdocs.fr/2016/07/21/installation-et-configuration-dun-serveur-dns-bind-centos-7-2/
+
+
+Hostname dynamique avec dhcp et Bind :
+https://www.supinfo.com/articles/single/1715-dynamic-dns-avec-bind9-isc-dhcp-server
+
+
+
+
+
+
+ Faites un DNS menteur pour www.thepiratebay.org, qui pointera sur votre IP.
+
+
+	Sécurisation :
+
+ - Relancez firewalld et ajouteez les règles qui vont bien.
+ - Validez l'accès en binôme.
+
+
+ - Accès restreint :
+	Dans /etc/named.conf, modifiez l'option allow-query comme suit :
+	allow-query {127.0.0.1; 192.168.20.SOUS-RESEAU/28; 192.168.20.81; };
+Validez que votre plage IP acccède toujours au serveur, mais pas votre voisin (par exemple)
+
+
+
+
+ - Relancez SElinux et validez le bon fonctionnmeent
+
+https://www.systutorials.com/docs/linux/man/8-bind_selinux/
+
+cp /etc/selinux/config /etc/selinux/config.original
+vim /etc/selinux/config
+
+
+
+	NTP :
+_____________
+
+
+Pour Network Time Protocol
+
+
+Gestion matérielle : hwclock
+
+tzselect
+/etc/timezone
+
+ntpdate
+ntp, ntpd, chrony
+
+NOTA BENE : Ntp/ ntpd sous debian / Ubuntu ; renommé en Chrony chez Redhat / CentOS 
+
+chronyd --> démon
+chronyc --> utilitaire pour manipuler le démon
+
+
+# yum install chrony
+systemctl enable chronyd
+systemctl start chronyd
+systemctl status chronyd -l
+
+
+Configuration : /etc/chrony.conf
+
+
+	
+	Conf Serveur :
+______________________
+
+On se synchronise sur des pools de serveurs de temps sur internet :
+
+server 0.centos.pool.ntp.org iburst
+server 1.centos.pool.ntp.org iburst
+server 2.centos.pool.ntp.org iburst
+server 3.centos.pool.ntp.org iburst
+
+On autorise le LAN à se connecter sur nous :
+
+allow machine.example.com
+allow 192.168.20.64/28
+
+
+	Conf Client :
+_____________________
+
+
+On commente tous les pools extérieurs, et on laisse uniquement l'IP du serveur maitre :
+
+# server 0.centos.pool.ntp.org iburst
+# server 1.centos.pool.ntp.org iburst
+# server 2.centos.pool.ntp.org iburst
+# server 3.centos.pool.ntp.org iburst
+
+
+server 192.168.20.XX iburst
+
+On ne fait PAS figurer de directive allow !!!
+
+
+Vérifier si chrony est synchronisé :
+
+$ chronyc tracking 
+
+Vérifier les sources :
+
+$ chronyc sources
+
+Vérifier les statistiques des sources :
+
+$ chronyc sourcestats
+
+
+Ajuster manuellement l'horloge système :
+
+$ chronyc
+
+... puis, au prompt :
+
+makestep
+
+
+Ajuster la sécurité :
+
+# firewall-cmd --add-service=ntp --permanent
+# firewall-cmd --reload 
+
+Sécuriser l'accès via des clefs :
+
+ Comme l'accès à chronyc permet de modifier chronyd de la même manière qu'on puisse le faire par une modifcation des fichiers 
+de configuration, l'accès à chronyc doit être limité. Des mots de passe écrits en ASCII ou HEX peuvent être spécifiés dans 
+le fichier clé pour restreindre l'utilisation de chronyc. L'une des entrées est utilisée pour restreindre l'utilisation de commandes
+opérationnelles et est désignée comme étant la commande clé. Dans la configuration par défaut, une clé de commande aléatoire
+est générée automatiquement lors du démarrage. Il ne devrait pas être nécessaire de la spécifier ou de l'altérer manuellement.
+
+
+D'autres entrées dans le fichier clé peuvent être utilisées comme clés NTP pour authentifier les paquets reçus de serveurs ou de pairs
+NTP distants. Les deux côtés doivent partager une clé avec un ID, un type de hachage et un mot de passe identiques dans leurs fichier
+clé.
+
+Cela nécessite la création manuelle des clés, ainsi que de les copier au moyen d'un support sécurisé, tel que SSH.
+Ainsi, si l'ID clé était de 10, alors les systèmes agissant en tant que clients doivent avoir une ligne dans leurs fichiers
+de configuration sous le format suivant : 
+
+server w.x.y.z key 10
+peer w.x.y.z key 10
+
+L'emplacement du fichier clé est spécifié dans le fichier /etc/chrony.conf. L'entrée par défaut dans le fichier de configuration
+ est comme suit : 
+
+
+keyfile /etc/chrony.keys 
+
+Le numéro de la clé de commande est spécifié dans /etc/chrony.conf à l'aide de la directive commandkey,
+il s'agit de la clé que chronyd utilisera pour l'authentification des commandes utilisateurs.
+ La directive du fichier de configuration prend le format suivant :
+
+commandkey 1
+
+Un exemple du format de l'entrée par défaut dans le fichier clé, /etc/chrony.keys, pour la clé de commande est comme suit :
+
+1 SHA1 HEX:A6CFC50C9C93AB6E5A19754C246242FC5471BCDF
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+keyfile /etc/chrony.keys generatecommandkey
+driftfile /var/lib/chrony/drift makestep 10 3
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	INFOS :
+
+https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/7/html/system_administrators_guide/sect-using_chrony
+
+https://access.redhat.com/documentation/fr-fr/red_hat_enterprise_linux/7/html/system_administrators_guide/sect-understanding_chrony_and-its_configuration
+
+
+
+
+
+
+
+	OPENLDAP :
+__________________
+
+
+Procédure d'installation : 
+
+Adaptez le tuto de :
+http://www.itzgeek.com/how-tos/linux/centos-how-tos/step-step-openldap-server-configuration-centos-7-rhel-7.html
+
+https://www.server-world.info/en/note?os=CentOS_7&p=openldap&f=1
+
+
+systemctl stop nslcd (la partie déjà installée par Guillaume, à arrêter pour éviter les effets de bord indésirables )
+
+
+yum -y install openldap compat-openldap openldap-clients openldap-servers openldap-servers-sql openldap-devel
+
+systemctl start slapd.service
+systemctl enable slapd.service
+
+# Donner un mot de passe admin :
+ 
+slappasswd	# password root de l'admin LDAP (à noter !! )
+
+{SSHA}yt7rBn336ya4GxkcNAAFiBGYF
+
+
+# vim db.ldif
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=guillaume,dc=net
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=guillaume,dc=net
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SSHA}yt7rBn...
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Injecter ce 1er LDIF au serveur LDAP : 
+
+ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+
+
+On continue avec monitor.ldif :
+
+# vim monitor.ldif
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dn: olcDatabase={1}monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=guillaume,dc=net" read by * none
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# On l'injecte avec :
+
+ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+
+
+	INSTALLATION DE LA BASE DE DONNÉES LDAP :
+_________________________________________________
+
+# Copier les fichiers standards et injectez-les au serveur :
+
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+chown ldap:ldap /var/lib/ldap/*
+
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+
+
+# Créez un fichier base.ldif pour votre domaine :
+
+
+# vim base.ldif
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dn: dc=guillaume,dc=net
+dc: guillaume
+objectClass: top
+objectClass: domain
+
+dn: cn=ldapadm ,dc=guillaume,dc=net
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou=People,dc=guillaume,dc=net
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Group,dc=guillaume,dc=net
+objectClass: organizationalUnit
+ou: Group
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Puis : 
+
+ldapadd -H ldapi:/// -x -W -D "cn=ldapadm,dc=guillaume,dc=net" -f base.ldif
+
+(quand il vous demande le mot de passe, vous tapez le mot de pass EN CLAIR !) 
+
+
+# ENTRER UN PREMIER UTILISATEUR :
+
+vim willy.ldif :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+dn: uid=willy,ou=People,dc=guillaume,dc=net
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: willy
+uid: willy
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/willy
+loginShell: /bin/bash
+gecos: willy [Admin (at) guillaume]
+userPassword: {crypt}x
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# On l'intègre :
+
+ldapadd -H ldapi:/// -x -W -D "cn=ldapadm,dc=guillaume,dc=net" -f willy.ldif
+Enter LDAP Password: 
+
+# Puis, pour lui fixer un mot de passe :
+
+ldappasswd -H ldapi:/// -s password123 -W -D "cn=ldapadm,dc=guillaume,dc=net" -x "uid=willy,ou=People,dc=guillaume,dc=net"
+
+
+
+ INTERROGER LE SERVEUR LDAP :
+
+
+# Maintenant qu'on a un utilisateur, on peut interroger le serveur pour voir les informations qui le concernent :
+
+ldapsearch -H ldapi:/// -x cn=willy -b dc=guillaume,dc=net
+
+
+ ...
+ ... 
+
+
+
+ SE LOGGUER SUR UN AUTRE POSTE AVEC LE COMPTE CRÉÉ :
+
+
+# Sur un poste CLIENT (ex. : VM ) :
+
+# Installer la partie cliente (éventuellement déjà présente) :
+
+yum install openldap-clients pam_ldap nss-pam-ldapd authconfig
+
+authconfig-tui
+
+# (renseignez toutes les informations relatives à VOTRE serveur)
+
+# Une fois terminé, ajoutez cette option :
+
+ authconfig --enablemkhomedir --update
+
+# HINT  :(alternative authconfig (SANS tui) :
+authconfig --enableldap --enableldapauth --ldapserver=192.168.20.XXX --ldapbasedn="dc=guillaume,dc=net" --enablemkhomedir --update
+
+# puis redémarrez le service concerné :
+
+systemctl restart nslcd
+
+# Tentez de valider la config avec :
+
+getent passwd
+
+# ... qui doit vous retourner le /etc/passwd local ET la ligne de votre user distant en LDAP.
+
+# Lorsque c'est le cas, logguez-vous avec cet utilisateur.
+
+
+
+
+
+
+	PHPLDAPADMIN :
+______________________
+
+
+https://hostadvice.com/how-to/how-to-install-phpldapadmin-on-centos-7/
+
+
+# yum update && sudo yum upgrade -y
+
+# yum install epel-release
+
+# yum install php-ldap php-mbstring php-pear php-xml
+
+# yum -y install phpldapadmin
+
+
+Une fois ceci fait, il faut modifier un peu quelques fichiers :
+
+# vim /etc/httpd/conf.d/phpldapadmin.conf
+
+Alias /phpldapadmin /usr/share/phpldapadmin/htdocs
+Alias /ldapadmin /usr/share/phpldapadmin/htdocs
+
+usr/share/phpldapadmin/htdocs>
+  &lt;IfModule mod_authz_core.c>
+    # Apache 2.4
+    # Require local
+    Require all granted
+  IfModule>
+  &lt;IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from ::1
+  &lt;/IfModule>
+&lt;/Directory>
+
+Start the apache service in CentOS 7 / RHEL 7.
+
+# systemctl restart httpd.service
+
+Configure the FirewallD to allow external machines to access the dashboard (CentOS / RHEL).
+
+# firewall-cmd --permanent --zone=public --add-service=http
+# firewall-cmd --reload
+
+Configure phpLDAPAdmin:
+
+Now, setup phpLDAPadmin by modifying some of its configuration values.
+
+# vim /etc/phpldapadmin/config.php
+
+A handy name that will appear in the left tree viewer and throughout phpLDAPadmin to identify this LDAP server to users.
+
+$servers->setValue('server','name','ITzGeek Local LDAP Server');
+
+If you are planning to manage the LDAP server other than localhost then you can modify the below parameter. (Optional)
+
+$servers->setValue('server','host','127.0.0.1');
+
+To connect to the LDAP server which listens on the non-standard port. (Optional)
+
+$servers->setValue('server','port',389);
+
+Array of base domain names of your LDAP server. ( Must be set in Ubuntu 16.04)
+
+$servers->setValue('server','base',array('dc=itzgeek,dc=local'));
+
+Uncomment the line 397 and comment out the 398, like below.
+
+$servers->setValue('login','attr','dn');
+
+// $servers→setValue('login','attr','uid');
+$servers->setValue('login','bind_id','cn=ldapadm,dc=itzgeek,dc=local');
+
+If you have SELinux enabled on CentOS 7 / RHEL 7 then run this command.
+
+# setsebool -P httpd_can_connect_ldap on
+
+Access phpLDAPAdmin:
+
+Open up the web browser and navigate it to the following URL.
+
+
+http://your-ip-add-ress/phpldapadmin
+
+
+ 	Sécurité :
+__________________
+
+À la fin, activez la règle SElinux suivante avant de le réactiver :
+
+setsebool -P httpd_can_connect_ldap on
+
+Et ajustez les règles firewalld :
+
+firewall-cmd --permanent --zone=public --add-service=ldap
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --reload
+
+setenforce 1
+systemctl start firewalld
+
+
+
+
+
+	SERVICES WEB :
+______________________
+
+
+Apache est apparu en avril 1995. Au début, il s'agissait d'une collection de correctifs et d'additions au serveur NCSA HTTPd 1.3,
+qui était dans le domaine public et le serveur HTTP alors le plus répandu. De cette origine, de nombreuses personnes affirment
+que le nom Apache vient de a patchy server, soit « un serveur rafistolé ».
+
+Par la suite, Apache a été complètement réécrit, de sorte que, dans la version 2, il ne reste pas de trace de NCSA HTTPd.
+
+Gestion des types MIME :
+
+https://httpd.apache.org/docs/2.4/fr/mod/mod_mime.html
+
+
+INSTALLATION :
+
+
+Sur RedHat, cherchez le paquetage httpd
+
+Sur Debian, cherchez le paquetage apache2
+
+
+yum install httpd
+
+systemctl start httpd
+systemctl enable httpd
+systemctl status -l httpd
+
+Gestion des mises à jour :
+
+# yum update ( attention aux dépendances)
+
+ Lancer/arrêter le serveur – modification de la configuration
+
+systemctl start | stop | restart | reload 
+
+apachectl graceful ( !!!)
+
+
+Vérifier la syntaxer des fichiers de configuration du serveur web :
+
+apachectl configtest
+
+https://httpd.apache.org/docs/current/fr/programs/apachectl.html
+
+
+
+###############################	Apparté : éditeur HTML ############
+
+yum install bluefish
+
+ou 
+
+http://bluegriffon.org/#download
+
+###################################################################
+
+
+Exigences matérielles  et performance :
+
+
+Timeout : 
+réglé par défaut à 300 (c’est à dire 5 minutes), ce seuil peut éventuellement être abaissé si vous rencontrez de gros problèmes
+de performances dus à des connexions très lentes qui encombrent votre serveur.
+
+
+KeepAlive On : il est recommandé d’utiliser cette fonctionnalité de la norme http1.1 qui permet de réutiliser une connexion ouverte
+pour envoyer plusieurs documents au même client. 
+
+
+MaxKeepAliveRequests : réglé par défaut à 100, vous pouvez abaisser ce seuil si vous avez besoin de faire “mourir” 
+plus rapidement vos processus à la suite de fuites de mémoire, mais dans la plupart des cas vous n’avez pas intérêt à l’abaisser.
+
+KeepAliveTimeout : réglé par défaut à 15 secondes, c’est en général beaucoup trop. 
+Si vous n’avez pas de raison spécifique de vouloir maintenir artificiellement des connexions ouvertes avec vos clients 
+pendant aussi longtemps, baissez ce seuil à 2 secondes.
+
+
+MaxClients (150) : C’est le paramètre le plus important dans la configuration Apache !
+En théorie, vous devez régler ce nombre en fonction de la mémoire moyenne utilisée par un de vos processus Apache 
+et de la mémoire totale disponible pour Apache sur votre système. Malheureusement ce n’est pas toujours possible quand on 
+travaille avec mod-php .
+En pratique, les instances Apache ont donc tendance à consommer systématiquement la mémoire nécessaire à l’exécution 
+de votre plus “gros” script PHP à tout moment.
+
+HostnameLookups : sur un serveur chargé et que vous devez optimiser, laissez ce paramètre à Off.
+Si vous voulez vraiment résoudre les adresses IP de tous vos visiteurs, faites-le de façon asynchrone,
+sur un serveur de statistiques séparé de votre serveur de production.
+
+LogLevel warn : sur un serveur de production très chargé sur lequel de nombreux fichiers manquants viendraient par exemple
+à provoquer un volume très important d’erreurs, vous pourriez gagner à baisser le seuil de sensibilité du journal d’erreurs. 
+
+
+En résumé
+
+Si vous avez des problèmes de mémoire RAM : baissez le MaxClients, le MaxKeepAliveRequests, le KeepAliveTimeout,
+le MaxSpareServers et un indiquez un nombre relativement faible pour MaxRequestsPerChild
+
+
+Si vous voulez augmenter les performances et que vous n’avez pas de problème de mémoire :
+ la configuration par défaut d’Apache est en général performante. Vous pourrez peut-être gagner à la marge
+ (si la mémoire et les performances de votre système le permettent) en augmentant le MaxClients
+ou le MaxSpareServers sur des systèmes qui doivent accepter de très nombreuses connexions simultanées.
+Sur la plupart des autres systèmes, les gains de performances sont à chercher ailleurs : structure des pages web, 
+optimisation du code PHP et des requêtes SQL, passage en asynchrone des appels externe, mises en cache, 
+architecture sous-jacente. 
+
+Vous pouvez aussi expérimenter le MPM Worker.
+
+https://httpd.apache.org/docs/2.4/fr/mod/worker.html
+
+
+Débit nécessaire :
+
+Voyez 
+http://www.ordinateur.cc/Logiciel/Code-Open-Source/143815.html
+pour gérer les très gros débits vers un serveur chargé, voire 
+https://www.lartc.org/
+
+
+Bases de la configuration :
+
+http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-rg-fr-4/s1-apache-config.html
+
+et 
+
+https://httpd.apache.org/docs/2.4/fr/configuring.html
+
+
+
+
+
+Spécifiquement, pour Ubuntu / Debian
+https://doc.ubuntu-fr.org/apache2
+http://www.linux-france.org/prj/edu/archinet/systeme/ch16s02.html
+
+ Un seul serveur Apache permet de déployer simultanément plusieurs sites et services qu'il faut configurer individuellement.
+Pour plus de clarté, la configuration d'Apache2 est morcelée. Toutefois, tous les fichiers de configuration se situent dans le répertoire /etc/apache2 :
+
+    sites-available contient les fichiers de configuration des sites disponibles
+    sites-enabled contient des liens symboliques vers les configurations, dans site-available, des sites activés
+
+    conf-available contient les fichiers de configuration des autres services disponibles
+    conf-enabled contient des liens symboliques vers les configurations, dans conf-available, des autres services activés
+
+    mods-available contient les fichiers de configuration des modules d'Apache disponibles
+    mods-enabled contient des liens symboliques vers les configurations, dans mods-available, des modules activés
+
+
+Les diverses configurations sont activées (a2en pour Apache 2 enable) ou désactivées (a2dis pour Apache 2 disable) avec les commandes suivantes :
+
+sudo a2ensite [configuration d'un site à activer]
+sudo a2dissite [configuration d'un site à désactiver]
+
+sudo a2enconf [configuration d'un service à activer]
+sudo a2disconf [configuration d'un service à désactiver]
+
+sudo a2enmod [configuration d'un module à activer]
+sudo a2dismod [configuration d'un module à désactiver]
+
+
+
+voir les modules :
+
+apachectl -M
+
+
+Virtualhosts :
+
+http://httpd.apache.org/docs/2.2/fr/vhosts/
+
+Exemples de virtualhosts :
+
+https://httpd.apache.org/docs/2.2/fr/vhosts/examples.html
+
+Tutoriel : 
+https://www.linuxtricks.fr/wiki/virtual-hosts-avec-apache-vhosts
+
+
+
+
+
+	INSTALLATION DE PHP :
+_____________________________
+
+
+	Version 5.6 :
+_____________________
+
+yum install php php-gd php-pdo
+
++ redémarrez Apache.
+
+Contrôlez avec :
+
+# php -v
+
+
+
+	Version 7.2 :
+_____________________
+
+C'est la version par défaut sur Ubuntu. Mais pour CentOS, il faut le lui préciser explicitement :
+
+# yum install yum-utils
+
+Enfin, installation proprement dite de PHP :
+
+# yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+# yum --enablerepo=remi,remi-php72 install php-fpm php-common php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+
+Ainsi que de ses modules :
+
+# yum --enablerepo=remi,remi-php72 install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml
+
+On vérifie avec :
+
+# php -v
+
+
+
+	Valider le fonctionnement de PHP :
+_________________________________________
+
+
+Créez à la racine de votre serveur un fichier info.php, contenant :
+
+
+&lt;?php phpinfo(); ?>
+
+
+	VIRTUALHOSTS :
+______________________
+
+
+cat /etc/httpd/conf.d/racine.conf 
+
+&lt;VirtualHost *:80>
+        ServerAdmin guillaume@delanoy.fr
+        ServerName www.dela.noy
+        ServerAlias www.dela.noy
+        DocumentRoot /var/www/html/
+        &lt;Directory />
+                Order Deny,Allow
+                Deny from all
+                Options -Indexes -Includes -ExecCGI -FollowSymlinks
+        &lt;/Directory>
+
+        &lt;Directory /var/www/html/>
+                Order allow,deny
+                allow from all
+                AllowOverride All
+                Options -Indexes -Includes -ExecCGI +FollowSymlinks
+        &lt;/Directory>
+&lt;/VirtualHost>
+
+
+cat /etc/httpd/conf.d/blog.conf 
+
+&lt;VirtualHost *:80>
+	 ServerAdmin guillaume@delanoy.fr
+        ServerName blog.dela.noy
+        ServerAlias blog.dela.noy
+        DocumentRoot /var/www/html/blog/
+        &lt;Directory />
+		AllowOverride none
+		Require all denied
+               # Order Deny,Allow
+               # Deny from all
+               # Options -Indexes -Includes -ExecCGI -FollowSymlinks
+        &lt;/Directory>
+        &lt;Directory /var/www/html/blog/>
+               # Order allow,deny
+               # allow from all
+                Require all granted
+		AllowOverride none
+                Options -Indexes -Includes -ExecCGI +FollowSymlinks
+        &lt;/Directory>
+&lt;/VirtualHost>
+
+
+cat /etc/httpd/conf.d/wiki.conf 
+
+&lt;VirtualHost *:80>
+	 ServerAdmin guillaume@delanoy.fr  
+        ServerName wiki.dela.noy
+        ServerAlias wiki.dela.noy
+        DocumentRoot /var/www/html/wiki/
+        &lt;Directory />
+                Order Deny,Allow
+                Deny from all
+                Options -Indexes -Includes -ExecCGI -FollowSymlinks
+        &lt;/Directory>
+        &lt;Directory /var/www/html/wiki/>
+                Order allow,deny
+                allow from all
+                AllowOverride All
+                Options -Indexes -Includes -ExecCGI +FollowSymlinks
+        &lt;/Directory>
+&lt;/VirtualHost>
+
+
+
+
+	T.P :
+_____________
+
+Installation et configuration de Dokuwiki.
+
+
+
+	BASES DE DONNÉES : MySQL & MAriaDB :
+___________________________________________
+
+# yum install mariadb-server mariadb -y
+
+Vérifiez que vous avez : php-mysql
+
+
+# systemctl start mariadb
+# systemctl enable mariadb
+
+Directement ensuite, jouez le script de sécurisation de cette BdD :
+
+# mysql_secure_installation
+
+
+	EXEMPLE DE CRÉATION DE BASE DE DONNÉES :
+________________________________________________
+
+
+mysql -u root -p (ne tapez PAS le mot de passe à la suite du 'p', c'est mal !!)
+*******
+puis :
+MariaDB [(none)]> CREATE DATABASE basetest;
+MariaDB [(none)]> GRANT ALL ON basetest.* TO 'baseuser' IDENTIFIED BY 'turlututue';
+MariaDB [(none)]> FLUSH PRIVILEGES;
+MariaDB [(none)]> exit
+
+Vous pouvez vérifier ensuite avec : 
+
+
+mysql -u baseuser -p
+************
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| basetest           |
++--------------------+
+2 rows in set (0.01 sec)
+
+MariaDB [(none)]> USE basetest
+... etc...
+
+
+	HINT :
+______________
+
+Sauvegarder des bases de données MySQL / MariaDB :
+
+mysqldump -u root -p --opt --all-databases -r backup-BDD-$(hostname)-$(date + %F).sql
+
+
+Restaurer :
+
+mysql -uroot -p --default-character-set=utf8
+mysql> SET names 'utf8';
+mysql> SOURCE backup.sql;
+
+OU (si vous avez compressé votre archive : ) :
+
+gunzip &lt; alldb.sql.gz | mysql -u [user] -p[password]
+
+
+
+	T.P :
+_____________
+
+Installation et configuration de WordPress.
+
+
+
+
+
+	Contrôle d'accès :
+__________________________
+
+
+https://httpd.apache.org/docs/2.4/fr/howto/access.html
+
+
+https://httpd.apache.org/docs/2.4/fr/howto/auth.html
+
+
+
+Fichiers .htaccess :
+
+
+https://httpd.apache.org/docs/2.2/fr/howto/htaccess.html
+
+http://www.tuteurs.ens.fr/internet/web/htaccess.html
+
+
+Les fichiers .htaccess peuvent être utilisés dans n'importe quel répertoire virtuel ou sous-répertoire. 
+
+Les principales raisons d'utilisation des fichiers .htaccess sont :
+    • Gérer l'accès à certains fichiers.
+    • Ajouter un mime-type.
+    • Protéger l'accès à un répertoire par un mot de passe.
+    • Protéger l'accès à un fichier par un mot de passe.
+    • Définir des pages d'erreurs personnalisées.
+
+Principe des fichiers htaccess
+Le fichier .htaccess est placé dans le répertoire dans lequel il doit agir.
+Il agit ainsi sur les permissions du répertoire qui le contient et de tous ses sous-répertoires.
+Vous pouvez placer un autre fichier .htaccess dans un sous-répertoire d'un répertoire déjà contrôlé par un fichier .htaccess.
+Le fichier .htaccess du répertoire parent reste en « activité » tant que les fonctionnalités n'ont pas été réécrites. 
+
+
+Un fichier .htaccess est composé de deux sections : 
+
+Une première section contient les chemins vers les fichiers contenant les définitions de groupes et d'utilisateurs : 
+AuthUserFile /repertoire/de/votre/fichier/.FichierDeMotDePasse 
+AuthGroupFile /repertoire/de/votre/fichier/.FichierDeGroupe 
+AuthName "Accès protégé" 
+AuthType Basic
+
+    • AuthUserFile définit le chemin d'accès absolu vers le fichier de mot de passe.
+    • AuthGroupFile définit le chemin d'accès absolu vers le fichier de groupe.
+    • AuthName entraîne l'affichage dans le navigateur Internet de : « Tapez votre nom d'utilisateur et votre mot de passe. Domaine: "Accès protégé" »
+    • AuthType Basic précise qu'il faut utiliser AuthUserFile pour l'authentification.
+
+
+Une seconde section contient la définition des conditions d'accès : 
+
+Require valid-user 
+
+{instruction d'accès à satisfaire } 
+
+• require valid-user précise que l'on autorise uniquement les personnes identifiées.
+Il est également possible de préciser explicitement le nom des personnes autorisées à s'identifier : require user {username}
+
+
+Protéger un répertoire par un mot de passe
+
+Il s'agit d'une des applications les plus utiles du fichier .htaccess car elle permet de définir de façon sûre 
+(à l'aide d'un login et d'un mot de passe) les droits d'accès à des fichiers par certains utilisateurs. La syntaxe est la suivante : 
+
+AuthUserFile {emplacement du fichier de mot de passe} 
+AuthGroupFile {emplacement du fichier de groupe} 
+AuthName "Accès protégé" 
+AuthType Basic 
+Require valid-user 
+
+La commande AuthUserFile permet de définir l'emplacement du fichier contenant les logins et les mots de passe des utilisateurs autorisés à accéder à une ressource donnée. 
+La commande AuthGroupFile permet de définir l'emplacement du fichier contenant les groupes d'utilisateurs autorisés à s'identifier. Il est possible d'outrepasser cette déclaration en déclarant le fichier suivant : /dev/null. 
+
+Voici un exemple de fichier .htaccess : 
+ErrorDocument 403 http://domaine.tld/accesrefuse.php 
+AuthUserFile /repertoire/de/votre/fichier/.FichierDeMotDePasse 
+AuthGroupFile /dev/null 
+AuthName "Accès sécurisé au site" 
+AuthType Basic 
+Require valid-user 
+
+Le fichier de mot de passe est un fichier texte devant contenir sur chacune des ses lignes le nom de chaque utilisateur 
+suivi des deux points (:), puis du mot de passe chiffré (solution recommandée) ou en clair. 
+
+Voici un exemple de fichier de mot de passe non crypté (ici .FichierDeMotDePasse) 
+JFPillou:Toto504 
+Damien:Robert(32) 
+Comma:Joe[leTaxi]
+
+oici le même fichier contenant des mots de passe cryptés : 
+JFPillou:$apr1$Si0.....$teyL5Y7BR4cHj0sX309Jj0 
+Damien:$apr1$TD1.....$sfPTHjoufoNsda4HsD1oL0 
+Comma:$apr1$zF1.....$wYKqRu2aVYlAEQnxVkly8.
+
+.FichierDeMotDePasse est un simple fichier texte contenant les noms des utilisateurs suivis d'un : puis du mot de passe crypté
+(ou non) de cet utilisateur. Ce fichier de mot de passe ne devrait pas être mis dans un répertoire virtuel Internet 
+(mais comment faire autrement si l'on ne possède pas de serveur Internet et que notre site est hébergé par un tiers ?).
+Il faut de plus prendre la précaution de mélanger des majuscules, des minuscules, des chiffres et des symboles dans le nom du fichier... 
+
+Chiffrer  les mots de passe
+
+Apache fournit un outil permettant de générer facilement des mots de passe cryptés (aussi bien sous Windows que sous Unix), il s'agit de l'utilitaire htpasswd accessible dans le sous-répertoire bind'Apache. 
+La syntaxe de cet utilitaire est la suivante :
+    • Pour créer un nouveau fichier de mots de passe : 
+      htpasswd -c {chemin du fichier de mot de passe} utilisateur
+    • Pour ajouter un nouvel utilisateur/mot de passe à un fichier existant : 
+      htpasswd {chemin du fichier de mot de passe} utilisateur
+
+Le mot de passe sera demandé en ligne de commande avec une confirmation. 
+Voici un exemple : 
+htpasswd -c /www/secure/.htpasswd JFPillou
+
+Voici un petit utilitaire vous permettant de crypter vos mots de passe en ligne :
+    • http://www.htaccesstools.com/htpasswd-generator/
+
+
+
+	T.P. :
+______________
+
+
+Créez-vous un troisième répertoire dans /var/www/html , nommé appli
+
+Dans appli, créez une page index.html, validez que vous y accédez à 
+
+http://www.prenom.tld/appli/
+
+Créez un fichier .htaccess à la racine de ce répertoire et faites-y figurer un utilisateur 'stagiaire',
+avec un mot de passe 'capensis' implanté avec htpasswd.
+
+Validez que l'accès à http://www.prenom.tld/appli/ est désormais asujetti à un login / MdP.
+
+
+
+	T.P. 2 :
+________________
+
+- Déplacez ou supprimez vos fichiers .htaccess / .htpasswd du répertoire appli.
+- Dans votre fichier /etc/hosts , rajoutez une entrée vers votre IP, nommée
+
+1.2.3.4		appli.prenom.tld
+		      ^^^^^^^^^^
+
+- Déclarez dans /etc/httpd/conf/httpd.conf (ou un fichier secondaire dans /etc/httpd/conf.d/fichier.conf )
+ un virtualhost appli.prenom.tld vers le répertoire appli.
+ Validez l'accès.
+
+- Ajoutez à votre serveur web le module mod_ldap.
+
+# yum -y install mod_ldap mod_authz_ldap
+# systemctl restart httpd
+# apachectl -M | grep ldap (pour contrôler)
+
+- Modifiez le virtualhost vers appli de sorte que l'uthentification se fasse via votre serveur LDAP.
+
+Un exemple fonctionnel :
+
+
+&lt;VirtualHost *:80>
+        ServerAdmin guillaume@delanoy.fr
+        ServerName appli.dela.noy
+        ServerAlias appli.dela.noy
+        DocumentRoot /var/www/html/appli/
+        &lt;Directory /var/www/html/appli/>
+          AuthName "Authentification LDAP"
+          AuthType Basic
+          AuthBasicProvider ldap
+          AuthLDAPURL ldap://192.168.20.XXX/dc=capen,dc=sis?uid?sub?(objectClass=*)
+          Require ldap-filter objectClass=posixAccount
+        &lt;/Directory>
+&lt;/VirtualHost>
+
+
+
+Redémarrez le serveur et testez l'accès.
+
+Quelques exemples intéressants ici :
+
+https://www.sbarjatiya.com/notes_wiki/index.php/Configuring_LDAP_based_authentication_for_apache
+
+
+
+
+
+	TLS / SSL :
+___________________
+
+https://wiki.centos.org/HowTos/Https
+https://blog.moncoindunet.fr/linux/openssl/openssl-creer-un-certificat-auto-signe/
+
+
+# yum install mod_ssl openssl
+
+
+Générer une clef privée :
+
+# openssl genrsa -out ca.key 2048 
+
+Générer un CSR :
+
+# openssl req -new -key ca.key -out ca.csr
+
+Générer une clef auto-signée :
+
+# openssl x509 -req -days 365 -in ca.csr -signkey ca.key -out ca.crt
+
+Recopiez les fichiers aux endroits prévus par le système :
+
+cp ca.crt /etc/pki/tls/certs
+cp ca.key /etc/pki/tls/private/ca.key
+cp ca.csr /etc/pki/tls/private/ca.csr
+
+
+Si vous aviez SElinux activé, vous devez restaurer le contexte après avoir déplacé ces fichiers :
+
+# restorecon -RvF /etc/pki
+
+
+Ensuite, ajustez les fichiers de configuration d'Apache :
+
+vim +/SSLCertificateFile /etc/httpd/conf.d/ssl.conf
+
+Dans ssl.conf, adaptez le chemin vers vos fichiers de certification :
+
+
+SSLCertificateFile /etc/pki/tls/certs/ca.crt
+
+[...]
+
+SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+
+
+Puis vous enregistrez et redémarrez Apache ;
+
+# systemctl restart httpd
+
+# systemctl status -l httpd 
+
+
+Enfin, adaptez un virtualhost.
+Recopiez le fichier ou la partie qui gère www.prenom.tld en un autre fichier www-ssl.conf (par exemple)
+
+Modifiez la directive Virtualhost comme suit : 
+
+&lt;VirtualHost *:443>
+
+Et ajoutez les lignes suivantes :
+
+	SSLEngine on
+        SSLCertificateFile /etc/pki/tls/certs/ca.crt
+        SSLCertificateKeyFile /etc/pki/tls/private/ca.key
+
+
+Puis vous redémarrez Apache, et vous testez l'accès en httpS 
+
+https://www.prenom.tld
+    ^
+
+
+
+	T.P. : 
+______________
+
+Paramétrez l'accès SSL à www.prenom.tld
+
+
+
+	T.P. 2 :
+________________
+
+Sur le virtualhost de www.prenom.tld d'origine (port 80),
+faites une redirection qui redirige tout le trafic vers le virtualhost sur port 443/
+
+
+
+
+
+
+	REWRITING :
+___________________
+
+
+Activez le module mod_rewrite.
+
+Vérifiez avec :
+
+# apachectl -M | grep rewrite
+
+
+Par exemple, pour rediriger du trafic http vers https :
+
+Dans votre VirtualHost :
+
+RewriteEngine On 
+RewriteCond %{HTTPS} off 
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+
+Ici, on redirige les requêtes http vers l’https du même nom de domaine. 
+La page demandée reste inchangée.
+
+
+
+Voici une autre redirection intéressante, toujours avec le “mod_rewrite” pour rediriger la racine d’un domaine vers un sous-dossier :
+
+RewriteEngine On 
+RewriteRule ^/$ /monrepertoire/ [L,R=301]
+
+
+Ici on redirige http://www.mondomaine.fr vers http://www.mondomaine.fr/monrepertoire/
+
+
+
+Plus d'infos sur URL Rewriting : 
+
+https://craym.eu/tutoriels/referencement/url_rewriting.html
+
+
+
+
+	T.P. : 
+______________
+
+Reprenez le virtualhost de blog.prenom.tld, recopiez-le de manière à ce qu'on puisse y accéder en https.
+
+Puis, dans le virtualhost d'origine de blog.prenom.tld, faites une règle de réécriture pour renvoyer le trafic en https.
+
+
+
+
+RewriteRule (.*) https://%{SERVER_NAME}$1 [R,L]
+
+
+
+
+
+	T.P. 2 :
+_______________
+
+
+dans le virtualhost www.prenom.tld, écrivez une règle de réécriture qui change l'extension .php en .htm
+
+validez en demandant la page info.php, qui doit être accessible à http://www.prenom.tld/info.htm
+											    ^^^^^
+
+
+
+
+  RewriteRule ^(.*)\.htm$ $1.php [L,R]
+ou
+  RewriteRule ^(.*)\.htm$ $1.php [L]
+si vous voulez continuer à afficher .htm tout en interprétant le code php
+
+
+
+
+
+
+
+	PHPMyAdmin :
+_____________________
+
+
+Pour un suage plus commode de vos bases de données, installer PhpMyAdmin.
+
+# yum install epel-release
+# yum install phpmyadmin
+
+(N.B. : si vous êtes en PHP 7.2 et +, passez cette commande :
+
+# yum install --enablerepo=remi,remi-php72 phpmyadmin )
+
+Faites une copie de sauvegarde du fichier de conf 
+# cp /etc/httpd/conf.d/phpMyAdmin.conf ~/phpMyAdmin.conf.backup
+
+vim /etc/httpd/conf.d/phpMyAdmin.conf
+
+
+... pour se connecter de manière sécurisée, appliquez cette méthode :
+
+" Require ip 127.0.0.1
+  Allow from 127.0.0.1 " ... dans phpMyAdmin.conf
+
+
+... et redémarrez httpd.
+
+
+	T.P. : 
+______________
+
+
+Accédez à l'interface de PHPmyAdmin via un tunnel ssh.
+
+
+ssh -L 8080:127.0.0.1:80 user@serveur
+
+
+Enfin, connectez-vous via votre tunnel :
+
+	http://127.0.0.1:8080/phpmyadmin/  ... 
+
+
+D'autres conseils de sécurisation sont accessibles ici :
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-with-apache-on-a-centos-7-server
+
+Je vous laisse apprécier de la validité de ces méthodes selon votre infrastructure.
+
+
+
+
+
+
+	STATS & ANALYSE DES LOGS :
+__________________________________
+
+
+2 types de logs :
+
+/var/log/httpd/error.log
+
+/var/log/httpd/access.log
+
+Vous pouvez (c'est même préférable) définir et créer un fichier de logs PAR VIRTUALHOST !!
+
+
+N'oubliez pas de les faire gérer par logrotate !! (cf. chapitre Admin_N2)
+
+
+
+Pour visualiser graphiquement la charge de votre serveur :
+
+
+Créez un répertoire et un virtualhost stats.
+
+Dans cet espace, installez awstats :
+
+
+	https://devops.profitbricks.com/tutorials/how-to-install-and-configure-awstats-on-centos-7/
+
+sudo yum --enablerepo=epel install awstats
+
+Éditez et modifiez éventuellement le fichier : /etc/httpd/conf.d/awstats.conf
+
+
+On peut essayer aussi avec :
+
+County Analytics :
+
+		https://www.tecmint.com/install-countly-analytics-in-centos-and-ubuntu/
+
+Piwik :
+
+https://www.tecmint.com/install-piwik-alternative-to-google-analytics-in-linux/?utm_content=buffere7c3c&utm_medium=social&utm_source=facebook.com&utm_campaign=buffer
+
+
+
+
+
+	REVERSE PROXYING :
+_________________________
+
+
+	T.P. :
+
+ - Installez une VM en LAMP, avec une page de test
+
+ - sur votre machine physique, paramétrez un Virtualhost "reverse" en Reverse Proxy vers ce serveur.
+
+- Validez l'accès à votre reverse proxy avec un voisin.
+
+
+ Corrigé :
+
+&lt;VirtualHost *:80>
+        ServerAdmin guillaume@delanoy.fr
+        ServerName reverse.dela.noy
+        ServerAlias reverse.dela.noy
+  ProxyPass / http://192.168.20.47/
+    ProxyPassReverse / http://192.168.20.47/
+    ProxyRequests Off
+&lt;/VirtualHost>
+
+
+
+
+
+	NGINX :
+_______________
+
+
+Serveur concurrent de Apache, réputé plus léger.
+
+
+
+# yum install epel-release
+# yum install nginx
+
+# systemctl start nginx
+# systemctl enable nginx
+
+
+Les règles pour paramétrer firewalld - le cas échéant :
+
+sudo firewall-cmd --permanent --zone=public --add-service=http 
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --reload
+
+
+
+La racine des documents HTML : /usr/share/nginx/html
+Le fichier de configuration : /etc/nginx/nginx.conf
+
+
+	Virtualhost vers la VM précédente :
+
+
+Éditez /Etc/nginx/nginx.conf
+
+Trouvez le bloc "Location".
+
+Dans les accolades qui suivent, ajoutez :
+
+proxy_pass http://@Hostname_de_ma_VM;
+
+
+
+Testez la validité de votre fichier de configuration avec :
+
+# nginx -T
+
+
+
+
+	Installation et configuration d'un serveur LEMP ( Linux - Nginx - MariaDB - PHP ) :
+___________________________________________________________________________________________
+
+
+Nginx est déjà installé, on poursuit donc avec MariaDB :
+
+# yum install mariadb-server mariadb -y
+
+# systemctl enable mariadb
+# systemctl start mariadb
+
+# mysql_secure_installation
+
+
+Et puis on passe à PHP :
+
+
+# yum install yum-utils
+# yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+# yum --enablerepo=remi,remi-php73 install php-fpm php-common php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+# yum --enablerepo=remi,remi-php73 install php-opcache php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-pgsql php-pecl-mongodb php-pecl-redis php-pecl-memcache php-pecl-memcached php-gd php-mbstring php-mcrypt php-xml
+# yum --enablerepo=remi,remi-php73 install php73
+Vérifiez avec :
+# php -v
+
+
+Avec Nginx, il faut reconfigurer le fichier php.ini !!
+
+vim /etc/php.ini
+
+Trouvez le paramètre cgi.fix_pathinfo, décommentez-le et passez-le à 0
+
+	cgi.fix_pathinfo=0
+
+Et ajustez le paramètre de la timezone :
+
+date.timezone = Europe/Paris
+
+
+Puis on configure FPM :
+
+
+vim /etc/php-fpm.d/www.conf
+
+Trouvez le paramètre listen, et changez-le comme suit :
+	
+	listen = /var/run/php-fpm/php-fpm.sock
+
+Trouvez aussi les valeurs suivantes et modifiez-les :
+
+
+user = apache to user = nginx
+
+group = apache to group = nginx
+
+listen.owner = nobody to listen.owner = nginx
+
+listen.group = nobody to listen.group = nginx
+
+And, lastly, under ;listen = 127.0.0.1:9000 add this line:
+
+listen = /var/run/php-fpm/php-fpm.sock
+
+
+
+
+Faites aussi un :
+
+chown -R nginx:nginx /usr/share/nginx/html
+
+
+Démarrez php-fpm :
+
+
+systemctl start php-fpm
+systemctl enable php-fpm
+
+
+Puis on va adapter la configuration de nginx :
+
+
+
+
+vim /etc/nginx/conf.d/default.conf
+
+
+	Par exemple :
+
+
+server {
+    listen       80;
+    server_name  server_domain_name_or_IP;
+
+    # note that these lines are originally from the "location /" block
+    root   /usr/share/nginx/html;
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+
+
+
+
+
+systemctl restart nginx
+
+
+Vérifier la syntaxe du fichier de configuration avec :
+
+nginx -t
+
+
+
+Test :
+
+Créez à la racine de votre serveur un fichier info.php, contenant :
+
+&lt;?php phpinfo(); ?>
+
+
+
+
+On peut lui adjoindre PHPMyAdmin :
+
+# yum install phpmyadmin
+ou :
+# yum install --enablerepo=remi,remi-php72 phpmyadmin
+Si vous avez installé PHP en version 7.2 (adaptez si c'est la 7.3 !!)
+
+
+Changer l'appartenance du répertoire /etc/phpmyadmin à nginx :
+
+# chgrp -R nginx /etc/phpMyAdmin
+
+
+Créez un snippet pour accéder facilement à phpmyadmin :
+
+# mkdir -p /etc/nginx/snippets
+
+#vim /etc/nginx/snippets/phpMyAdmin.conf
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+location /phpMyAdmin {
+       root /usr/share/;
+       index index.php index.html index.htm;
+       location ~ ^/phpMyAdmin/(.+\.php)$ {
+               try_files $uri =404;
+               root /usr/share/;
+               fastcgi_pass unix:/run/php-fpm/www.sock;
+               fastcgi_index index.php;
+               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+               include /etc/nginx/fastcgi_params;
+       }
+       location ~* ^/phpMyAdmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+               root /usr/share/;
+       }
+}
+location /phpmyadmin {
+    rewrite ^/* /phpMyAdmin last;
+}
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SElinux et la sécurité :
+________________________
+
+
+setsebool -P httpd_unified on
+
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --reload
+
+
+
+	T.P. FINAL :
+____________________
+
+	Jeremy 	:
+_________________
+
+ Prestashop
+
+	
+	Paulin 	:
+_________________
+
+Nextcloud + OnlyOffice
+
+
+	Quentin :
+_________________
+
+GLPI + Fusion Directory
+
+  	
+	Vincent :
+_________________
+
+Joomla + Virtuemart
+
+	
+	Akhmed 	:
+_________________
+
+Itop
+
+
+	Jason 	:
+_________________
+
+ Odoo
+
+
+	Alexis 	:
+_________________
+
+
+ SuiteCRM
+
+
+
+
+
+
+
+
+	MESSAGERIE :
+____________________
+
+En classe inversée.
+
+Attendus :
+
+- Faire fonctionner une messagerie locale (système) avec postfix.
+
+- Faire fonctionner une messagerie pour un domaine ( prenom.tld ).
+Postfix (smtp) + Dovecot (imap)
+Valider le fonctionnement avec deux comptes distincts, accessibles via Evolution ou Kmail.
+
+- Faire fonctionner cette messagerie pour un réseau local.
+
+- Échanger des mails d'un domaine prenom.tld à l'autre.
+
+- Sécuriser les accès IMAP avec TLS / SSL.
+
+- Sécuriser les accès SMTP avec STARTTLS
+
+- Accéder à la messagerie via un webmail ( roundcube ).
+
+
+
+
+
+
+
+
+
+
+
+Conférence sur l'e-mail, par Benjamin Sonntag :
+
+https://youtu.be/f_ORZDNHMXM
+
+
+Une vieille (!) documentation, néanmoins complète, francophone et utilisable :
+
+http://www.linux-france.org/article/mail/postfix-jaco/
+
+
+
+
+SMTP (Simple Mail Transport Protocol)
+Un canal bidirectionnel entre l'expéditeur et le récepteur (port 25).
+SMTP c'est aussi un format de message (pour qui ? de qui ?à qui l'envoyer ? ...).
+Les balises (EHLO, MAIL FROM, RCPT TO, DATA...).
+Les codes erreurs (destinataire inconnu, refus...)
+Problèmes de caractères entre les plate-formes (ASCII sur 7 bits, format MIME, pièces jointes).
+SMTP et sécuritéNotion de relais ouvert/fermé (cas des fournisseurs d'accès).
+Tolérance par mot de passe ou adresse IP. Cryptage.
+Problèmes des utilisateurs itinérants. Spam et relais ouverts. Liste noire.
+Le routage du courrierRôle du DNS (enregistrement MX) sollicité par le MTA
+Le cycle MUA/MTA/MTA/.../MTA/MDA (boîte aux lettres pop/imap) puis ... MUA.
+
+
+
+
+
+
+
+Les tutos des MicroLinux :
+
+https://www.microlinux.fr/postfix-minimal-dedibox-centos-7/
+https://www.microlinux.fr/postfix-centos-7/
+https://www.microlinux.fr/dovecot-centos-7/
+
+
+~~~~~~~~~~~~~ exemple simple de main.cf pour une conf' locale ~~~~~~~~~~~~~~~~~~~~~
+
+myhostname      = mail.capen.sis	# = FQDN
+mydomain        = capen.sis		# partie droite d'une adresse e-mail
+myorigin        = $mydomain
+inet_interfaces = all 
+inet_protocols = all 
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+mynetworks = 192.168.20.0/24, 127.0.0.0/8
+home_mailbox = Maildir/
+
+
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+
+alias_maps = hash:/etc/aliases
+
+alias_database = hash:/etc/aliases
+
+mailbox_command = procmail -a "$EXTENSION"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ exemple de /etc/aliases ~~~~~~~~~~~~~~~~~~~~~~
+
+# /etc/aliases
+
+mailer-daemon: postmaster
+postmaster: root
+nobody: root
+hostmaster: root
+usenet: root
+news: root
+webmaster: root
+www: root
+ftp: root
+abuse: root
+noc: root
+security: root
+admin: root
+root: formateur
+clamav: root
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~ Main.cf for standalone Host :~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/etc/postfix/main.cf:
+    # Optional: send mail as user@domainname instead of user@hostname.
+    #myorigin = $mydomain
+
+    # Optional: specify NAT/proxy external address.
+    #proxy_interfaces = 1.2.3.4
+
+    # Alternative 1: don't relay mail from other hosts.
+    mynetworks_style = host
+    relay_domains =
+
+    # Alternative 2: relay mail from local clients only.
+    # mynetworks = 192.168.1.0/28
+    # relay_domains =
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~ Main.cf pour serveur de LAN  : ~~~~~~~~~~~~~~~~~~~~~~~~~
+ /etc/postfix/main.cf:
+     myorigin = $mydomain
+    mynetworks = 127.0.0.0/8 192.168.20.0/24
+    relay_domains = 
+     # Optional: forward all non-local mail to mailhost6     #relayhost = $mydomain
+
+
+Mailhost configuration :
+
+ 1 DNS:
+ 2     example.com    IN    MX  10 mailhost.example.com.
+ 3 
+ 4 /etc/postfix/main.cf:
+ 5     myorigin = $mydomain
+ 6     mydestination = $myhostname localhost.$mydomain localhost $mydomain
+ 7     mynetworks = 127.0.0.0/8 10.0.0.0/24
+ 8     relay_domains =
+ 9     # Optional: forward all non-local mail to firewall
+10     #relayhost = [firewall.example.com]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 /etc/postfix/main.cf:
+2     myorigin = example.com
+3     mydestination =
+4     local_recipient_maps =
+5     local_transport = error:local mail delivery is disabled
+6 
+7 /etc/postfix/master.cf:
+8     Comment out the local delivery agent
+
+
+Support for postmaster :
+
+
+
+1 /etc/postfix/main.cf:
+2     virtual_alias_maps = hash:/etc/postfix/virtual
+3 
+4 /etc/postfix/virtual:
+5     postmaster      postmaster@example.com
+6     abuse           abuse@example.com
+
+
+
+
+
+
+
+email forwarding :
+
+
+
+
+     1 /etc/postfix/main.cf:
+     2     mynetworks = 127.0.0.0/8 12.34.56.0/24
+     3     relay_domains = example.com
+     4     parent_domain_matches_subdomains = 
+     5         debug_peer_list smtpd_access_maps
+
+
+     6a    # Postfix 2.10 and later support separate relay control and
+     7a    # spam control.
+     8a    smtpd_relay_restrictions =
+     9a        permit_mynetworks reject_unauth_destination
+    10a    smtpd_recipient_restrictions = ...spam blocking rules....
+
+
+     6b    # Older configurations combine relay control and spam control. To
+     7b    # use this with Postfix ≥ 2.10 specify "smtpd_relay_restrictions=".
+     8b    smtpd_recipient_restrictions =
+     9b        permit_mynetworks reject_unauth_destination
+    10b        ...spam blocking rules....
+
+
+    11     relay_recipient_maps = hash:/etc/postfix/relay_recipients
+    12     transport_maps = hash:/etc/postfix/transport
+    13 
+    14 /etc/postfix/relay_recipients:
+    15     user1@example.com   x
+    16     user2@example.com   x
+    17      . . .
+    18 
+    19 /etc/postfix/transport:
+    20     example.com   smtp:[inside-gateway.example.com]
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+~~~~~~~~~~~~ Exemple de conf fonctionnelle chez Jeremy : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+etc/postfix/main.cf:
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+
+myhostname = mail.jeremy.pt
+mydomain = jeremy.pt
+myorigin = $mydomain
+
+inet_interfaces = all
+inet_protocols = all
+
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+
+unknown_local_recipient_reject_code = 550
+
+mynetworks = 192.168.20.0/24, 127.0.0.0/8
+
+relay_domains = $mydestination
+
+alias_maps = hash:/etc/aliases
+
+alias_database = hash:/etc/aliases
+
+home_mailbox = Maildir/
+
+debug_peer_level = 2
+
+
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+
+
+sendmail_path = /usr/sbin/sendmail.postfix
+
+newaliases_path = /usr/bin/newaliases.postfix
+
+mailq_path = /usr/bin/mailq.postfix
+
+setgid_group = postdrop
+
+html_directory = no
+
+manpage_directory = /usr/share/man
+
+sample_directory = /usr/share/doc/postfix-2.10.1/samples
+
+readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~~~ PARAMÈTRES SMTP POUR TLS ( TLS DANS POSTFIX) : ~~~~~~~~~~~~~~~~~~~~~~~~~~É
+
+
+smtpd_use_tls = yes
+smtpd_tls_key_file = /etc/ssl/private/mail.key
+smtpd_tls_cert_file = /etc/ssl/private/mail-capen.sis.crt
+smtpd_tls_ask_ccert = yes
+
+[ ... ]
+
+smtpd_tls_security_level = encrypt
+smtp_tls_security_level = encrypt
+smtpd_tls_auth_only = yes
+smtpd_tls_ccert_verifydepth = 1
+smtpd_tls_session_cache_database = btree:/var/lib/postfix/smtpd_scache
+smtpd_tls_session_cache_timeout = 86400
+
+
+
+
+VALIDEZ.
+PUIS, DANS /ETC/POSTFIX.MASTER.CF, MODIFIEZ :
+
+# smtp inet n - - - - smtpd ( COMMENTEZ )
+
+587 inet n - - - - smtpd (ajoutez ! )
+
+
+et redémarrez postfix.
+
+ --> du coup dans les clients de messagerie, c'est le port 587 qu'on utilise !
+
+
+Pour tester le chiffement, essayez la commande :
+
+
+ openssl s_client -starttls smtp -crlf -connect localhost:587
+						^^^^^^^^^^^^^
+						À ADAPTER !!!
+
+
+
+
+
+~~~~~~~~~~~~~~ Une conf Dovecot fonctionnelle ( /etc/dovecot/dovecot.conf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+protocols = imap
+listen = *
+dict {
+}
+!include conf.d/*.conf
+!include_try local.conf
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+À compléter avec : https://www.server-world.info/en/note?os=CentOS_7&p=mail&f=2
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	Réécriture de l'adresse FROM en sortie :
+________________________________________________
+
+
+Dans /etc/postfix/sender_canonical :
+
+/.*@prenom.tld/    monvraimail@gmail.com
+
+
+Et dans /etc/postfix.main.cf, testez :
+
+sender_canonical_maps = regexp:/etc/postfix/sender_canonical
+
+
+
+	BLOQUER DES PIÈCES JOINTES :
+____________________________________
+
+On le fait en contrôlant le type MIME dans les entêtes
+
+Dans /etc/postfix/main.cf :
+
+mime_header_checks = regexp:/etc/postfix/block_attachments
+
+Dans le fichier block_attachments correspondant :
+
+/name=[^>]*\.(pdf|zip)/ REJECT
+
+NOTA BENE : il y a bien plus utile que de filtrer les PDF ou les ZIP, ceci n'est qu'un exemple ...
+
+
+
+	LISTE NOIRE / BLOQUER DES ADRESSES E-MAIL : 
+___________________________________________________
+
+
+ Éditez un fichier  /etc/postfix/sender_access , et inscrivez-y :
+
+user@abadboy.com REJECT ( par exemple )
+
+Utilisez la commande postmap pour vous créer une base d'adresses noirlistées : 
+
+# postmap hash:sender_access
+
+Enfin, modifiez votre main.cf comme suit : 
+
+smtpd_recipient_restrictions = check_sender_access
+hash:/etc/postfix/sender_access
+
+
+	TRAITEMENT DES SPAMS :
+______________________________
+
+
+	SPAMASSASSIN :
+______________________
+
+# yum install spamassassin
+
+Éditer /etc/mail/spamassassin/local.cf :
+
+[ ... ] 
+required_hits 5
+report_safe 0
+required_score 5
+rewrite_header Subject [SPAM]
+[ ... ] 
+
+
+required_hits définit le seuil du filtrage. Un paramétrage à 5 est généralement considéré comme efficace pour une PME.
+ Plus ce chiffre est réduit, plus le filtrage sera agressif.
+ Si vous êtes un labo d’analyes et que vous recevez régulièrement des mails qui tentent de vous vendre des produits pharmaceutiques,
+ vous avez intérêt à définir un score plus élevé, 8 par exemple.
+    
+report_safe décide si le message en question doit être supprimé (1) ou redirigé vers la boîte de réception avec une réécriture
+ de l’en-tête (0).
+
+    required_score définit le score pour tous les messages envoyés au domaine, en allant du message légitime (0)
+ au spam résolument pourri (5). Si nous abaissons ce score à 3, cela nous permettrait certes d’éliminer un plus grand nombre
+ de courriers non sollicités. En revanche, on augmenterait la probabilité d’avoir des faux positifs, c’est-à-dire des messages
+ légitimes identifiés comme spams.
+
+  rewrite_header se charge de réécrire l’en-tête du message. 
+ En l’occurrence, la chaîne de caractères [SPAM] est ajoutée au sujet du message.
+
+
+$ sudo groupadd spamd
+$ sudo useradd -c "SpamAssassin User" -g spamd -s /bin/false \
+  -d /var/log/spamassassin spamd
+
+$ sudo chown spamd:spamd /var/log/spamassassin
+
+
+$ sudo systemctl enable spamassassin
+$ sudo systemctl start spamassassin
+
+$ sudo sa-update
+
+Configuration de postfix pour travailler avec Spamassassin :
+
+
+Éditer /etc/postfix/master.cf. Ajouter une option tout en haut du fichier.
+
+smtp    inet  n      -      n      -      -      smtpd -o content_filter=spamassassin
+
+ou
+
+587    inet  n      -      n      -      -      smtpd -o content_filter=spamassassin
+
+
+
+L'important étant  de rajouter l'option à la fin
+
+
+sudo systemctl restart postfix
+
+
+	Premier test :
+
+
+Envoyer un mail depuis un compte externe. Le sujet peut être librement choisi. 
+Dans le corps du message, copier/coller la chaîne de caractères suivante.
+
+
+
+XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
+
+
+Mise à jour automatique des règles
+
+Éditer un petit script shell pour la mise à jour des règles et le redémarrage du service.
+
+#!/bin/bash
+#
+# update-spamassassin.sh
+
+/usr/bin/sa-update
+/usr/bin/systemctl restart spamassassin
+
+
+	SpamAssassin et SElinux :
+
+
+sudo setsebool -P spamd_enable_home_dirs 1
+sudo semanage fcontext -a -t spamd_var_lib_t \
+  '/var/log/spamassassin(/.*)?'
+sudo restorecon -Rv /var/log/spamassassin/
+
+Puis, pour tester :
+
+setenforce 1
+sudo sealert -a /var/log/audit/audit.log
+
+Si vous n'avez pas de problème, il vous répondra :
+
+100% done
+found 0 alerts in /var/log/audit/audit.log
+
+
+
+	Un autre tuto Spamassassin avec filtres bayésiens :
+__________________________________________________________
+
+
+**************
+SpamAssassin :
+**************
+
+
+https://spamassassin.apache.org/full/3.1.x/doc/Mail_SpamAssassin_Conf.html
+
+Récupérez éventuellement la clef pour valider l'installation :
+
+wget http://spamassassin.apache.org/updates/GPG.KEY
+gpg --import GPG.KEY
+
+
+
+Les fichiers de configuration se trouvent dans :
+
+    /etc/mail/spamassassin 
+
+Le plus important est local.cf.
+
+
+internal_networks 1.2.3.4
+internal_networks 1.2.3.0
+required_hits 5
+report_safe 0
+rewrite_header Subject [!!!SPAM!!!]
+
+
+Internal_networks doit être renseigné avec vos serveurs MX.
+
+    etc/sysconfig/spamassassin
+
+# Options to spamd
+SPAMDOPTIONS="-d -c -m5 -H -s /var/log/spamd.log"
+
+Les règles sont stockées dans :
+
+/var/lib/spamassassin/x.xxxxxxxx
+
+Pour récupérer les dernières règles, faire de temps en temps :
+
+sa-update -v
+
+Update available for channel updates.spamassassin.org
+Update was available, and was downloaded and installed successfully
+
+Ou mieux, une petite tache Cron pour :
+
+/usr/share/spamassassin
+/etc/cron.d/sa-update
+
+
+Vérifier la syntaxe du fichier local.cf :
+
+spamassassin --lint -D
+
+
+
+Apprendre de nouveau spams à votre filtre bayésien :
+
+Créer un dossier imap dans votre boite (par exemple : spamtolearn), 
+mettez y les spams non détectés et créez une tache cron du genre :
+
+/usr/bin/sa-learn --spam --mbox /var/spool/vmail/titi@toto.org/.
+
+
+
+Vous avez la possibilité de faire la même chose si Spamassassin détecte des spam alors que ce sont de vrai mails :
+
+
+Créez un dossier imap dans votre boite (ex: hamtolearn), mettez y les hams détectés comme spams et créez une tache cron comme celle ci :
+
+/usr/bin/sa-learn --ham --mbox /var/spool/vmail/titi@toto.org/.hamtolearn
+
+
+Pour la création de Liste blanche :
+
+whitelist_from mimimati@olala.com
+
+mimimati@olala.com est l'adresse en qui vous avez totalement confiance.
+
+
+A mettre dans les fichiers :
+
+    ~/.spamassassin/user_prefs
+
+ou
+
+    /etc/mail/spamassassin/local.cf
+
+La syntaxe suivante fonctionne :
+
+whitelist_from  *@domainevalide.com
+
+Même chose pour les listes noires avec la directive : blacklist_from
+
+
+
+
+Tests et validation :
+
+
+
+Envoyez un mail avec cette chaine dans le corps du message :
+
+XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
+
+Il doit être identifié comme spam, et son objet doit être modifié (ajout de : !!!SPAM!!!)
+Si ce n'est pas le cas, votre Spamassassin ne fonctionne pas correctement.
+Jetez un œil dans les logs : /var/log/spam.log et /var/log/maillog, faites un grep sur spam.
+
+
+
+
+
+
+
+
+
+Listes noires pour filtrer le spam :
+
+dsbl.org
+spamhaus.org
+Open Relay Database 
+
+
+	Pour configurer le filtrage par rbl, il faudra modifier à la fois le serveur DNS et le serveur de messagerie :
+______________________________________________________________________________________________________________________
+
+
+
+Postfix MTA DNS Blackhole Lists Configuration
+
+Under Postfix mail server you need to define DNSRBLs in main.cf file
+using the smtpd_recipient_restrictions configuration directive. Open
+main.cf file:
+
+# vi /etc/postfix/main.cf
+
+Locate smtpd_recipient_restrictions line and setup reject_rbl_client as
+follows:
+
+smtpd_recipient_restrictions =
+
+....
+
+.....
+
+    reject_rbl_client list.dsbl.org,
+
+    reject_rbl_client sbl-xbl.spamhaus.org,
+
+    reject_rbl_client cbl.abuseat.org,
+
+    reject_rbl_client dul.dnsbl.sorbs.net,
+
+....
+
+    permit
+
+Here is my complete configuration:
+
+smtpd_recipient_restrictions =
+
+    reject_invalid_hostname,
+
+    reject_non_fqdn_hostname,
+
+    reject_non_fqdn_sender,
+
+    reject_non_fqdn_recipient,
+
+    reject_unknown_sender_domain,
+
+    reject_unknown_recipient_domain,
+
+    reject_unauth_destination,
+
+    permit_mynetworks,
+
+    reject_rbl_client list.dsbl.org,
+
+    reject_rbl_client sbl-xbl.spamhaus.org,
+
+    reject_rbl_client cbl.abuseat.org,
+
+    reject_rbl_client dul.dnsbl.sorbs.net,
+
+    permit
+
+Save and close the file. Restart / reload postfix mail server:
+
+# /etc/init.d/postfix restart
+
+À partir de l’adresse <https://www.cyberciti.biz/faq/page/200/>
+
+
+
+
+
+
+
+	LIENS MESSAGERIE :
+__________________________
+
+
+Postfix / Dovecot  +  SASL sur CentOS :
+https://wiki.centos.org/HowTos/postfix_sasl
+
+https://www.system-linux.eu/index.php?post/2009/01/27/Traitement-de-Queue-mail-Postfix
+
+https://www.system-linux.eu/index.php?post/2009/09/01/Installation-et-Configuration-de-Mailgraph
+
+https://www.system-linux.eu/index.php?post/2009/10/22/Installation-et-Configuration-de-postfixadmin
+
+https://www.cyberciti.biz/faq/postfix-remove-hide-hostnames-ip-addresses/
+
+
+
+
+Commandes telnet pour SMTP POP IMAP :
+
+
+https://www.system-linux.eu/index.php?post/2010/02/28/Telnet-et-SMTP
+
+https://www.cyberciti.biz/faq/postfix-smtp-authentication-for-mail-servers/
+
+
+Relais avec smtp externe :
+
+
+https://www.cyberciti.biz/faq/how-to-configure-postfix-relayhost-smarthost-to-send-email-using-an-external-smptd/
+
+https://www.system-linux.eu/index.php?post/2010/03/31/postgrey-liste-pour-Postfix
+
+https://www.system-linux.eu/index.php?post/2010/03/08/Installation-de-SPF-pour-Posfix
+
+
+IMAP :
+
+https://www.system-linux.eu/index.php?post/2010/03/11/IMAP-Spam-Begone-%28isbg%29
+
+
+https://www.cyberciti.biz/faq/unix-dovecot-ssl-tls-server-configuration/
+
+
+dans dovecot.conf
+
+protocols = imap imaps
+
+ssl_cert_file = /etc/postfix/ssl/smtp.theos.in.crt
+ssl_key_file = /etc/postfix/ssl/smtp.theos.in.key
+
+
+
+
+Postfix Tips and Tricks :
+_________________________
+
+
+Contrôler la queue de messagerie :
+
+$ mailq
+
+$ postqueue -p
+
+Renvoyer les messages dans la queue :
+
+$ postqueue -f
+
+Supprimer tous les messages de la queue (DANGER !!!)
+
+$ postsuper -d ALL
+
+Variantes :
+
+postsuper -d messageid
+postsuper -d ALL deferred
+
+
+Tester l'envoi de mail depuis postfix :
+
+$ echo "Test de mail depuis postfix" | mail -s "Test Postfix" ping@oleane.net
+
+Chercher un mail selon son adresse dans la queue de messagerie :
+
+$ postqueue -p | grep –A 2 –B 2 ‘email@domain.com’
+
+Voir le mail (ATTENTION A LA CONFIDENTIALITÉ !!!) :
+
+$ postcat –q  <msgIDFromAboveStep>
+
+Supprimer tous les "Mailer-Daemon de la queue de messagerie :
+
+for emailID in `mailq | grep '^[A-Z0-9]' | grep 'MAILER-DAEMON' | awk '{print$1}'| tr -d '*!'`; do postsuper -d $emailID; done
+
+Supprimer des mails en fonction du FROM :
+
+mailq|awk ' /^[0-9A-F][0-9A-F]*.*mail.ru$/ {print $1}'|tr -d '*'| xargs -rn1 postsuper -d
+
+
+Voir la taille des boîtes mail des usagers : 
+
+$ ls -lL /var/mail | awk '{print $5, $9}' | head -10
+
+
+
+
+
+
+	iSCSI : 
+_______________
+
+Exemple sur la serveuse ( 192.168.20.252 ) :
+
+loop0    7:0    0    10G  0 loop /mnt/donnees/stagiaires/paulin
+loop1    7:1    0    10G  0 loop /mnt/donnees/stagiaires/jeremy
+loop2    7:2    0    10G  0 loop /mnt/donnees/stagiaires/akhmed
+loop3    7:3    0    10G  0 loop /mnt/donnees/stagiaires/alexis
+loop4    7:4    0    10G  0 loop /mnt/donnees/stagiaires/cluster-C
+loop5    7:5    0    10G  0 loop /mnt/donnees/stagiaires/cluster-B
+loop6    7:6    0    10G  0 loop /mnt/donnees/stagiaires/jason
+loop7    7:7    0    10G  0 loop /mnt/donnees/stagiaires/vincent
+
+
+/mnt/donnees/filesystems/formation1.bin         /mnt/donnees/stagiaires/alexis          ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation2.bin         /mnt/donnees/stagiaires/vincent         ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation3.bin         /mnt/donnees/stagiaires/jason           ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation4.bin         /mnt/donnees/stagiaires/jeremy          ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation5.bin         /mnt/donnees/stagiaires/paulin          ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation6.bin         /mnt/donnees/stagiaires/quentin         ext4    defaults,loop,nodev,nosuid      0       0
+/mnt/donnees/filesystems/formation7.bin         /mnt/donnees/stagiaires/akhmed          ext4    defaults,loop,nodev,nosuid      0       0
+
+
+L'iqn du Lun de Serveuse : 
+
+
+
+iqn.2019-02.capen.sis:lun1
+
+Chacun doit accéder à un LUN différent :
+
+
+Alexis	:	LUN1	
+Vincent	:	LUN2
+Jason	:	LUN3
+Jeremy	:	LUN4
+Paulin	:	LUN5
+Quentin	:	LUN6
+Akhmed	:	LUN7
+
+
+
+
+	Authentification sur Serveur Active Directory :
+_______________________________________________________
+
+
+WARNING : nslcd et sssd sont deux produits INCOMPATIBLES !
+
+si vous avez déjà installé le 1er pour de l'authent' LDAP,
+suivez ce module sur une VM fraîchement installée !
+
+
+
+L'authentification se fait avec le paquet sssd.
+
+Le serveur Windows AD est pdc, pour le domaine capen.sis, à l'adresse 192.168.20.251 .
+
+Vous devez le déclarer en serveur DNS pour pouvoir vous authentifier sur lui !!
+     ^^^^^
+
+	PAM :
+_____________
+
+
+Introduction to SSSD and Realmd
+
+Starting from Red Hat 7 and CentOS 7, SSSD or ‘System Security Services Daemon’  and realmd have been introduced. 
+SSSD’s main function is to access a remote identity and authentication resource through a common framework that provides caching
+ and offline support to the system. SSSD provides PAM and NSS integration and a database to store local users,
+ as well as core and extended user data retrieved from a central server. 
+
+The main reason to transition from Winbind to SSSD is that SSSD can be used for both direct and indirect integration 
+and allows to switch from one integration approach to another without significant migration costs.
+The most convenient way to configure SSSD or Winbind in order to directly integrate a Linux system 
+with AD is to use the realmd service. 
+Because it allows callers to configure network authentication and domain membership in a standard way.
+The realmd service automatically discovers information about accessible domains and realms 
+and does not require advanced configuration to join a domain or realm.
+
+The realmd system provides a clear and simple way to discover and join identity domains.
+It does not connect to the domain itself but configures underlying Linux system services, such as SSSD or Winbind,
+to connect to the domain.
+
+
+Setup : 
+
+Le nom du serveur doit être présent dans /etc/hosts :
+
+
+192.168.20.251	pdc.capen.sis	pdc
+
+
+# yum install sssd realmd oddjob oddjob-mkhomedir adcli samba-common samba-common-tools krb5-workstation openldap-clients policycoreutils-python
+
+# systemctl enable ntpd.service
+# systemctl start ntpd.service
+
+ Join the server to the domain:
+
+realm join --user=admin capen.sis
+
+Ajoutez aussi ( seulement si nécessaire) les suffixes de domaine au fichier /etc/sssd/sssd.conf sous [sssd] :
+
+default_domain_suffix = capen.sis
+
+
+Démarrer le service :
+
+
+# systemctl enable sssd
+# systemctl start sssd
+# systemctl status sssd
+
+Découverte du domaine :
+
+# realm discover capen.sis
+# realm list
+
+
+Modification du fichier /etc/sssd/sssd.conf
+Cela permet de ce connecté en tapant xxxx au lieu de  xxxx@MONDOMAINE.lan
+
+use_fully_qualified_names = False
+fallback_homedir = /home/%d/%u
+
+systemctl restart sssd 
+
+
+MODIFIEZ KERBEROS 5 :
+
+
+~~~~~~~~~~~~~~~ /etc/krb5.conf : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+includedir /etc/krb5.conf.d/
+
+includedir /var/lib/sss/pubconf/krb5.include.d/
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+        default_realm 	= 	CAPEN.SIS
+	clockskew 	= 	300
+	ticket_lifetime	=	1d
+        forwardable     =       true
+        proxiable       =       true
+        dns_lookup_realm =      true
+        dns_lookup_kdc  =       true
+	
+[realms]
+	CAPEN.SIS = {
+		kdc 	= 	PDC.CAPEN.SIS
+                admin_server = PDC.CAPEN.SIS
+		default_domain = CAPEN.SIS
+	}
+	
+[domain_realm]
+        .kerberos.server = CAPEN.SIS
+	.CAPEN.SIS = CAPEN.SIS
+	CAPEN.SIS = CAPEN.SIS
+	example	= CAPEN.SIS
+
+[appdefaults]
+	pam = {
+	ticket_lifetime 	= 1d
+	renew_lifetime 		= 1d
+	forwardable 		= true
+	proxiable 		= false
+	retain_after_close 	= false
+	minimum_uid 		= 0
+	debug 			= false
+	}
+
+[logging]
+	default 		= FILE:/var/log/krb5libs.log
+	kdc 			= FILE:/var/log/kdc.log
+        admin_server            = FILE:/var/log/kadmind.log
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Puis on tape 
+kinit admin@CAPEN.SIS --verbose
+
+
+
+Vérification
+
+# getent passwd admin@capen.sis
+
+
+Créer un répertoire personnel
+
+# echo "session required pam_mkhomedir.so skel=/etc/skel/ umask=0022" | sudo tee -a /etc/pam.d/common-session
+
+
+
+... et on tente de se logguer !
+
+
+
+
+
+	SaMBa :
+_______________
+
+
+
+
+
+
+
+
+
+
+

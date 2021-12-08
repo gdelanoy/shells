@@ -1,0 +1,1935 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Docker:
+________________
+
+https://mypads.framapad.org/mypads/?/mypads/group/poe-2019-2-6c4lg779d/pad/view/docker-1w6b2x7ko
+
+
+
+
+
+Qu'est-ce qu'une API RESTful ?
+https://www.lemagit.fr/definition/API-RESTful
+
+Docker repose sur une API RESTful:
+
+Une API compatible REST, ou « RESTful », est une interface de programmation
+d'application qui fait appel à des requêtes HTTP pour obtenir (GET),
+placer (PUT), publier (POST) et supprimer (DELETE) des données.
+
+La philosophie générale consiste à créer un conteneur par service --> micro-service.
+
+ iaas vs saas
+http://blogs.bmc.com/wp-content/uploads/2017/09/iaas-paas-saas-comparison-1024x759.jpg
+
+pizza as a service
+https://www.episerver.com/contentassets/c2298831dbc04581ab7a6af1df35dc0d/pizza.jpg
+
+Les images peuvent dialoguer entre elles, et surtout être répliquées à l'infini.
+
+Pour faire fonctionner tout ça, on décrit un état (une image) en y installant par exemple python,
+on en installe une autre avec java, sans que les deux n'interagissent ensemble (ou BDD, webserver ...).
+
+On peut faire communiquer ensuite toutes ces applications cloisonnées.
+Apache Kafka par ex. permet de les faire communiquer --> système de mise en queue ou chaque conteneur
+pousse des informations, qui peuvent être lues par ailleurs par un autre conteneur et permettent ainsi 
+de les faire interagir.
+
+
+
+	Installation :
+______________________
+
+Le paquetage le plus récent : 
+
+# curl -sSL https://get.docker.com/ | sh
+
+Si vous faites confiance à votre distribution (moins récent) :
+
+# yum install docker
+
+
+
+
+
+
+# systemctl enable --now docker
+
+sudo usermod -aG docker your-user	(CentOS, REdHat, Fedora)
+
+sudo usermod -aG dockerroot your-user	(Debian, Ubuntu)
+
+(selon la distro utilisée)
+
+
+
+Hint :
+Alpine Linux a été racheté par Docker, c'est un support système extrêmement léger pour les applis,
+on va donc l'utiliser comme couche de base pour nos services.
+
+https://www.cyberciti.biz/faq/10-alpine-linux-apk-command-examples/
+
+Docker fonctionne donc en téléchargeant des images (très légères) depuis un hub en ligne.
+
+Pour vous permettre d’en profiter pleinement, créez-vous un compte (gratuit) sur :
+
+
+https://hub.docker.com/
+
+
+
+	COMMANDES USUELLES :
+____________________________
+
+
+docker run ....				# Télécharger (le cas échéant) une image et lancer le container.			
+
+docker run -it nom_image 		# (entre en mode interactif dans l'image)
+
+docker pull ...				# Télécharger une image SANS lancer le container.			
+
+docker exec -it [id_container] bash	# Entrer dans un container actif
+
+docker attach [container] 		# Pour se rattacher au TTY en cours (et non un nouveau)
+
+docker images				# liste des images locales
+
+docker ps -a 				# voir les processus.
+
+docker info				# indormations générales (!!!)
+
+
+Supprimer un conteneur ou supprimer tous les conteneurs :
+
+docker container rm $JOB1
+
+docker container rm id_du_conteneur
+
+docker container rm $(docker container ps -a -q)  # Utile en alias dans .bashrc !
+
+
+Supprimer une image:
+
+docker image rm id_ou_nom_de_l_image
+ou:
+docker rmi id_ou_nom_de_l_image
+
+Inspecter la configuration d'un container :
+
+$ docker inspect id_container (Attention, sortie verbeuse, à affiner !!)
+
+
+Voir les logs d'un conteneur :
+
+docker logs &lt;container_name&gt; -f
+
+
+
+docker start<id>             =       Lancer le container <id>
+docker stop <id>             =       Arrêter le container <id>
+
+
+https://github.com/wsargent/docker-cheat-sheet
+
+
+Pour sortir d'un container sans gêner son exécution, tapez la séquence :
+
+Ctrl-P Ctrl-Q
+
+
+
+
+Faire le ménage :
+
+docker container prune
+docker image prune
+
+docker system prune
+docker volume prune
+docker network prune
+
+Supprime tout ce qui n'est pas utilisé (à utiliser avec précaution !)
+
+
+alias dockstop="docker ps -a -q | xargs docker stop"
+
+alias dockmenage="docker ps -a -q | xargs docker rm"
+
+
+
+
+	LES DOCKERFILES :
+_________________________
+
+Exemples de Dockerfiles :
+
+https://github.com/kstaken/dockerfile-examples
+
+
+
+Truc :
+
+Pour trouver l'@IP de votre container :
+
+
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id
+
+alias dockip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
+
+____________________________________________________________
+
+TP 1 :
+
+En partant de l’image alpine
+Créez un Dockerfile appelant ping et prenant en paramètre du
+conteneur le host (localhost par défaut)
+
+Buildez-le, exécutez-le.
+
+TP1 - Réponses : 
+
+~~~~~~~~~~~~~~~ Guillaume : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FROM alpine
+ENTRYPOINT ["ping"]
+CMD ["localhost"]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~ Jeremy : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FROM alpine
+CMD ["ping", "localhost"]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+docker build .
+docker run @ID_du_container
+
+
+
+
+
+	LES VOLUMES :
+_____________________
+
+Les volumes sont initialisés à la création du container. 
+Si l’image de base contient des données au point de montage spécifié, 
+celles-ci sont copiés dans le volume lors de son initialisation.
+
+Les volumes de données peuvent être partagés entre plusieurs containers 
+(très pratique pour créer des clusters de container par exemple).
+
+Les changements apportés aux données du volume sont pris en compte immédiatement.
+   
+Les données restent sur votre hôte même si le container vient à disparaître.
+
+
+La gestion des volumes se fait avec l’option -v (pour --volume) des commandes docker run ou docker create. 
+Évidemment, plusieurs -v peuvent être placés les uns après les autres en fonction du nombre de volumes souhaités
+
+docker run --name mariadb-test --volume /var/lib/mysql -d mariadb
+
+
+Dans le container, le point de montage est /var/lib/mysql.
+Sur le serveur Docker (hôte), un container spécial de type volume a été créé, dans /var/lib/docker/volumes/ ....
+
+
+	T.P. 2 :
+________________
+
+Reprenez le Docker file qui lance un serveur Apache.
+
+Exposez le port 80 du container sur le port 80 de votre hôte.
+
+Dans un répertoire ~/html , créez une page index.html avec un message personnalisé.
+
+Lancez un volume qui se trouvera localement dans ~/html et qui sera vu par le container comme étant à
+/var/www/html
+
+docker run -d -p 80:80 --name apache2 -v ~/html:/var/www/html 5ea2b4de275e
+
+
+	TP 3 - Volumes :
+________________________
+
+Créer un conteneur Ubuntu avec un volume initialisé avec le
+contenu de /etc (du conteneur).
+
+Utiliser un second conteneur pour faire une archive du
+contenu du volume créé et récuperez cette archive sur votre
+système avec un point de montage
+
+
+mkdir -p /home/formateur/myetc
+docker run -d --name=ubuntu2 -v /home/formateur/myetc:/etc ubuntu
+
+cd ~
+docker container run -d --rm -v /home/formateur/myetc:/data -v ${PWD}:/backup ubuntu bash -c 'cd /data && tar zcvf /backup/backup.tar.gz .'
+
+
+
+
+	TP 4 : Appli en réseau :
+________________________________
+
+En utilisant l’image php:7.0-apache
+Afficher l’index.php contenant :
+&lt;?php phpinfo() ; ?>
+
+docker run -d --name LAMP -p 80:80 -v /html:/var/www/html nimmis/apache-php7
+
+
+
+
+	TP 4.1 :
+_______________
+
+
+Même énoncé que précédemment, mais en lançant le container via un Dockerfile et en incluant un fichier de configuration
+apache2.conf .
+
+
+~~~~~~~~~~~~~~~~ apache2.conf :~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DefaultRuntimeDir ${APACHE_RUN_DIR}
+PidFile ${APACHE_PID_FILE}
+
+AddDefaultCharset utf-8
+
+ServerRoot "/etc/apache2"
+
+Timeout 300
+KeepAlive On
+MaxKeepAliveRequests 100
+KeepAliveTimeout 5
+
+HostnameLookups Off
+
+LogLevel warn
+LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %O" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+ErrorLog ${APACHE_LOG_DIR}/error.log
+
+User ${APACHE_RUN_USER}
+Group ${APACHE_RUN_GROUP}
+
+&lt;Directory />
+	Options FollowSymLinks
+	AllowOverride None
+	Require all denied
+&lt;/Directory>
+
+&lt;Directory /var/www/>
+	Options Indexes FollowSymLinks
+	AllowOverride None
+	Require all granted
+&lt;/Directory>
+
+AccessFileName .htaccess
+
+&lt;FilesMatch "^\.ht">
+	Require all denied
+&lt;/FilesMatch>
+
+Include ports.conf
+
+IncludeOptional mods-enabled/*.load
+IncludeOptional mods-enabled/*.conf
+IncludeOptional conf-enabled/*.conf
+IncludeOptional sites-enabled/*.conf
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Et :
+
+
+~~~~~~~~~~~~~~~~ index.php :~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+&lt;?php phpinfo() ; ?>
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Puis :
+
+docker build . -t monimage
+
+docker run -d --name apachephp monimage
+
+
+
+
+
+
+
+	Exemple d'utilisation graphique de Docker :
+__________________________________________________
+
+
+docker run -it -p 22 magglass1/docker-browser-over-ssh
+
+... vous récupérez les infos suivantes :
+
+IP address:     172.17.0.3
+Password:	1LpsWhax2pl2M
+Firefox:	ssh -X webuser@172.17.0.3 firefox
+Google Chrome:	ssh -X webuser@172.17.0.3 google-chrome --no-sandbox
+
+
+
+	INTERFACE GRAPHIQUE POUR DOCKER :
+_________________________________________
+
+
+Interface d'administration simple des containers :
+
+
+$ docker pull portainer/portainer
+$ docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+
+Puis, depuis votre navigateur (en http sur port 9000), vous accédez à une
+interface graphique de gestion de vos containers).
+
+Configuration plus poussée : 
+http://portainer.readthedocs.io/en/stable/configuration.html
+
+
+
+TP :
+
+Démarrer Portainer avec le système au moyen d'un unit systemd.
+
+
+
+
+Créer un unit /etc/systemd/system/container.service (par ex.)
+qui contient :
+
+
+[Service] 
+ExecStart=docker start *container* 
+ExecStop=docker stop *Interface*
+
+
+
+~~~~~~~~~~~~~~~ /etc/systemd/system/portainer.service : ~~~~~~
+
+
+[Unit]
+Description=Portainer container
+After=docker.service
+Wants=network-online.target docker.socket
+Requires=docker.socket
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a portainer
+ExecStop=/usr/bin/docker stop -t 10 portainer
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+...
+
+systemctl daemon-reload
+systemctl start container
+systemctl enable container
+systemctl status container
+
+
+
+
+Un exemple ici (avec MongoDB) :
+
+http://www.barreverte.fr/astuce_mongo_docker_systemd/
+
+(N.B. : remplacez les 'docker run' par des 'docker start' dans son
+mongo.service; adaptez-le pour faire démarrer Portainer (!) )
+
+
+
+
+	Avoir des conteneurs actifs au démarrage / redémarrage :
+________________________________________________________________
+
+
+
+Pour créer un container qui démarre automatiquement au reboot ou quand le service
+docker redémarre :
+
+# docker run -dit --restart [options] [container]
+
+
+options :
+
+- no = Ne pas redémarrer automatiquement le container, c'est l'option par 
+défaut quand on fait un docker run -it [container]
+
+- on-failure(:nombre redémarrage) = redémarre le container s'il s'est arrêté à cause d'une erreur,
+si le code d'erreur est un code de sortie.
+
+Si vous mettez on-failure:3 au bout de trois redémarrages, il s'arrêtera.
+
+- unless-stopped = redémarre le container s'il s'est arrêté ou si docker lui-même s'est stoppé 
+  ou a redémarré.
+
+- always = Le container va toujours redémarrer peut importe ce qui l'a stoppé.
+
+La politique de redémarrage ne s'exécute que si le container a démarré avec succès.
+Il ne redémarrera jamais en boucle.
+
+Si vous stoppez manuellement un container, la politique de redémarrage est ignorée,
+à part si le daemon docker est redémarré ou si on redémarre manuellement le container.
+Elle s'applique uniquement aux containers.
+
+https://docs.docker.com/config/containers/start-containers-automatically/
+
+
+Pour ajouter une politique de redémarrage à un container déjà existant :
+
+# docker update --restart [options] [container]
+
+
+
+
+
+	DOCKER COMPOSE :
+________________________
+
+
+Cf. https://docs.docker.com/compose/install/
+
+	Installation :
+______________________
+
+
+curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+
+Pour avoir la complétion des commandes docker-compose :
+
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.23.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+source /etc/bash_completion.d/docker-compose
+
+
+
+
+	UTILISATION :
+_____________________
+
+
+	TP 1 : Installer un WordPress (BdD + WordPress)
+
+
+https://docs.docker.com/compose/wordpress/#bring-up-wordpress-in-a-web-browser
+
+
+
+	TP 2 : Installer un Serveur LAMP (Apache + PHP + BdD + PHPMyAdmin)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~É
+version: '2'
+
+services:
+   webserver:
+     image: httpd:latest
+     ports:
+       - "80:80"
+     volumes:
+       - volumetest:/app
+     networks:
+       - database
+
+   php:
+     image: webdevops/php:latest
+     volumes:
+       - volumetest:/app
+     networks:
+       - database
+
+   phpmyadmin:
+     image: phpmyadmin/phpmyadmin
+     ports :
+      - "8080:80"
+     environment:
+      - MYSQL_USERNAME=formation
+      - MYSQL_PASSWORD=formation
+     networks:
+      - database
+
+   db:
+     image: mysql:5.7
+     volumes:
+       - lampvolume:/var/lib/mysql
+     ports:
+       - "3306:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: totoleharicot
+       MYSQL_DATABASE: lamp
+       MYSQL_USER: formation
+       MYSQL_PASSWORD: formation
+     networks:
+      - database
+
+networks:
+    database:
+
+volumes:
+    volumetest:
+    lampvolume:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+		Accéder à un Filesystem distant via SSHFS grâce à un driver :
+__________________________________________________________________________
+
+
+
+# docker plugin install --grant-all-permissions vieux/sshfs
+# docker volume create --driver vieux/sshfs-o sshcmd=test@node2:/home/test \
+  -o password=testpassword sshvolume
+
+
+
+	T.P.  SSHFS : 
+_____________________
+
+Reprendre le docker-compose précédent en lui ajouteant deux points de montage sur l'hôte local :
+
+- un répertoire ~/docker-compose/mysqkdb qui sera monté sur /var/lib/mysql dans le container db
+
+- un répertoire ~/docker-compose/html qui sera monté sur /var/www/html dans le container webserver
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+volumes:
+  sshfsdata:
+    driver: vieux/sshfs:latest
+    driver_opts:
+      sshcmd: "username@server:/location/on/the/server"
+      allow_other: ""
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+	DOCKER EN RÉSEAU :
+___________________________
+
+Commencez par essayer manuellement
+
+systemctl stop docker
+
+dockerd -H unix:///var/run/docker.sock -H tcp://192.168.20.XXX:2375
+
+
+... puis vous demandez à votre voisin d'accéder à votre serveur docker depuis son poste :
+
+
+docker -H 192.168.20.XX:2375 run hello-world
+
+
+Si ça marche de cette façon, il faut simplement modifier l'appel du démon docker par 
+l'unit systemd ( localisez docker.service ):
+
+ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://192.168.20.XX:2375
+
+
+
+... puis : 
+
+systemctl daemon-reload
+systemctl start docker 
+
+systemctl status docker -l
+
+netstat -laputn | grep 2375
+
+
+Et pour tester (depuis un autre poste) :
+docker -H 192.168.20.243:2375 run -it ubuntu bash
+docker -H 192.168.20.243:2375 ps -a
+
+
+
+$ docker -H IP_du_serveur:2375 ps -a
+
+
+Pour rendre ce mécanisme permanent :
+
+En direct OU dans le .bashrc de chaque utilisateur :
+
+export DOCKER_HOST=IP_du_serveur:2375
+(dispense du -H @IP dans les futures commandes)
+
+Nota Bene : un utilisateur local du serveur devra AUSSI se connecter via 
+le socket réseau et non plus en local).
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Une autre méthode consiste à aller modifier le fichier /etc/docker/daemon.json :
+
+{
+        "hosts" : [
+                "unix:///var/run/docker.sock",
+                "tcp://0.0.0.0:2375"
+        ]
+}
+
+Démarrez (ou redémarrez) docker normalement
+systemctl enable --now docker
+systemctl restart docker
+
+
+Une autre syntaxe : 
+
+
+
+{
+    "log-level":"warn",
+    "hosts": ["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],
+    "runtimes": {
+        "docker-runc": {
+            "path": "/usr/libexec/docker/docker-runc-current"
+        }
+    },
+    "add-runtime": "docker-runc=/usr/libexec/docker/docker-runc-current",
+    "default-runtime": "docker-runc"
+}
+
+
+systemctl stop docker
+
+cd /usr/libexec/docker/
+sudo ln -s /usr/libexec/docker/docker-runc-current /usr/bin/docker-runc
+
+
+dockerd -H tcp://IP_du_SERVEUR_Docker:2375 -H unix:///var/run/docker.sock
+
+
+
+Pour modifier l'unit systemd docker.service avec de telles options :
+
+/lib/systemd/system/docker.service :
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.com
+After=network.target rhel-push-plugin.socket registries.service
+Wants=docker-storage-setup.service
+Requires=docker-cleanup.timer
+
+[Service]
+Type=notify
+NotifyAccess=all
+EnvironmentFile=-/run/containers/registries.conf
+EnvironmentFile=-/etc/sysconfig/docker
+EnvironmentFile=-/etc/sysconfig/docker-storage
+EnvironmentFile=-/etc/sysconfig/docker-network
+Environment=GOTRACEBACK=crash
+Environment=DOCKER_HTTP_HOST_COMPAT=1
+Environment=PATH=/usr/libexec/docker:/usr/bin:/usr/sbin
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+#       -current \
+#          --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current \
+#          --default-runtime=docker-runc \
+#          --exec-opt native.cgroupdriver=systemd \
+          --userland-proxy-path=/usr/libexec/docker/docker-proxy-current \
+#          --seccomp-profile=/etc/docker/seccomp.json \
+          $OPTIONS \
+          $DOCKER_STORAGE_OPTIONS \
+          $DOCKER_NETWORK_OPTIONS \
+          $ADD_REGISTRY \
+          $BLOCK_REGISTRY \
+          $INSECURE_REGISTRY \
+          $REGISTRIES
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=1048576
+LimitNPROC=1048576
+LimitCORE=infinity
+TimeoutStartSec=0
+Restart=on-abnormal
+MountFlags=slave
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                        
+
+
+Côté client :
+--------------
+
+$ docker -H IP_du_serveur:2375 ps -a
+
+
+En direct OU dans le .bashrc de chaque utilisateur :
+
+export DOCKER_HOST=IP_du_serveur:2375
+(dispense du -H @IP dans les futures commandes)
+Nota Bene : un utilisateur local du serveur devra AUSSI se connecter via 
+le socket réseau et non plus en local).
+
+
+
+Une fois que vous pouvez exécuter des containers sur UN AUTRE hôte, vous pouvez par exwemple
+le mettre à disposition d'une équipe de développement pour qu'elle dispose d'environnements de tests
+volatils, jetables et réutilisables sur un serveur dédié !
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Un Dockerfile pour se créer un environnement de dev idéal :
+
+#################################################################"
+FROM ubuntu:16.04
+
+RUN apt-get update -y
+RUN apt-get install -y mercurial
+RUN apt-get install -y git
+RUN apt-get install -y python
+RUN apt-get install -y curl
+RUN apt-get install -y vim
+RUN apt-get install -y strace
+RUN apt-get install -y diffstat
+RUN apt-get install -y pkg-config
+RUN apt-get install -y cmake
+RUN apt-get install -y build-essential
+RUN apt-get install -y tcpdump
+RUN apt-get install -y screen
+
+# Install go
+RUN curl https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz | tar -C /usr/local -zx
+ENV GOROOT /usr/local/go
+ENV PATH /usr/local/go/bin:$PATH
+
+# Setup home environment
+RUN useradd dev
+RUN mkdir /home/dev && chown -R dev: /home/dev
+RUN mkdir -p /home/dev/go /home/dev/bin /home/dev/lib /home/dev/include
+ENV PATH /home/dev/bin:$PATH
+ENV PKG_CONFIG_PATH /home/dev/lib/pkgconfig
+ENV LD_LIBRARY_PATH /home/dev/lib
+ENV GOPATH /home/dev/go:$GOPATH
+
+RUN go get github.com/dotcloud/gordon/pulls
+
+# Create a shared data volume
+# We need to create an empty file, otherwise the volume will
+# belong to root.
+# This is probably a Docker bug.
+RUN mkdir /var/shared/
+RUN touch /var/shared/placeholder
+RUN chown -R dev:dev /var/shared
+VOLUME /var/shared
+
+WORKDIR /home/dev
+ENV HOME /home/dev
+ADD vimrc /home/dev/.vimrc
+ADD vim /home/dev/.vim
+ADD bash_profile /home/dev/.bash_profile
+ADD gitconfig /home/dev/.gitconfig
+
+# Link in shared parts of the home directory
+RUN ln -s /var/shared/.ssh
+RUN ln -s /var/shared/.bash_history
+RUN ln -s /var/shared/.maintainercfg
+
+RUN chown -R dev: /home/dev
+USER dev
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+	REVERSE PROXY / TRAEFIK :
+_________________________________
+
+https://blog.osones.com/traefik-un-reverse-proxy-pour-vos-conteneurs.html
+
+https://blog.wecoprod.com/traefik-docker/
+
+https://docs.traefik.io/user-guides/docker-compose/basic-example/
+
+~~~~~~~~~ Exemple fonctionnel selon Vincent : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+version: "3.3"
+
+services:
+
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.mariadb.address=:3306"
+      - "--entrypoints.pma.address=:8888"
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "8888:8888"
+      - "3306:3306"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  webserver:
+    image: php:7.3-apache
+    links:
+      - mariadb
+    volumes:
+      - ./www:/var/www/html
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/vhosts:/etc/apache2/sites-enabled
+      - ./logs/apache2:/var/log/apache2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webserver.rule=Host(`192.168.20.XX`)"
+      - "traefik.http.routers.webserver.entrypoints=web"
+
+  mariadb:
+    image: mariadb:latest
+    volumes: 
+      - ./data/mysql:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
+      - ${DOCKER_RESOURCES}/SQL/:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: webserver
+      MYSQL_USER: webserver
+      MYSQL_PASSWORD: webserver
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mariadb.rule=Host(`192.168.20.65`)"
+      - "traefik.http.routers.mariadb.entrypoints=mariadb"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    volumes: 
+      - /sessions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pma.rule=Host(`192.168.20.XXX`)"
+      - "traefik.http.routers.pma.entrypoints=pma"
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Une conf fonctionnelle selon Jeremy : ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+version: '3.3'
+services:
+  traefik:
+    image: traefik:latest
+     command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80" 
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    #  - "$PWD/traefik.toml:/traefik.toml"
+  webserver:
+    image: php:7.3-apache
+       volumes:
+        - ./www:/var/www/html
+        labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webserver.rule=Host(`192.168.20.XXX`)"
+      - "traefik.http.routers.webserver.entrypoints=web"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports :
+      - "8090:80"
+    environment:
+      - MYSQL_USERNAME=formation
+      - MYSQL_PASSWORD=formation
+    networks:
+      - database
+  
+  db:
+    image: mysql:5.7
+    volumes:
+       - lampvolume:/var/lib/mysql
+    ports:
+       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: formation
+      MYSQL_DATABASE: lamp
+      MYSQL_USER: formation
+      MYSQL_PASSWORD: formation
+    networks:
+      - database
+  
+networks:
+    database:
+
+volumes:
+    volumetest:
+    lampvolume:
+   
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+	Docker Swarm :
+______________________
+
+
+
+	INSTALLATION :
+______________________
+
+
+ Trois VMs Virtualbox distinctes :
+
+ 1 VM Leader	( 192.168.20.114 pour moi, à adapter ! )
+ 2 VM Worker	( 192.168.20.115 et 192.168.20.116 )
+
+- Renseignez les fichiers hosts sur chaque VM !
+- changez de hostname sur chaque vm pour avoir leader, worker1 et worker2 :
+
+192.168.20.114  leader
+192.168.20.115  worker1
+192.168.20.116  worker2
+
+
+
+	Sur chaque VM : 
+
+	Désactivez SElinux dans /etc/sysconfig/selinux (!!)
+	Désactivez firewalld ( systemctl stop + disable firewalld )
+	iptables -F
+	iptables -X
+	cd /tmp	
+	curl -sSL https://get.docker.com/ | sh
+	systemctl enable --now docker
+	usermod -aG docker $USER
+
+curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+
+
+Créez le fichier /etc/docker/daemon.json :
+
+ {"hosts": ["tcp://0.0.0.0:2375", "unix:///var/run/docker.sock"]}
+
+Créez le répertoire /etc/systemd/system/docker.service.d/
+
+et dedans le fichier /etc/systemd/system/docker.service.d/override.conf
+
+contenant :
+
+[Service]
+ ExecStart=
+ ExecStart=/usr/bin/dockerd
+
+
+Démarrez (ou redémarrez) docker normalement
+systemctl enable --now docker
+systemctl restart docker
+
+
+
+Il est possible de faire tout ça sur une seule VM, puis de la cloner (clone intégral), après quoi il suffira de 
+modifier le hostname et l'@IP.
+
+
+ SNAPSHOTEZ !!!
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+1 - sur le LEADER :
+
+
+Démarrez un Swarm sur "leader" (adaptez l' IP ! ) :
+
+docker swarm init --advertise-addr @IP
+
+Récupérez la commande avec le n° de token :
+
+docker swarm join --token SWMTKN-1-0vzba1rs9wgzurzk9u5si1lkgsqtspm1gwmp74h-4v19x49v3xl2o62q4lgalfee1 192.168.20.114:2377
+
+
+Recopiez-la sur chacun des deux nœuds secondaires.
+Vous devez obtenir en réponse :
+
+This node joined a swarm as a worker.
+
+
+Vérifiez la configuration sur le manager primaire en utilisant les commandes ci-dessous :
+
+docker node ls
+docker -H 192.168.20.114 info
+
+Un premier test pour lancer un service nginx (sur le leader) :
+
+
+docker service create --name NGINX --replicas 2 --publish 80:80 nginx
+
+
+On voit nginx s'exécuter sur les trois nœuds dans un navigateur, à :
+
+http://192.168.20.114/
+http://192.168.20.115/
+http://192.168.20.116/
+
+
+Pour voir le service :
+
+docker node ps leader
+docker node ps worker1
+docker node ps worker2
+
+
+
+On peut voir le service passer d'un nœud à l'autre :
+avec docker node ps, voyez sur quel nœud le service s'exécute.
+sur ce nœud, tapez :
+
+systemctl stop docker
+
+
+puis après quelques secondes, tapez 'docker node ps sur l'autre nœud.
+Vous devriez voir le service lancé sur cet autre nœud.
+Le service reste en permanence accessible depuis le leader.
+
+
+pour supprimer le service :
+
+docker service rm NGINX
+
+
+
+	T.P. 1 :
+________________
+
+Réaliser cette opération avec le docker-compose de LAMP (SANS TRAEFIK)
+
+On va récupérer (via scp par ex.) le docker-compose.yml qui a démarré un LAMP 
+(plus haut), et recommencer en lançant cette fois une STACK :
+
+
+docker stack deploy mastack --compose-file docker-compose.yml
+
+
+
+On vérifie avec :
+
+docker service ls
+
+On l'arrête avec : 
+
+docker stack rm mastack
+
+
+
+Pour administrer le tout, j'ai lancé (sur le leader) :
+
+
+
+Comment répartir la charge, ex : 1 container db sur worker1, 1 autre container (web) sur worker2 ? 
+
+Adaptez la config suivante à la stack LAMP :
+
+https://upcloud.com/community/tutorials/load-balancing-docker-swarm-mode/
+
+
+Comment lancer un portainer pour superviser le tout ?
+
+
+Alexis :
+
+https://portainer.readthedocs.io/en/stable/deployment.html
+$ curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+$ docker stack deploy --compose-file=portainer-agent-stack.yml portainer
+
+
+Jeremy :
+
+
+Portainer Docker Swarm ( service) :
+docker service create \
+ --name portainer \
+--publish 9000:9000 \
+--constraint 'node.role == manager' \
+ --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+portainer/portainer \
+-H unix:///var/run/docker.sock
+
+
+
+
+
+Portainer Docker Swarm ( service) :
+
+docker service create --name portainer --publish 9000:9000 --constraint 'node.role == manager' --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock portainer/portainer -H unix:///var/run/docker.sock
+
+
+
+
+
+
+	Sécurité : 
+__________________
+
+
+Docker content Trust :
+
+sudo export DOCKER_CONTENT_TRUST=1
+Après ceci, si vous tentez de 'puller' une image non signée,
+Docker vous mettra en garde.
+
+
+Pour limiter l'espage mémoire d'un conteneur à 1Go RAM, 
+lancez-le avec l'option :
+ --memory="1000M"
+
+
+Vous pouvez aussi limiter le nombre de coeurs CPUs accessibles 
+à un conteneur avec l'option :
+
+--cpus=X (Où X est le nombre de CPUs que vous mettez à disposition 
+	 de votre conteneur).
+
+
+
+	Docker et SELinux :
+___________________________
+
+The contexts that apply to docker are defined in the lxc_contexts file:
+
+$ cat /etc/selinux/targeted/contexts/lxc_contexts
+
+process = "system_u:system_r:container_t:s0"
+content = "system_u:object_r:virt_var_lib_t:s0"
+file = "system_u:object_r:container_file_t:s0"
+ro_file="system_u:object_r:container_ro_file_t:s0"
+sandbox_kvm_process = "system_u:system_r:svirt_qemu_net_t:s0"
+sandbox_kvm_process = "system_u:system_r:svirt_qemu_net_t:s0"
+sandbox_lxc_process = "system_u:system_r:container_t:s0"
+
+
+https://www.mankier.com/8/docker_selinux
+https://rhelblog.redhat.com/2017/01/13/selinux-mitigates-container-vulnerability/
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/container_security_guide/docker_selinux_security_policy
+
+
+# setsebool -P docker_connect_any 1
+
+
+
+	Docker pour Windows :
+_____________________________
+
+Installer Docker sous Windows :
+
+https://docs.docker.com/docker-for-windows/install/#where-to-go-next
+
+
+Boot2Docker pour windows :
+
+https://github.com/boot2docker/windows-installer/releases
+
+
+Il est utile de télécharger et d'utiliser le Hardware-assisted Virtualization Detection Tool :
+
+https://www.microsoft.com/en-us/download/details.aspx?id=592
+
+
+
+
+
+
+	RANCHER :
+_________________
+
+Rancher, projet open-source créé par la société Rancher Labs est un outil gratuit d’orchestration de conteneurs Docker. Il permet de facilement déployer des conteneurs Docker sur des machines possédant Docker.
+( comparable à portainer ).
+
+sudo docker run -d --restart=always -p 8080:8080 rancher/server
+
+
+Add a host --> valider.
+
+Au paragraphe 4, spécifier l'adresse IP du 1er worker.
+
+AVANT de cliquer close, copier-coller au paragraphe 5 la (looongue) ligne docker run :
+
+sudo docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/rancher:/var/lib/rancher rancher/agent:v1.2.10 http://192.168.20.114:8080/v1/scripts/9AEC3ED8472990F6F986:1514678400000:CaHmDR5cLjUnxodn0W1QdqqVa0
+
+Recommencer avec le worker 2.
+
+Une fois tous les nœuds paramétrés, cliquez Close
+
+Dans Infrastructure, vous voyez alors votre Cluster.
+
+
+
+
+
+
+
+
+
+
+	Liens :
+_______________
+
+
+https://docs.docker.com/engine/userguide/   !!!!!!!!!!!!!!!
+
+https://github.com/wsargent/docker-cheat-sheet
+
+https://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy/
+
+https://csabapalfi.github.io/random-docker-tips/
+
+https://www.ctl.io/developers/blog/post/15-quick-docker-tips	
+
+https://www.techrepublic.com/article/how-to-install-and-use-portainer-for-easy-docker-container-management/ !!!!
+
+
+
+
+
+		Dans les Dockerfile :
+______________________________________
+
+https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
+
+http://crosbymichael.com/dockerfile-best-practices.html
+
+http://crosbymichael.com/dockerfile-best-practices-take-2.html
+
+http://www.projectatomic.io/docs/docker-image-author-guidance/
+
+http://putaindecode.io/fr/articles/docker/dockerfile/
+
+
+
+		Docker-compose :
+_______________________________
+
+
+
+La référence Docker Compose :
+
+https://docs.docker.com/compose/compose-file/
+
+
+Des exemples de docker-compose.yml :
+
+https://docs.docker.com/compose/samples-for-compose/
+
+
+
+	Volumes :
+_________________
+
+
+https://docs.docker.com/engine/reference/commandline/run/#attach-to-stdinstdoutstderr--a
+
+https://docs.docker.com/storage/volumes/#use-a-volume-driver
+
+https://github.com/kubernetes/kompose/issues/176
+
+
+
+
+
+
+	GÉNÉRALITÉS :
+_____________________
+
+https://en.wikipedia.org/wiki/Linux_Foundation#Cloud_Native_Computing_Foundation
+
+Standard container manifesto :
+https://github.com/moby/moby/commit/0db56e6c519b19ec16c6fbd12e3cee7dfa6018c5
+
+https://guillaumebriday.fr/comprendre-et-mettre-en-place-docker
+
+https://code.i-harness.com/fr/q/1bbaae2
+
+https://mondedie.fr/d/7164-Tuto-Utilisation-de-Docker
+
+https://github.com/itwars/docker-swarm
+
+
+https://techan.fr/categories/trucs-et-astuces/page/2.html
+
+https://techan.fr/docker-chasse-a-lespace-perdu-gare-aux-volumes.html
+
+https://guillaumebriday.fr/comprendre-et-mettre-en-place-docker
+
+https://code.i-harness.com/fr/q/1bbaae2
+
+https://mondedie.fr/d/7164-Tuto-Utilisation-de-Docker
+
+https://github.com/itwars/docker-swarm
+
+
+
+
+	Trucs & Astuces :
+_________________________
+
+
+https://github.com/pierpo/fzf-docker	( !!! )
+
+
+alias drm="docker rm"
+alias dps="docker ps -a"
+alias dockimg="docker images | uniq -f 3"
+alias dockps="docker ps -a | less -S"
+alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1"
+alias docklog="docker logs -f -t $1"
+alias dockstat="docker stats $1"
+alias dockrmimg="docker images -aq -f dangling=true | xargs docker rmi"
+alias dockkillall="docker ps -q | xargs docker kill"
+
+
+alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+
+
+Exporter un container au format tar.gz :
+
+docker export id_du_container > mon_container.tgz
+
+Importer un tar.gz :
+
+cat mon_container.tgz | docker import - mon_container
+
+
+Un script de Vincent qui reprend l'affichage de docker ps -a avec plus d'options, et notamment les adresses IP ( !!) :
+
+# vim /usr/local/bin/dockpsip
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#!/bin/env bash
+
+
+function __docker_reoutput()
+{
+	# Retrieving full list from Docker PS (All)
+	DPSA=()
+	IDS=()
+	mapfile -t IDS < <( docker ps -a --format "{{.ID}}" )
+	mapfile -t DPSA < <( docker ps -a --format "{{.ID}}\t\t\t{{.Image}}\t\t\t{{.Names}}" )
+
+	for I in $(seq -s' ' 0 $((${#DPSA[@]} - 1)))
+	do
+		IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${IDS[$I]})
+
+		printf "%s \t\t\t%s\n" "${DPSA[$I]}" "${IP}"
+	done
+}
+
+__docker_reoutput
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# chmod +x /usr/local/bin/dockpsip
+
+# dockpsip
+
+
+alias drm="docker rm"
+​alias dps="docker ps"
+​alias dl='docker ps -l -q'
+
+
+Une fonction pour créer un nouveau conteneur, et s'y rattacher :
+
+function newbox () {
+    docker run --name $1 --volumes-from=volume_container -it -v /var/run/docker.sock:/var/run/docker.sock -e BOX_NAME=$1 nathanleclaire/devbox
+}
+
+
+Voir les logs d'un conteneur :
+
+docker logs <container_name> -f
+
+
+
+
+Sauvegardez vos conteneurs avec une commande telle que celle-ci :
+
+docker run --rm -v /tmp:/backup --volumes-from <container-name> busybox tar -cvf /backup/backup.tar <path-to-data>
+
+Puis restaurez avec :
+
+docker run --rm -v /tmp:/backup --volumes-from <container-name> busybox tar -xvf /backup/backup.tar <path-to-data>
+
+
+
+
+Nice Docker ps output :
+docker ps -a | less -S
+
+
+
+Trouver l'@IP d'un conteneur :
+
+$ docker inspect --format '{{ .NetworkSettings.IPAddress }}' CONTAINER_ID
+	
+
+
+
+Accéder à un conteneur déjà lancé : 
+
+$ docker exec -it CONTAINER_ID bash
+
+
+
+Sortir d'un container en faisant un commit des changements :
+
+Maintenant que le conteneur a été modifié, il faut faire un commit.
+Sortez d'abord du conteneur avec la commande "exit".
+
+Pour faire un commit des changements et créer une nouvelle image comprenant les changements
+en question, passez la commande :
+
+$ docker commit CONTAINER_ID template_de_mon_conteneur
+
+
+
+alias dockercleancontainers="docker ps -aq | xargs docker rm"
+alias dockercleanimages="docker images -aq -f dangling=true | xargs docker rmi"
+alias dockerclean="dockercleancontainers && dockercleanimages"
+alias docker-killall="docker ps -q | xargs docker kill"
+
+
+
+# runs docker exec in the latest container
+function docker-exec-last {
+  docker exec -ti $( docker ps -a -q -l) /bin/bash
+}
+
+
+
+
+function docker-get-ip {
+  # Usage: docker-get-ip (name or sha)
+  [ -n "$1" ] && docker inspect --format "{{ .NetworkSettings.IPAddress }}" $1
+}
+
+
+
+
+
+function docker-get-state {
+  # Usage: docker-get-state (friendly-name)
+  [ -n "$1" ] && docker inspect --format "{{ .State.Running }}" "$1"
+}
+
+
+
+
+function docker-memory {
+  for line in `docker ps | awk '{print $1}' | grep -v CONTAINER`; do docker ps | grep $line | awk '{printf $NF" "}' && echo $(( `cat /sys/fs/cgroup/memory/docker/$line*/memory.usage_in_bytes` / 1024 / 1024 ))MB ; done
+}
+# keeps the commmand history when running a container
+function basher() {
+    if [[ $1 = 'run' ]]
+    then
+        shift
+        docker run -e HIST_FILE=/root/.bash_history -v $HOME/.bash_history:/root/.bash_history "$@"
+    else
+        docker "$@"
+    fi
+}
+# backup files from a docker volume into /tmp/backup.tar.gz
+function docker-volume-backup-compressed() {
+  docker run --rm -v /tmp:/backup --volumes-from "$1" debian:jessie tar -czvf /backup/backup.tar.gz "${@:2}"
+}
+# restore files from /tmp/backup.tar.gz into a docker volume
+function docker-volume-restore-compressed() {
+  docker run --rm -v /tmp:/backup --volumes-from "$1" debian:jessie tar -xzvf /backup/backup.tar.gz "${@:2}"
+  echo "Double checking files..."
+  docker run --rm -v /tmp:/backup --volumes-from "$1" debian:jessie ls -lh "${@:2}"
+}
+# backup files from a docker volume into /tmp/backup.tar
+function docker-volume-backup() {
+  docker run --rm -v /tmp:/backup --volumes-from "$1" busybox tar -cvf /backup/backup.tar "${@:2}"
+}
+# restore files from /tmp/backup.tar into a docker volume
+function docker-volume-restore() {
+  docker run --rm -v /tmp:/backup --volumes-from "$1" busybox tar -xvf /backup/backup.tar "${@:2}"
+  echo "Double checking files..."
+  docker run --rm -v /tmp:/backup --volumes-from "$1" busybox ls -lh "${@:2}"
+}
+
+
+
+Supprimer tout les containers arrêtés :
+docker rm $(docker ps -a -q) 
+
+Si certains containers sont encore actifs en tant que deamon, vous pouvez ajouter le paramètre -f afin de forcer la suppression
+​
+Supprimer toutes les images
+docker rmi $(docker images -q) 
+
+Supprimer toutes les images sans tag
+docker rmi $(docker images | grep "^" | awk "{print $3}") 
+
+Supprimer tout les volumes
+docker volume rm $(docker volume ls -qf dangling=true) 
+
+Supprimer un container après son exécution
+docker run --rm [OPTIONS] &lt;CONTAINER_ID|CONTAINER_NAME&gt; 
+
+Afficher les derniers containers lancés
+docker ps -l docker ps -n X 
+
+La paramètre -l affiche uniquement un seul container
+
+Le paramètre -n, permet de voir les derniers X containers
+​
+Afficher les logs d’un container
+
+
+docker logs -f &lt;CONTAINER_ID|CONTAINER_NAME&gt; 
+
+Le paramètre -f permet d’avoir les logs en continu. Quand vous avez fini, vous pouvez faire CTRL+C
+
+Le paramètre -t permet d’avoir le timestamp
+​
+Afficher les stats des containers
+
+
+docker stats [CONTAINER_ID|CONTAINER_NAME] 
+
+Sans option, stats affiche tout les containers
+​
+Entrer dans un docker
+
+
+docker exec -it &lt;CONTAINER_ID|CONTAINER_NAME&gt; bash 
+
+Pour Alpine Linux, il faut remplacer bash par sh
+​
+
+
+
+
+	DOCKERIGNORE :
+______________________
+
+# .dockerignore :
+
+#
+# General syntax for .dockerignore files :
+#
+
+# Pattern:
+# { term }
+# term:
+# '*' matches any sequence of non-Separator characters
+# '?' matches any single non-Separator character
+# '[' [ '^' ] { character-range } ']'
+# character class (must be non-empty)
+# c matches character c (c != '*', '?', '\\', '[')
+# '\\' c matches character c
+#  
+# character-range:
+# c matches character c (c != '\\', '-', ']')
+# '\\' c matches character c
+# lo '-' hi matches character c for lo &lt;= c &lt;= hi
+#  
+# additions:
+# '**' matches any number of directories (including zero)
+# '!' lines starting with ! (exclamation mark) can be used to make exceptions to exclusions
+# '#' lines starting with this character are ignored: use it for comments
+#  
+# Note: Using the ! character is pretty tricky. The combination of it and pa
+# 
+
+
+# Git files
+
+.git
+.gitignore
+
+
+### Eclipse template
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+### Vim template
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+### Node template
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+core
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directory
+# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
+node_modules
+### Linux template
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+### NetBeans template
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.nb-gradle/
+### SublimeText template
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+# *.sublime-project
+
+# sftp configuration file
+sftp-config.json
+### Windows template
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+### OSX template
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+### NotepadPP template
+*.bak
+### Xcode template
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## Build generated
+build/
+DerivedData
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+
+## Other
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+
+
+
+
+
+
+

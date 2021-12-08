@@ -1,0 +1,188 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+
+	L.P.I.        :
+_______________________
+
+
+Historique d'UNIX & de Linux :
+
+Premier message sur la naissance de Linux :
+
+https://fr.wikisource.org/wiki/Naissance_de_Linux
+
+
+
+
+
+Que signifie Unix ?
+Uniplexed Information and Computing System.
+
+
+
+	Les catégories de man :
+_______________________________
+
+       1   Programmes exécutables ou commandes de l'interpréteur de commandes (shell)
+       2   Appels système (fonctions fournies par le noyau)
+       3   Appels de bibliothèque (fonctions fournies par les bibliothèques des programmes)
+       4   Fichiers spéciaux (situés généralement dans /dev)
+       5   Formats des fichiers et conventions. Par exemple /etc/passwd
+       6   Jeux
+       7   Divers (y compris les macropaquets et les conventions), par exemple man(7), groff(7)
+       8   Commandes de gestion du système (généralement réservées au superutilisateur)
+       9   Sous-programmes du noyau [hors standard]
+
+
+
+
+	Questionnaire 1 :
+_________________________
+
+
+
+Trouver de l’aide
+
+Q1. Citer des sources de documentation
+Q2. Quelle commande permet d’accéder aux pages de manuel ?
+Q3. Chercher la commande printf et variantes dans les pages de manuel
+Q4. Observer la différence entre printf(1) et printf(3)
+Q5. À quoi sert la commande rm ?
+
+
+Le shell
+
+Q1. Quel est le shell que vous utilisez actuellement ?
+Q2. Citez d’autres shell.
+Q3. Que vous permet de faire un shell ?
+Q4. Syntaxe générale des commandes ?
+Q5. Comment chaîner des commandes ?
+Q6. Afficher du texte ?
+Q7. Comment savoir si une commande est exécutée par le shell ou par un
+programme “réel” ?
+Q8. À quoi servent ces raccourcis ?
+CTRL+C ? CTRL+Z ? CTRL+D ?
+Q9. Comment accéder à l’historique ?
+Q10. Comment rappeler une commande via fc ?
+
+
+Arborescence et gestion des fichiers :
+
+Q1. Fonction des dossiers à la racine du système de fichier ?
+Q2. Quels sont les trois grands types de fichiers sous Unix/Linux ?
+Q3. Limitations/spécificités sur les noms des fichiers ?
+Q4. Comment accéder à des fichiers/dossiers de façon absolue ? Relative ?
+Q5. À quoi peut servir “~” ?
+Q6. Présentez un exemple de chemin de dossiers que vous
+pourriez utiliser
+
+
+Copie
+
+Q1. Copier tous les fichiers d’un dossier et ce dossier
+Q2. Copie en préservant les dates et droits
+Q3. Forcer la copie si impossible
+Q4. Afficher ce qui est fait
+
+Déplacement
+
+Q1. Renommer un fichier
+Q2. Déplacer un répertoire
+Q3. Demander confirmation
+Q4. Ne pas demander confirmation pour réécriture
+Se déplacer dans les répertoires
+Q1. Déplacez-vous à la racine
+Q2. Retournez dans votre $HOME sans saisir le chemin complet
+Q3. Aller au répertoire parent
+
+Utilisation de motifs dans les commandes
+
+Q1. Créer des fichiers aa -> cc
+Q2. Lister les fichiers se terminant par ‘c’
+Q3. Lister les fichiers se terminant par ‘c’ et ne commençant pas par ‘b’
+Q4. Créer les fichiers ‘*test*’, ‘test*test’, ‘te*stte*st’
+Q5. Lister les fichiers comprenant un ‘*’ quelque part au milieu du nom
+mais pas au début
+Q6. Lister les fichiers commençant par ’*’
+
+
+
+
+
+
+
+
+
+All bytes except NUL ('\0') and '/' and the special file names "." and ".." which are not forbidden but are always used for a respective special purpose.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

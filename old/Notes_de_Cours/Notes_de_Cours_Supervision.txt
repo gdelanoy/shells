@@ -1,0 +1,896 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Supervision	:
+_________________________
+
+
+
+	Différents produits :
+______________________________
+
+Usage local :
+
+
+sensors	 (lm-sensors)	#	température CPU
+hddtemp			# 	température des disques
+top / htop		#	Charge CPU + processus
+free -h			# 	Occupation RAM
+df -f			# 	Espace libre sur le filesystem
+du -h .			#	Espace occupé sur une partie donnée du filesystem.
+
+glances			#	Une synthèse de ces informations.
+
+
+
+
+
+Une interface simple des informations générales d'une machine : Cockpit.
+________________________________________________________________________
+
+
+
+# yum install cockpit
+# systemctl enable cockpit
+# systemctl start cockpit
+
+--> http://<@_IP>:9090/  (login d'un utilisateur du système).
+
+
+
+SNMP & SNMPWalk :
+_________________________
+
+Les OID des MIBs : 
+https://www.alvestrand.no/objectid/1.3.6.1.2.1.2.2.1.html
+
+Snmpget permet de récupérer la valeur d’un OID feuille 
+alors que snmpwalk permet de récupérer toutes les valeurs d’un OID « noeud ».
+
+
+Avec snmpget, vous récupérez une et une seule valeur : 
+la valeur de l’OID demandée.
+
+Syntaxe de snmpwalk :
+
+snmpwalk -v <laversion> -c <lacommunaute> <adresseip> <oid>
+
+snmpwalk -v 2c -c public 192.168.20.245 1.3.6.1.2.1.2.2.1.10
+
+
+Syntaxe de snmpget :
+
+snmpget -v <laversion> -c <lacommunaute> <adresseip> <oid>
+snmpget -v 2c -c public 192.168.20.245 1.3.6.1.2.1.2.2.1.10.1
+
+
+	T.P. : Installer snmpd sur une VM Linux, puis l'interroger depuis le poste physique.
+____________________________________________________________________________________________
+
+
+Quelques infos ici :
+
+https://www.it-connect.fr/installation-de-snmp-sous-linux/
+
+
+yum -y install net-snmp net-snmp-utils
+
+systemctl start snmpd
+systemctl status snmpd
+
+
+cp /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf.orig
+
+
+vim /etc/snmp/snmpd.conf
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~ etc/snmp/snmpd.conf ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Map 'idv90we3rnov90wer' community to the 'ConfigUser'
+# Map '209ijvfwer0df92jd' community to the 'AllUser'
+#       sec.name        source          community
+com2sec ConfigUser      default         idv90we3rnov90wer
+com2sec AllUser         default         209ijvfwer0df92jd
+# Map 'ConfigUser' to 'ConfigGroup' for SNMP Version 2c
+# Map 'AllUser' to 'AllGroup' for SNMP Version 2c
+#                       sec.model       sec.name
+group   ConfigGroup     v2c             ConfigUser
+group   AllGroup        v2c             AllUser
+# Define 'SystemView', which includes everything under .1.3.6.1.2.1.1 (or .1.3.6.1.2.1.25.1)
+# Define 'AllView', which includes everything under .1
+#                       incl/excl       subtree
+view    SystemView      included        .1.3.6.1.2.1.1
+view    SystemView      included        .1.3.6.1.2.1.25.1.1
+
+view    AllView         included        .1
+
+# Give 'ConfigGroup' read access to objects in the view 'SystemView'
+# Give 'AllGroup' read access to objects in the view 'AllView'
+#                       context model   level   prefix  read            write   notify
+access  ConfigGroup     ""      any     noauth  exact   SystemView      none    none
+access  AllGroup        ""      any     noauth  exact   AllView         none    none
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tester :
+
+snmpwalk -v 2c -c idv90we3rnov90wer -O e 127.0.0.1
+
+snmpwalk -v 2c -c 209ijvfwer0df92jd -O e 127.0.0.1
+
+La compréhension des OID et MIB peut être difficile lorsque l'on aborde SNMP, 
+j'ai pour habitude d'utiliser l'option "-On" de snmpwalk qui permet d'afficher les OID dans leur forme numérique, qui sont plus facile à écrire.
+
+
+
+
+
+
+
+
+	Centreon.
+_________________
+
+
+/!\ L'installation de Centreon est INCOMPATIBLE avec epel-release!
+PAS de yum install epel-release, faute de devoir réinstaller le système pour les besoins
+de cet atelier !
+
+
+Il est recommandé de désactiver SElinux au moins durant l'installation,
+et d'adapter la configuration de firewalld / IPtables ! 
+
+
+		INSTALLATION DU SERVEUR :
+_________________________________________
+
+
+Méthode 1 : Téléchargement de l'iso de Centreon pour installation :
+___________________________________________________________________
+
+wget http://iso.download.centreon.com/stable/3.3/ces-standard-3.3-x86_64.iso
+
+Ou plus récent : 
+https://download.centreon.com/
+
+Graver l’image ISO sur une clé USB :
+
+dd if=ces-standard-3.3-x86_64.iso of=/dev/sdx bs=4M && sync
+
+N.B. : Vous pouvez aussi tout simplement créer une VM et booter sur l'iso.
+
+...
+
+
+
+
+
+
+
+Méthode 2 : Installation sur une CentOS 7 à partir du REPO Centreon * :
+_______________________________________________________________________
+
+(*) C'est la méthode requise pour les TP de ce module de formation.
+
+
+
+
+
+# yum install centos-release-scl
+
+# wget http://yum.centreon.com/standard/18.10/el7/stable/noarch/RPMS/centreon-release-18.10-2.el7.centos.noarch.rpm -O /tmp/centreon-release-18.10-2.el7.centos.noarch.rpm
+
+# yum install --nogpgcheck /tmp/centreon-release-18.10-2.el7.centos.noarch.rpm
+
+# yum install centreon
+
+
+
+# systemctl enable mariadb
+
+# systemctl restart mariadb
+
+# mysql_secure_installation
+
+
+
+
+
+# mkdir -p  /etc/systemd/system/mariadb.service.d/
+
+# echo -ne "[Service]\nLimitNOFILE=32000\n" | tee /etc/systemd/system/mariadb.service.d/limits.conf
+
+# systemctl daemon-reload
+
+# systemctl restart mariadb
+
+
+
+
+
+
+Dans /etc/php.ini :
+
+date.timezone Europe/Paris
+
+
+Et aussi  :
+
+echo "date.timezone = Europe/Paris" > /etc/opt/rh/rh-php71/php.d/php-timezone.ini
+
+
+On désactive le firewall durant la configuration. Il pourra être remis en marche -et configuré ! en fin d'installation.
+
+# systemctl stop firewalld
+
+#  systemctl disable firewalld
+
+#  systemctl status firewalld
+
+
+
+
+On active et l'on démarrre tous les services requis :
+
+
+
+# systemctl enable  httpd
+
+# systemctl enable  snmpd
+
+# systemctl enable  snmptrapd
+
+# systemctl enable cbd
+
+# systemctl enable rh-php71-php-fpm
+
+# systemctl enable centcore
+
+# systemctl enable centreontrapd
+
+# systemctl enable centengine
+
+# systemctl enable  centreon
+
+# systemctl start rh-php71-php-fpm
+
+# systemctl restart httpd
+
+# systemctl start cbd
+
+# systemctl restart mariadb
+
+# systemctl start snmpd
+
+# systemctl restart snmptrapd
+
+
+
+
+Il est nécessaire de donner un mot de passe à l'utilisateur "centreon" avant de finaliser l'installation.
+Pour cela, connectez-vous localement ou en ssh au serveur, et tapez :
+
+
+# passwd centreon
+
+Entrez un mot de passe, et confirmez.
+
+
+
+
+En outre et pour des raisons de sécurité, les utilisateurs centreon, centreon-broker et centreon-engine ne doivent pas disposer d'un shell interactif.
+
+Pour corriger cela, éditez /etc/passwd , et à la fin des lignes de ces deux utilisateurs, remplacez /bin/bash par /bin/false .
+
+
+
+
+
+
+Finaliser l'installation sur l'interface web : 
+
+http://[SERVER_IP]/centreon
+
+Renseigner les champs requis (par défaut la plupart du temps).
+
+Pour le mot de passe de l'utilisateur centreon, connectez-vous en ssh au serveur
+et renseignez explicitement un mot de passe (passwd) AVANT de le confirmer dans 
+l'interface web (!!!!) .
+
+Et, par sécurité :
+
+reboot
+
+Contôlez que tout fonctionne normalement au reboot.
+
+
+Si le service rh-php71-php-fpm ne redémarre pas de lui-même, pensez à désactiver (à nouveau) SElinux
+puis relancez-le à la main
+
+
+
+La doc de référence :
+
+https://documentation-fr.centreon.com/docs/centreon/en/latest/configuration_guide/index.html
+
+
+Aller dans les paramètres du compte admin, passer la langue à
+
+fr_FR_UTF8, et valider (save).
+
+
+Cliquez sur votre profil utilisateur en haut à droite de l’interface
+Cliquez sur le bouton Edit profile
+Dans le champ Language, remplacez en_US par fr_FR.UTF-8
+Configurez la timezone sur Europe / paris
+Cliquez sur Save
+
+
+État du poller et du central :
+Rendez-vous à la page Configuration --> Poller --> Poller ( ou "collecteurs" en français)
+
+
+##################################################################################################
+À chaque fois que vous aurez modifié la façon dont le serveur Centreon collecte de l'information, 
+il faudra revenir ici faire prendre en compte les modifications, en cochant Central, puis Export Configuration.
+ Là vous cochez les quatres premières options, vous choisissez Restart, et vous validez.
+##################################################################################################
+
+
+Résolution de bugs mineurs :
+La manipulation précédente peut demander à être faite deux fois (ou patienter) pour que le poller soit en état running, ce qui est nécessaire.
+Si le service centreontrapd n'a pas démarré, remédiez-y ainsi :
+
+
+#   mv /etc/centreon/centreontrapd.pm /etc/centreon/centreontrapd
+
+# systemctl restart centreontrapd
+
+
+
+
+
+
+
+
+Activer les Plugin Packs :
+Rendez-vous à la page Administration --> extensions --> modules, et vérifiez que les modules sont en vert 
+(l'installation a été faite durant le setup ).
+Allez à la page Configuration --> Packs de plugins --> gestionnaire, et cochez tous ceux qui sont intéressants (grâce au petit +).
+ Attendez qu'apparaisse la coche verte avant de passer au suivant (ignorez autodiscovery) !
+
+
+
+
+Superviser le serveur via les plugins Centreon
+
+
+Allez dans Configuration --> hôte --> hôte
+
+Créez un hôte nommé localhost
+
+
+
+
+
+
+
+
+
+
+	NRPE :
+______________
+
+
+Nagios Remote Plugin Executor
+
+Nous avons deux installations distinctes à réaliser en fonction du rôle de la machine : supervision ou hôte.
+
+Côté serveur :
+
+#  yum install -y centreon-nrpe3-daemon
+
+# systemctl enable centreon-nrpe3
+
+# systemctl start centreon-nrpe3
+
+# systemctl status centreon-nrpe3
+
+
+Et la partie plugin, pour dialoguer avec le démon :
+
+
+# yum install centreon-nrpe3-plugin
+
+
+Pour tester, on peut interroger NRPE directement en ligne de commande :
+
+# /usr/lib/nagios/plugins/check_centreon_nrpe3 -H localhost
+
+
+Vous obtenez en réponse la version de nrpe : NRPE v3.2.1
+
+
+
+
+
+Une fois que ça marche en local, on va essayer de le faire fonctionner ...
+
+	sur une machine distante.
+_________________________________
+
+On installe le démon NRPE sur la VM :
+
+# setenforce 0
+
+# yum install -y nrpe nrpe-selinux nagios-plugins-all
+
+# systemctl enable nrpe
+
+# systemctl start nrpe
+
+# systemctl status -l nrpe
+
+
+
+# firewall-cmd --permanent --add-port=5666/tcp
+
+# firewall-cmd --reload
+
+
+On autorise le serveur à requêter sur le poste :
+
+# vim /etc/nagios/nrpe.cfg
+ 
+...
+allowed_hosts=127.0.0.1,@IP_du_Serveur_Centreon,::1
+...                     ^^^^^^^^^^^^^^^^^^^^^^^
+
+
+# systemctl restart nrpe
+
+# systemctl status -l nrpe
+
+
+
+Et le test se fait depuis le serveur de supervision :
+
+
+/usr/lib/nagios/plugins/check_centreon_nrpe3 -H @IP_de_mon_client
+Vous devez obtenir : NRPE v3.2.1
+
+
+
+Une fois qu'on en est là, on peut définir sur chaque hôte 
+les commandes que l'on va passer via NRPE.
+
+Éditez à nouveau /etc/nagios/nrpe.cfg
+Au bout du fichier,décommentez (ou modifiez ) :
+
+...
+command[check_load]=/usr/lib64/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+...
+
+
+Et relancez le démon NRPE.
+
+Puis, sur le serveur centreon, requêtez avec :
+
+# /usr/lib/nagios/plugins/check_centreon_nrpe3 -H @IP_client -c check_load
+                                               ^^^^^^^^^^^^^^   ^^^^^^^^^^ 
+
+Et une fois que ceci fonctionne, on va l'invoquer via l'interface de Centreon avec diverses options.
+
+
+	Configuration dans Centreon :
+_____________________________________
+
+Configuration --> commandes --> contrôles Ajoutez :
+Nom de commande : check_nrpe3
+Type de commande :
+
+
+/usr/lib/nagios/plugins/check_centreon_nrpe3 -H $HOSTADDRESS$ -p $_HOSTNRPEPORT$ -c $_SERVICECOMMAND$
+
+Puis on fait un template de service :
+
+Configuration --> Services --> Modèles
+Ajoutez "load_nrpe"
+Modèle : generic-active-service-custom
+Commande de vérification : la commande check_nrpe3 que vous venez de créer.
+Macro personnalisée : selon la commande, ici : check_load ( = ce qui se trouve dans mon nrpe.cfg sur les clients)
+
+
+Puis, créez un template d'hôte :
+
+Configuration --> Hôtes --> Modèles
+Ajoutez "os-linux-nrpe3"
+Modèle : generic-active-host-custom (permet d'embarquer le check_ping )
+
+
+Ne pas oublier l'onglet RELATIONS, pour y faire figurer le template de service qu'on vient de créer :
+
+Modèle de services liés : load_nrpe3
+et sauvegardez.
+
+
+Enfin, on crée un hôte à qui on va appliquer ce template :
+
+Nom / Alias / @ IP ... classique
+Modèle : le modèle qu'on vient de créer : "os-linux-nrpe3"
+et SURTOUT, cochez "oui" à "créer aussi les services liés aux modèles"  !!!
+
+Précisez bien le n° de port :
+
+NRPEPORT : 5666
+Rechargez les collecteurs.
+Enfin, allez vérifier dans "Supervision --> détails des status --> services --> tous ( et pas seulement OK)"
+
+
+
+
+Actions Génériques :
+
+https://documentation-fr.centreon.com/docs/centreon/en/2.8.x/configuration_guide/actions.html
+
+
+
+
+
+-----------------
+
+SUR LE SERVEUR
+créer la commande
+	nom: check_nrpe
+	commande: $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+	description des macros:
+		MACRO (SERVICE) PORT : MACRO (SERVICE) PORT :
+		MACRO (SERVICE) COMMAND : MACRO (SERVICE) COMMAND :
+
+créeer un hôte
+	nom: hote
+	alias: hote
+	ip: 192.168.20.XXX
+	modèle: generic-active-host-custom
+	commande: check_nrpe
+	periode: 24x7
+	interval normal: 1
+	interval non-régulier: 1
+
+créer un service
+	description: check_nrpecheck_load
+	lié: hote
+	modèle: generic-active-service-custom
+	commande: check_nrpe
+	arguments: ARG1 check_load
+	periode: 24x7
+	interval normal: 1
+	interval non-régulier: 1
+
+Allez dans configuration / Collecteurs
+Cochez Central
+Cliquez sur Export configuration
+Cochez les 4 premières cases puis redémarrez le moteur de supervision.
+
+L'indicateur de charge est ensuite visible dans Accueil / Custom views
+
+
+
+
+
+
+
+
+	SUR UN HÔTE À SUPERVISER :
+__________________________________
+
+
+Installation des plugins NRPE sur les clients (à sélectionner selon les besoins) :
+
+
+yum install nrpe nagios-plugins nagios-plugins-load nagios-plugins-disk \
+nagios-plugins-linux_raid nagios-plugins-ntp
+
+Il manque un plugin après installation : check_mem (check_mem.pl)
+Récupérer le check depuis le lien ci-dessous : 
+
+https://github.com/justintime/nagios-plugins/archive/master.zip
+
+Déposez-le dans:
+/usr/lib/nagios/plugins/
+Il faudra ensuite rendre ce fichier exécutable :
+chmod 755 /usr/lib/nagios/plugins/check_mem.pl
+
+
+
+Configuration côté client :
+
+Il y a deux fichiers de configuration pour NRPE : nrpe.cfg et nrpe_local.cfg
+
+nrpe.cfg => fichier de configuration global de NRPE (inclut nrpe_local.cfg)
+nrpe_local.cfg => fichier de configuration avancé (vide par défaut),
+c'est ici que nous ajouterons les commandes de checks à exécuter (plus compréhensible).
+
+La configuration par défaut n'est pas "valide" :
+
+il faut autoriser le serveur Nagios à consulter les résultats des checks
+il faut désactiver les checks déjà présents (les commenter).
+
+
+fichier nrpe.cfg :
+
+vim /etc/nagios/nrpe.cfg
+
+Si le dns est bien fait, le nom suffit, sinon renseigner l'adresse IP :
+
+allowed_hosts=127.0.0.1,srvnagios.mondomaine.local
+
+
+commenter les lignes: 
+
+#command[check_users]=/usr/lib/nagios/plugins/check_users -w 5 -c 10
+#command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+#command[check_hda1]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /dev/hda1
+#command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w 5 -c 10 -s Z
+#command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 150 -c 200 
+
+fichier nrpe_local.cfg :
+
+Ajout des checks :
+
+Pour le check_disk, vérifier la partition à surveiller (df -h),
+remplacer xxx par la partition souhaitée.
+
+vim /etc/nagios/nrpe_local.cfg
+command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25,20
+command[check_mem]=/usr/lib/nagios/plugins/check_mem.pl -u -C -w 75 -c 90
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /
+command[check_ntp]=/usr/lib/nagios/plugins/check_ntp_time -H ntp -w 1 -c 1.5
+
+
+Pour finir, on teste les différent checks (exemple pour mem) puis on redémarre NRPE.
+
+/usr/lib/nagios/plugins/check_mem.pl -u -C -w 75 -c 90
+
+/etc/init.d/nagios-nrpe-server restart
+
+
+
+
+
+
+
+
+
+
+	Zabbix.
+_______________
+
+https://wiki.monitoring-fr.org/zabbix/start
+
+INSTALLATION SERVEUR :
+______________________
+
+
+yum install epel-release
+
+yum update
+
+cd /tmp
+
+
+
+yum localinstall http://repo.zabbix.com/zabbix/3.5/rhel/7/x86_64/zabbix-release-3.5-1.el7.noarch.rpm
+
+yum install zabbix-server-mysql zabbix-agent zabbix-web-mysql mysql mariadb-server httpd php
+
+
+systemctl enable mariadb
+systemctl start mariadb
+
+mysql_secure_installation
+
+mysql -u root -p
+
+CREATE DATABASE zabbix;
+GRANT ALL privileges ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'monsupermotdepasse';
+FLUSH privileges;
+exit
+
+cd /usr/share/doc/zabbix-server-mysql-4.0.0/
+cp create.sql.gz /tmp
+cd /tmp
+gunzip create.sql.gz 
+mysql -u zabbix -p zabbix < create.sql
+
+
+sed -i 's/^max_execution_time.*/max_execution_time=600/' /etc/php.ini
+sed -i 's/^max_input_time.*/max_input_time=600/' /etc/php.ini
+sed -i 's/^memory_limit.*/memory_limit=256M/' /etc/php.ini
+sed -i 's/^post_max_size.*/post_max_size=32M/' /etc/php.ini
+sed -i 's/^upload_max_filesize.*/upload_max_filesize=16M/' /etc/php.ini
+sed -i "s/^\;date.timezone.*/date.timezone=\'Europe\/Paris\'/" /etc/php.ini
+
+
+cp /etc/zabbix/zabbix_server.conf ~
+
+vim /etc/zabbix/zabbix_server.conf 
+
+... et passer en revue les options.
+
+
+firewall-cmd --get-active-zones
+
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --zone=public --add-port=443/tcp --permanent
+firewall-cmd --zone=public --add-port=10050/tcp --permanent
+firewall-cmd --zone=public --add-port=10051/tcp --permanent
+
+setsebool -P httpd_can_connect_zabbix on
+setsebool -P zabbix_can_network on
+
+Pour info, toutes les variables SElinux pour zabbix peuvent être obtenues ainsi :
+
+getsebool -a | grep zabbix
+ 
+httpd_can_connect_zabbix --> on
+zabbix_can_network --> on
+
+
+systemctl enable zabbix-agent
+systemctl enable zabbix-server
+systemctl enable httpd
+
+systemctl start zabbix-agent
+systemctl start zabbix-server
+systemctl start httpd
+
+
+
+Lancer l'installation de zabbix via son interface web :
+
+
+Allez sur http://[Mon_Ip]/zabbix/ et suivez les instructions.
+
+....
+
+Finalement, connectez-vous avec le compte admin et le mot de passe "zabbix".
+
+N.B. : ce mot de passe peut (et doit !) être modifié ultérieurement dans la section 'Profil'.
+
+
+Finalement, éditez /etc/zabbix/zabbix_server.conf et modifiez les lignes suivantes :
+
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=Mon_mot_de_passe
+
+
+Et créez un ficher /etc/zabbix/zabbix_agentd.d/zext.conf qui contient :
+
+UserParameter=zext.packages.updates,/usr/lib/update-notifier/apt-check 2>&1 | cut -d';' -f1
+UserParameter=zext.packages.security,/usr/lib/update-notifier/apt-check 2>&1 | cut -d';' -f2
+UserParameter=reboot,find /var/run/ -name reboot-required | grep -c reboot-required
+
+
+Sauvegardez, relancez le client zabbix :
+
+systemctl restart zabbix-agent
+
+
+
+
+INSTALLATION CLIENT :
+_____________________
+
+yum install epel-release
+yum update
+
+http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-release-3.4-1.el7.centos.noarch.rpm
+
+yum install zabbix-agent
+
+
+sed -i 's/^Server=127.0.0.1/Server=192.168.20.244/g' /etc/zabbix/zabbix_agentd.conf
+sed -i 's/^ServerActive=127.0.0.1/ServerActive=/g' /etc/zabbix/zabbix_agentd.conf
+
+systemctl enable zabbix-agent
+systemctl start zabbix-agent
+
+
+
+
+
+	LIENS UTILES :
+______________________
+
+
+Centreon : 
+__________
+
+http://www.starmate.fr/installation-de-centreon-3-3/
+
+http://www.starmate.fr/centreon-et-nrpe/
+
+https://documentation-fr.centreon.com/docs/plugins-packs/en/latest/prerequisites.html
+
+https://www.supinfo.com/articles/single/2361-supervision-via-centreon-configuration
+
+https://dev.tranquil.it/wiki/Supervision_-_nrpe_installation
+
+https://download.centreon.com/
+
+https://memo-linux.com/installer-et-configurer-centreon-enterprise-3-3/
+
+https://www.clevernetsystems.com/centreon-2-7-x-red-hat-7-centos-7/
+
+https://documentation-fr.centreon.com/docs/centreon/en/2.8.x/configuration_guide/actions.html
+
+https://forum.centreon.com/forum/installation-upgrade/143037-installing-centreon-on-centos-7
+
+https://www.centreon.com/en/solutions/centreon-imp/
+
+https://www.sugarbug.fr/atelier/techniques/monitoring_lan/nrpe-centreon/
+
+
+
+
+
+

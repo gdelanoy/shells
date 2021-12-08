@@ -64,8 +64,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
  # byobu-tmux send-keys -t 0 '( ( ping -c1 syno && clear;sursyno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 
-# And a last one
-
  byobu-tmux new-window
  byobu-tmux rename-window 'Quatre'
  byobu split-window -v
@@ -79,7 +77,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'find Temp/ -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'mpv ²'
 
- # OK, that wasn't the last one yet ...
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Cinq'
@@ -92,16 +89,13 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'grosse'
- byobu-tmux send-keys -t 2 '"TERM=rxvt-unicode-256color cava"' 'C-m'
+ byobu-tmux send-keys -t 2 'TERM=rxvt-unicode-256color' 'C-m'
+ byobu-tmux send-keys -t 2 'cava' 'C-m'
  byobu-tmux send-keys -t 3 'alsamixer' 'C-m'
-
-# LOL jk :-P
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Six'
  byobu-tmux send-keys 'su - testeur' 'C-m'
- wait
- byobu-tmux send-keys 'beta' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'

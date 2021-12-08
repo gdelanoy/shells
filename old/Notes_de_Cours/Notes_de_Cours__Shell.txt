@@ -1,0 +1,2183 @@
+
+                   _                  _                                 
+       _ __   ___ | |_ ___  ___    __| | ___    ___ ___  _   _ _ __ ___ 
+      | '_ \ / _ \| __/ _ \/ __|  / _` |/ _ \  / __/ _ \| | | | '__/ __|
+      | | | | (_) | ||  __/\__ \ | (_| |  __/ | (_| (_) | |_| | |  \__ \
+      |_| |_|\___/ \__\___||___/  \__,_|\___|  \___\___/ \__,_|_|  |___/
+                                                                  
+
+
+
+                                .:xxxxxxxx:. 
+                             .xxxxxxxxxxxxxxxx. 
+                            :xxxxxxxxxxxxxxxxxxx:. 
+                           .xxxxxxxxxxxxxxxxxxxxxxx: 
+                          :xxxxxxxxxxxxxxxxxxxxxxxxx: 
+                          xxxxxxxxxxxxxxxxxxxxxxxxxxX: 
+                          xxx:::xxxxxxxx::::xxxxxxxxx: 
+                         .xx:   ::xxxxx:     :xxxxxxxx 
+                         :xx  x.  xxxx:  xx.  xxxxxxxx 
+                         :xx xxx  xxxx: xxxx  :xxxxxxx 
+                         'xx 'xx  xxxx:. xx'  xxxxxxxx 
+                          xx ::::::xx:::::.   xxxxxxxx 
+                          xx:::::.::::.:::::::xxxxxxxx 
+                          :x'::::'::::':::::':xxxxxxxxx. 
+                          :xx.::::::::::::'   xxxxxxxxxx 
+                          :xx: '::::::::'     :xxxxxxxxxx. 
+                         .xx     '::::'        'xxxxxxxxxx. 
+                       .xxxx                     'xxxxxxxxx. 
+                     .xxxx                         'xxxxxxxxx. 
+                   .xxxxx:                          xxxxxxxxxx. 
+                  .xxxxx:'                          xxxxxxxxxxx. 
+                 .xxxxxx:::.           .       ..:::_xxxxxxxxxxx:. 
+                .xxxxxxx''      ':::''            ''::xxxxxxxxxxxx. 
+                xxxxxx            :                  '::xxxxxxxxxxxx 
+               :xxxx:'            :                    'xxxxxxxxxxxx: 
+              .xxxxx              :                     ::xxxxxxxxxxxx 
+              xxxx:'                                    ::xxxxxxxxxxxx 
+              xxxx               .                      ::xxxxxxxxxxxx. 
+          .:xxxxxx               :                      ::xxxxxxxxxxxx:: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          xxxxxxxx               :                      ::xxxxxxxxxxxxx: 
+          ':xxxxxx               '                      ::xxxxxxxxxxxx:' 
+            .:. xx:.                                   .:xxxxxxxxxxxxx' 
+          ::::::.'xx:.            :                  .:: xxxxxxxxxxx': 
+  .:::::::::::::::.'xxxx.                            ::::'xxxxxxxx':::. 
+  ::::::::::::::::::.'xxxxx                          :::::.'.xx.'::::::. 
+  ::::::::::::::::::::.'xxxx:.                       :::::::.'':::::::::   
+  ':::::::::::::::::::::.'xx:'                     .'::::::::::::::::::::.. 
+    :::::::::::::::::::::.'xx                    .:: ::::::::::::::::::::::: 
+  .:::::::::::::::::::::::. xx               .::xxxx ::::::::::::::::::::::: 
+  :::::::::::::::::::::::::.'xxx..        .::xxxxxxx ::::::::::::::::::::' 
+  '::::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::::' 
+    '::::::::::::::::::::::: xxxxxxxxxxxxxxxxxxxxxxx :::::::::::::::' 
+        ':::::::::::::::::::_xxxxxx::'''::xxxxxxxxxx '::::::::::::' 
+             '':.::::::::::'                        `._'::::::'' 
+
+
+	Shell :
+_______________
+
+Norme POSIX :
+https://fr.wikipedia.org/wiki/POSIX
+
+Il existe d'autres shells :
+
+fish :
+
+yum install fish
+
++aide :
+file:///usr/share/doc/fish/index.html
+
+
+zsh :
+
+yum install zsh
+
+
+Pour changer de shell de manière permanente :
+
+chsh
+
+
+pour les tests et exercices :
+
+
+$ touch fic fic.log fic866.log fic866866.log fic866866866.log fic86686.log fic867.log fic868.log readme.txt typescipt
+
+
+
+
+
+$ masupercommande && echo "ça marche" || echo "ça ne marche pas"
+
+
+
+
+
+
+
+
+##############################################################
+	LE .BASHRC DU FORMATEUR :
+##############################################################
+
+
+
+
+
+#####################################
+# Le Path et les variables système :
+#####################################
+
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games:~/fzf-fs"
+# PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin:~/.scripts:/usr/games"
+ROOTPATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
+LDPATH="/lib:/usr/lib:/usr/local/lib:/usr/lib/gcc-lib/i686-pc-linux-gnu/3.2.3"
+MANPATH="/usr/share/man:/usr/local/share/man"
+INFODIR="/usr/share/info:/usr/local/share/info"
+PAGER="/usr/bin/most"
+EDITOR="/usr/bin/nvim"
+BROWSER="/usr/bin/firefox"
+umask 022
+export PATH PS1
+
+# Mon prompt est complexe, je le définis dans des fichiers à part :
+PS1=$(cat ~/.ps1.txt)
+PS2=$(cat ~/.ps2.txt)
+# PROMPT_COMMAND=$(cat ~/.pscmd.txt)
+
+# Un charset français :
+export LESSCHARSET="latin1"
+
+# Les couleurs de Nathaniel Landau :
+#
+abold=$(tput bold)
+underline=$(tput sgr 0 1)
+reset=$(tput sgr0)
+purple=$(tput setaf 171)
+red=$(tput setaf 1)
+green=$(tput setaf 76)
+tan=$(tput setaf 3)
+blue=$(tput setaf 38)
+#
+# Headers and  Logging
+#
+e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"
+}
+e_arrow() { printf "➜ $@\n"
+}
+e_success() { printf "${green}✔ %s${reset}\n" "$@"
+}
+e_error() { printf "${red}✖ %s${reset}\n" "$@"
+}
+e_warning() { printf "${tan}➜ %s${reset}\n" "$@"
+}
+e_underline() { printf "${underline}${bold}%s${reset}\n" "$@"
+}
+e_bold() { printf "${bold}%s${reset}\n" "$@"
+}
+e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"
+}
+
+# Color - Couleurs (à utiliser avec echo -e $Couleur "msg") :
+#
+# Color - Couleurs classiques :
+	Black="\033[0;30m"          # Color Black - Classic
+	Red="\033[0;31m"            # Color Red - Classic
+	Green="\033[0;32m"          # Color Green - Classic
+	Yellow="\033[0;33m"         # Color Yellow - Classic
+	Blue="\033[0;34m"           # Color Blue - Classic
+	Purple="\033[0;35m"         # Color Purple - Classic
+	Cyan="\033[0;36m"           #  Color Cyan - Classic
+	White="\033[0;37m"          # Color White - Classic
+
+# Color - Gras :
+	BBlack="\033[1;30m"       # Color Black - Bold
+	BRed="\033[1;31m"         # Color Red - Bold
+	BGreen="\033[1;32m"       # Color Green - Bold
+	BYellow="\033[1;33m"      # Color Yellow - Bold
+	BBlue="\033[1;34m"        # Color Blue - Bold
+	BPurple="\033[1;35m"      # Color Purple - Bold
+	BCyan="\033[1;36m"        # Color Cyan - Bold
+	BWhite="\033[1;37m"       # Color White - Bold
+
+# Color - Souligné :
+	UBlack="\033[4;30m"       # Color Black - Underlined
+	URed="\033[4;31m"         # Color Red - Underlined
+	UGreen="\033[4;32m"       # Color Green - Underlined
+	UYellow="\033[4;33m"      # Color Yellow - Underlined
+	UBlue="\033[4;34m"        # Color Blue - Underlined
+	UPurple="\033[4;35m"      # Color Purple - Underlined
+	UCyan="\033[4;36m"        # Color Cyan - Underlined
+	UWhite="\033[4;37m"       # Color White - Underlined
+
+# Color - Arrière-plan :
+	On_Black="\033[40m"       # Color Black - BackGround
+	On_Red="\033[41m"         # Color Red - BackGround
+	On_Green="\033[42m"       # Color Green - BackGround
+	On_Yellow="\033[43m"      # Color Yellow - BackGround
+	On_Blue="\033[44m"        # Color Blue - BackGround
+	On_Purple="\033[45m"      # Color Purple - BackGround
+	On_Cyan="\033[46m"        # Color Cyan - BackGround
+	On_White="\033[47m"       # Color White - BackGround
+
+# Color - Intensité :
+	IBlack="\033[0;90m"       # Color Black - Intense
+	IRed="\033[0;91m"         # Color Red - Intense
+	IGreen="\033[0;92m"       # Color Green - Intense
+	IYellow="\033[0;93m"      # Color Yellow - Intense
+	IBlue="\033[0;94m"        # Color Blue - Intense
+	IPurple="\033[0;95m"      # Color Purple - Intense
+	ICyan="\033[0;96m"        # Color Cyan - Intense
+	IWhite="\033[0;97m"       # Color White - Intense
+
+# Color - Gras & Intensité :
+	BIBlack="\033[1;90m"      # Color Black - Intense & Bold
+	BIRed="\033[1;91m"        # Color Red - Intense & Bold
+	BIGreen="\033[1;92m"      # Color Green - Intense & Bold
+	BIYellow="\033[1;93m"     # Color Yellow - Intense & Bold
+	BIBlue="\033[1;94m"       # Color Blue - Intense & Bold
+	BIPurple="\033[1;95m"     # Color Purple - Intense & Bold
+	BICyan="\033[1;96m"       # Color Cyan - Intense & Bold
+	BIWhite="\033[1;97m"      # Color White - Intense & Bold
+
+# Color - Intensité de l'arrière-plan :
+	On_IBlack="\033[0;100m"   # Color Black - Intense BackGround
+	On_IRed="\033[0;101m"     # Color Red - Intense BackGround
+	On_IGreen="\033[0;102m"   # Color Green - Intense BackGround
+	On_IYellow="\033[0;103m"  # Color Yellow - Intense BackGround
+	On_IBlue="\033[0;104m"    # Color Blue - Intense BackGround
+	On_IPurple="\033[10;95m"  # Color Purple - Intense BackGround
+	On_ICyan="\033[0;106m"    # Color Cyan - Intense BackGround
+	On_IWhite="\033[0;107m"   # Color White - Intense BackGround
+
+# Paramètres de l'historique des commandes :
+#
+# Nombre d'entrées dans l'historique :
+export HISTORY=100
+export SAVEHIST=100
+# Fichier ou est stocké l'historique :
+export HISTFILE=$HOME/.history
+HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
+HISTCONTROL="ignorespace"
+HISTCONTROL="ignoredups"
+HISTCONTROL="ignoreboth"
+HISTTIMEFORMAT='%Y-%m-%d %H:%M:%S '
+
+# Prise en compte des fichiers cachés :
+shopt -s dotglob
+
+# Autres options :
+shopt -s cdspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob
+shopt -s nullglob
+
+# Allumer le pavé numérique au login :
+case "`tty`" in /dev/tty[0-6]*)
+        setleds +num
+esac
+
+# Gestion de la couleur pour 'ls' (exportation de LS_COLORS) :
+if [ -x /usr/bin/dircolors ]
+then
+  if [ -r ~/.dircolors ]
+  then
+    eval "`dircolors ~/.dircolors`"
+  elif [ -r /etc/dir_colors ]
+  then
+    eval "`dircolors /etc/dir_colors`"
+  fi
+fi
+
+##############
+# Fonctions :
+##############
+#
+
+# Extraction facile :
+extract () {
+  if [ -f $1 ] ; then
+      case $1 in
+          *.tar.bz2)   tar xvjf $1    ;;
+          *.tar.gz)    tar xvzf $1    ;;
+          *.bz2)       bunzip2 $1     ;;
+          *.rar)       rar x $1       ;;
+          *.gz)        gunzip $1      ;;
+          *.tar)       tar xvf $1     ;;
+          *.tbz2)      tar xvjf $1    ;;
+          *.tgz)       tar xvzf $1    ;;
+          *.zip)       unzip $1       ;;
+          *.Z)         uncompress $1  ;;
+          *.7z)        7z x $1        ;;
+          *)           echo "don't know how to extract '$1'..." ;;
+      esac
+  else
+      echo "'$1' is not a valid file!"
+  fi
+}
+
+# Créer une archive à partir d'un répertoire donné :
+mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
+mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
+
+# Créer un répertoire ET cd dedans :
+function mkcd() {
+    mkdir -p -v $1
+    cd $1
+}
+
+# Chiffrement / Déchiffrement :
+encrypt ()
+{
+gpg -ac --no-options "$1"
+}
+decrypt ()
+{
+gpg --no-options "$1"
+}
+
+# Chercher, trouver :
+function findc()
+   {
+      find . -type f | xargs grep -nHi "${1}"
+   }
+# Trouver des fichiers :
+alias ff='find / -type f -name $1'
+alias fd='find / -type d -name $1'
+alias ffi='sudo find / -iname $1'
+
+# Générateur de mots de passe (indiquer un chiffre pour la longueur) :
+genpasswd() { 
+	local l=$1
+   	[ "$l" == "" ] && l=16
+      	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs 
+	}
+
+# Améliorer l'appel des pages de man :
+function man()
+{
+    for i ; do
+        xtitle The $(basename $1|tr -d .[:digit:]) manual
+        command man -a "$i"
+    done
+}
+
+# Déboguage en http :
+hthead () { /usr/bin/curl -I -L $@ ; }
+htdebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
+
+
+# Créer une archive (*.tar.gz) à partir d'un répertoire donné :
+function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+
+# Créer une archive ZIP archive d'un fichier ou d'un répertoire :
+function makezip() { zip -r "${1%%/}.zip" "$1" ; }
+
+bofh(){
+if [ -x /usr/games/fortune ]; then
+	fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat
+fi
+}
+# Gestion des processus :
+myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
+pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
+
+# Faire répéter une commande n fois :
+function repeat()       # Repeat n times command.
+{
+    local i max
+    max=$1; shift;
+    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+        eval "$@";
+    done
+}
+
+# Montrer tous les paquetages installés :
+showpkg () {
+  apt-cache pkgnames | grep -i "$1" | sort
+  return;
+}
+
+
+# Pour Noël :
+snow() {
+	           clear;while :;do echo $LINES $COLUMNS $(($RANDOM%$COLUMNS));sleep 0.1;done|gawk '{a[$3]=0;for(x in a) {o=a[x];a[x]=a[x]+1;printf "\033[%s;%sH ",o,x;printf "\033[%s;%sH*\033[0;0H",a[x],x;}}'
+   }
+
+# Afficher une ligne sur trois en vert, pour que les sorties soient plus lisibles :
+function thirdline(){ awk '{if (NR%3==0){print "\033[32m" $0 "\033[0m"} else{print}}'; } 
+
+# Serve a directory on a given port
+# https://davidwalsh.name/serve-directory-python
+# $1 = port
+# Example: servedir 8080
+servedir() {
+  # Allow myself to change the port ($1)
+  python -m SimpleHTTPServer "$1"
+}
+
+# Voir la liste des services lancés lisiblement :
+function services() { printf "$(service --status-all 2>&1|sed -e 's/ + /\\E42m + \\E0m/g' -e 's/ - /\\E41m - \\E0m/g' -e 's/ ? /\\E43m ? \\E0m/g')\n"; }
+
+# Interroger le serveur LDAP de la salle de formation :
+function ldapfind() {
+	        ldapsearch -x -h annuaire.capen.sis -b dc=capen,dc=sis uid=$1
+	}
+
+#  Lancer une appli indépendamment du shell d'origine et sans sortie :
+function nh() {
+	    nohup "$@" &>/dev/null &
+    }
+# Faut-il vraiment expliquer celle-là ? O:-)
+function rtfm() { help $@ || man $@ || $BROWSER "http://www.google.com/search?q=$@"; }
+
+# Montrer les différences entre deux fichiers en couleurs :
+function showdiff()
+{
+	wdiff -n -w $'\033[30;41m' -x $'\033[0m' -y $'\033[30;42m' -z $'\033[0m' $1 $2
+}
+
+# Remonter une arborescence autant de niveaux que je le mentionne :
+function up() {
+	[ "${1/[^0-9]/}" == "$1" ] && {
+	 local ups=""
+	 for ((i=1; i<=$1; i++))
+	 do
+	     ups=$ups"../"
+	 done
+         cd $ups
+	      }
+	}
+
+# L'édition sécurisée avec vim (créez le répertoire ~/.archives avant) : 
+
+function safevi() {
+	cp $1 ~/.archives/$(basename ${1}.backup-$(date +%F-%T)) && nvim $1
+}
+
+# cd dans le répertoire où ont eu lieu les dernières modifications :
+cl()
+{
+        last_dir="$(ls -Frt | grep '/$' | tail -n1)"
+        if [ -d "$last_dir" ]; then
+                cd "$last_dir"
+        fi
+}
+# "Marquer" le rép. en cours pour y retourner plus tard :
+rd(){
+    pwd > "$HOME/.lastdir_$1"
+}
+# Retourner dans le rép. "marqué" :
+crd(){
+        lastdir="$(cat "$HOME/.lastdir_$1")">/dev/null 2>&1
+        if [ -d "$lastdir" ]; then
+                cd "$lastdir"
+        else
+                echo "no existing directory stored in buffer $1">&2
+        fi
+}
+
+# Copier-coller en CLI :
+copie(){ cp $1 /tmp/copie.$1; }
+alias colle="ls /tmp/copie* | sed 's|[^\.]*.\.||' | xargs -I % mv /tmp/copie.% ./%"
+
+# Une couleur au hasard à chaque ligne d'un tail -f :
+coltail()
+	{
+	tail -F "${1}" |while read -r line;do printf "\033[38;5;%dm%s\033[0m\n" $(($RANDOM%255)) "$line";done
+	}
+
+morpheus()
+	{
+	/usr/lib/xscreensaver/glmatrix -window-id $( xwininfo -int -name "Bureau" | grep "Bureau" | awk '{print $4}' ) &
+	}
+
+# Faire parler le nordinateur (en anglais) :
+say()
+	{
+espeak "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+	}
+
+# Faire parler le nordinateur (en français) :
+dis()
+	{
+cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
+espeak -v mb-fr1 "$*" --stdout | play - tempo 0.8 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+cd -
+	}
+
+# Faire parler le nordinateur (en allemand) :
+sag()
+	{
+cd /usr/lib/x86_64-linux-gnu/espeak-data/voices/mb/
+espeak -v mb-de2 "$*" --stdout | play - tempo 1.1 bend 0.1,-500,0.5 chorus 1 1.5 20 1 3 8 -s echos .7 .7 100 .5 10 0.1 reverb
+cd -
+	}
+
+# Comme "please", mais on pose poliment la question (merci Canard) :
+function fuck() {                                                                    
+     local last_cmd=$(history -p !!)                                                  
+     echo -n "run command '${last_cmd}' with sudo? [y/n]: "                           
+     read -s -n 1 confirm                                                             
+     echo ""                                                                          
+     if [ "${confirm}" = "y" ]; then                                                  
+     sudo ${last_cmd}                                                             
+     fi                                                                               
+	}
+
+
+###############
+#  Les alias :
+###############
+
+# Se déplacer rapidement dans le filesystem :
+#
+alias back='cd $OLDPWD'
+alias cd..='cd ..'
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
+
+# Raccourcis de répertoires :
+#
+alias home='cd ~/'
+alias documents='cd ~/Documents'
+alias downloads='cd ~/Downloads'
+alias books='cd ~/eBooks'
+alias images='cd ~/Images'
+alias videos='cd ~/Videos'
+alias web='cd /var/www/html'
+
+# Demander confirmation avant d'écraser un fichier :
+#
+alias cp='cp --interactive'
+alias mv='mv --interactive'
+alias rm='rm --interactive'
+
+# Raccourcis pour 'ls' :
+#
+alias ls='ls --classify --tabsize=0 --literal --color=auto --show-control-chars --human-readable'
+alias ll="ls -lv --group-directories-first"
+alias lla='ls -la'
+alias llo='ls -aol'
+alias lli='ls -AlhGrti'
+alias lsd="ls -alF | grep /$"
+alias lx='ls -lXB'        	# Par extension
+alias lk='ls -lSr'        	# Par taille
+alias lsize='ls --sort=size -lhr' # Ou comme ça
+alias la='ls -Al'        	# Montre les fichiers cachés
+alias lr='ls -lR'        	# Récursif
+alias lt='ls -ltr'        	# Trié par date
+alias lm='ls -al |most'        # pipé dans 'most'
+alias l='ls -hF --color'    # quick listing
+
+# Pour se rendre la vie plus facile (et lutter contre la dyslexie) :
+# 
+alias tree='tree -Cs'       
+alias less='less --quiet'
+alias df='df --human-readable'
+alias du='du -h --max-depth=1'
+alias psgrep='ps aux |grep -v grep |grep -i'
+alias count='du -a | cut -d/ -f2 | sort | uniq -c | sort -nr'
+# alias findn='find . -iname '"${1}"''
+alias tu='top -o cpu' #cpu
+alias tm='top -o vsize' #memory
+alias biggest='BLOCKSIZE=1048576; du -chx | sort -rh'
+alias tf='tail -f '
+alias dn='OPTIONS=$(\ls -F | grep /$); select s in $OPTIONS; do cd $PWD/$s; break;done'
+alias path='echo -e ${PATH//:/\\n}'
+alias xs="cd"
+alias vf="cd"
+alias see="bat"
+alias mpv="mpv --no-audio-display"
+alias couleurs="grep  '# Color' ~/.bashrc"
+
+# Des gadgets rigolos ( il en faut ;-) ) :
+#
+alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
+alias wesh="espeak -s 1 -p 0.0001 'wesh'; clear"
+alias kikoo="fortune bofh-excuses | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1) | lolcat"
+alias tux='xpenguins -n 50 --all'
+alias meteo='curl http://wttr.in/Wasquehal'
+alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
+
+# Administration :
+#
+alias reload='source ~/.bashrc'
+alias confctrl='grep "^[^#]" $1'
+alias nocomm='grep -v '^$\|^\s*\#' $1'
+alias nslookup='nslookup -sil'
+alias LOG="tail -f /var/log/*log /var/log/*/*log"
+alias LOGS="find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
+alias dmesg='dmesg -wx'
+alias dff='df -h -x tmpfs -x usbfs'
+alias psg='ps -ef | grep $1'
+alias fastping='ping -c 100 -s.2'
+alias ports='netstat -laputn'
+alias updb='sudo updatedb &'
+alias swapflush="echo swapoff && sudo swapoff -a && echo swapon && sudo swapon -a && echo done"
+alias burn='pkill -9'
+alias px='ps aux | grep '
+alias ct='column -t'
+alias dfc='df -hPT | column -t' 
+alias untar='tar -zxvf'
+alias ipext='curl ipinfo.io/ip'
+alias ipin='hostname -I'
+alias myip="ip -br -c a"
+alias which='type -all'
+alias debug="set -o nounset; set -o xtrace"
+alias ssytemctl='systemctl'
+alias sstatus="sudo systemctl status -l"
+alias srestart="sudo systemctl restart"
+alias tue="sudo pkill"
+alias mem="free -h"
+alias cdtmp="cd $(mktemp -d)"
+alias top-commands='history | awk "{print $2}" | awk "BEGIN {FS="|"} {print $1}" |sort|uniq -c | sort -rn | head -10'
+alias neo='su -c cmatrix guillaume'
+alias cputemp='sensors | grep Core'
+alias chx='chmod 755'
+alias chr='chmod 644'
+alias ipinfo='curl ipinfo.io'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias cmderror='/usr/local/bin/cmderror'
+alias showconn="lsof -Pan -i tcp -i udp"
+
+alias mdpdf=" ~/.pandoc/md2pdf"
+
+alias less="bat"
+alias more="bat"
+alias most="bat"
+
+alias ping="prettyping"
+
+# Les machines du réseau local :
+alias nwho='ping -b -c 2 255.255.255.255 2>&1 | grep "bytes from" | cut -d " " -f 4 | sort | uniq | sed -e "s/://g"'
+
+# Trouver ce qui prend de la place sur tout le filesystem :
+#
+alias diskspace="du -S | sort -n -r |more"
+# La taille des répertoires dans le rép. en cours :
+alias folders="find . -maxdepth 1 -type d -print | xargs du -sk | sort -rn"
+
+# Raccourcis pour la gestion des paquetages :
+#	
+alias apti='sudo apt-get install'
+alias apts="sudo apt-cache search"
+alias aptr='sudo apt-get remove' 
+alias orphand='sudo deborphan | xargs sudo apt-get -y remove --purge'
+alias aptclean='sudo apt-get autoclean && sudo apt-get autoremove && sudo apt-get clean && sudo apt-get remove && orphand' 
+alias maj="sudo apt-get update && sudo apt-get upgrade --only-upgrade -y | tee /var/log/divers/packages-update-$(date +%F).log; sudo apt-get -f install; sudo apt autoclean; sudo apt autoremove"
+
+# Arrêt / Reboot :
+#
+# (à combiner avec quelques binaires autorisés en NOPASSWD dans la conf de sudo)
+alias dodo='sudo /sbin/poweroff'
+alias reboot='sudo /sbin/reboot'
+alias poweroff='sudo /sbin/poweroff'
+alias halt='sudo /sbin/poweroff'
+alias shutdown='sudo /sbin/shutdown'
+
+# Date et Heure :
+alias stamp='date "+%A_%d/%m/%Y_%Hh%M"'
+alias d='date +%F'
+alias now='date +"%T"'
+
+#############################################################
+# Des commandes vers mes propres scripts, ou personnalisées :
+#############################################################
+
+# Mes montages chiffrés :
+alias safe-in-cloud='encfs "/home/guillaume/Cloud/MEGAsync/Cloud Drive/Safe/" /home/guillaume/safe-in-cloud/ && df -h | grep -i cloud'
+alias safe-on-usb='encfs /media/$USER/USBPRO/Coffre-fort ~/safe-on-usb && df -h | grep safe-on'
+
+# Mes scripts de session byobu :
+alias hop='bash ~/.scripts/byobu-opensession.sh'
+alias poe='bash ~/.scripts/byobu-poe.sh'
+
+# POUR LE BOULOT :
+
+# Pour que les accèdent directment à leur VM Debian 7 sur le Proxmox de la salle de formation :
+
+alias vm7='ssh formation@serveur -p 2200$(echo $HOSTNAME | tail -c2)'
+
+################
+# à peaufiner :
+################
+
+# alias backup='rsync -r -t -p -o -g -x -v --progress --delete -c -H -i -s /home/nickyeoman/saveme /media/nickyeoman/portabledrive'
+
+
+###############################
+# Pour les différentes applis : 
+###############################
+
+# Raccourcis pour 'grep' :
+#
+alias {G,g}{re,er}p='grep'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+
+# Raccourcis pour 'sudo' :
+#
+alias please='sudo $(history -p \!\!)'
+alias sduo='sudo'
+alias suod='sudo'
+alias svi='sudo nvim'
+alias us="su"
+
+# VIM : 
+#
+alias vi='nvim'
+alias edit='nvim'
+alias emacs='nvim'
+
+# IPtables :
+#
+alias iptl='sudo /sbin/iptables -L -n -v --line-numbers'
+alias iptlin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
+alias iptlout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
+alias iptlfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias iptlnat='sudo /sbin/iptables -t nat -n -v --line-numbers'
+
+#Rsync :
+# alias usbb='rsync -avz /media/usbdisk/ ~/backup/usb/'
+
+# Git :
+alias yolo='(git add . && git commit -a -m "Commit du $(date "+%A %d %B %Y") à $(date "+%H heures %M") ." ; git push origin master)'
+alias gitar="git ls-files -d -m -o -z --exclude-standard | xargs -0 git update-index --add --remove"
+alias g='git'
+alias gpd='git push origin develop'
+alias gpm='git push origin master'
+alias gst='git status'
+alias gcom='git commit -m --all'
+alias gclo='git clone'
+alias glog='git log'
+alias gadd='git add . --verbose'
+alias gco='git checkout'
+alias gls='git ls-files'
+alias gpall='git push --all'
+
+# MySQL / MariaDB :
+alias msr='mysql -u root -p'
+
+# Apache :
+alias restartapache='sudo systemctl restart apache2 && sudo systemctl status -l apache2'
+alias apachedit='sudo vim /etc/apache2/apache2.conf'
+alias apachegrace='sudo apachectl graceful'
+alias apachelog="less +F /var/log/apache2/*.log"
+
+# Ansible :
+# Récupérer les facts Ansible de n'importe quel serveur en un instant :
+ansibleSetup() {
+    ansible $1 -m setup > ~/$1.txt
+}
+alias accio=ansibleSetup
+alias ans='ansible'
+alias ansp='ansible-playbook'
+
+# Docker : 
+# alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+# alias dockd="docker run -d -P"			# Daemonized container
+# alias docki="docker run -t -i -P"       	# Insteractive container
+
+# dockb() { docker build -t="$1" .; }		# docker build
+# dockri() { docker rmi $(docker images -q); }	# rm image
+# dockrm() { docker rm $(docker ps -q -a); }	# rm container
+
+# alias dockmenage="docker container rm $(docker container ps -a -q)"
+# alias dockercleancontainers="docker ps -aq | xargs docker rm"
+# alias dockercleanimages="docker images -aq -f dangling=true | xargs docker rmi"
+# alias dockerclean="dockercleancontainers && dockercleanimages"
+# alias docker-killall="docker ps -q | xargs docker kill"
+
+# alias dl='docker ps -l -q'
+# alias drm="docker rm"
+# alias dps="docker ps -a"
+# alias dockimg="docker images | uniq -f 3"
+# alias dockps="docker ps -a | less -S"
+# alias dockip="docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1"
+# alias docklog="docker logs -f -t $1"
+# alias dockstat="docker stats $1"
+# alias dockrmimg="docker images -aq -f dangling=true | xargs docker rmi"
+# alias dockkillall="docker ps -q | xargs docker kill"
+
+
+# LXC :
+
+alias lxcls="lxc-ls --fancy"
+alias lxcat="lxc-attach -n $@"
+alias lxcstop="lxc-stop -n $@"
+alias lxcstart="lxc-start -n $@"
+
+##############################################################################
+
+
+
+	Variables :
+___________________
+
+
+Manipulation de variables simples
+
+var=val ou var="a b"   affectation de la variable "var"
+
+$var ou ${var}   contenu de la variable "var"
+
+${#var}   longueur de la variable "var"
+
+export var ou declare -x var   exportation de la variable "var" vers les shells fils
+
+set   affichage de l'ensemble des variables définies dans le shell
+
+unset var   suppression de la variable "var"
+
+Tableaux
+tab[0]=val   affectation du premier enregistrement du tableau "tab"
+${tab[0]} ou $tab   contenu du premier enregistrement du tableau "tab"
+${tab[11]}   contenu du douzième enregistrement du tableau "tab"
+${tab[*]}   ensemble des enregistrements du tableau "tab"
+${#tab[11]}   longueur du douzième enregistrement du tableau "tab"
+${#tab[*]}   nombre d'enregistrements du tableau "tab
+
+
+Paramètres positionnels et arguments
+
+$0   nom du script
+
+$1 $2 ... ${10}   paramètres positionnels (1, 2 et 10)
+
+$#   nombre de paramètres positionnels
+
+$* ou $@   ensemble des paramètres positionnels, équivalant à $1 $2 ... ${n}
+
+"$*"   ensemble des paramètres positionnels, équivalant à "$1 $2 ... ${n}"
+
+"$@"   ensemble des paramètres positionnels, équivalant à "$1" "$2" ... "${n}"
+
+
+Variables spéciales
+
+$$   PID du shell courant
+
+$!   PID du dernier travail lancé en arrière plan
+
+$?   code retour de la dernière commande
+
+
+Variables d'environnement ( entre autres )
+
+$HOME   chemin du répertoire personnel de l'utilisateur
+$OLDPWD   chemin du répertoire précédent
+$PATH   liste des chemins de recherche des commandes exécutables
+$PPID   PID du processus père du shell
+$PS1   invite principale du shell
+$PS2   invite secondaire du shell
+$PS3   invite de la structure shell "select"
+$PS4   invite de l'option shell de débogage "xtrace"
+$PWD   chemin du répertoire courant
+$RANDOM   nombre entier aléatoire compris entre 0 et 32767
+$REPLY   variable par défaut de la commande "read" et de la structure shell "select"
+$SECONDS   nombre de secondes écoulées depuis le lancement du shell
+...
+
+
+
+
+
+	Commandes Filtres :
+__________________________
+
+
+Options de grep : 
+
+
+$ grep chaîne fichier   # recherche chaîne dans fichier
+$ grep -r chaîne rep.   # recherche récursive dans les fichiers du rep.
+$ grep -i chaîne fichier # recherche insensible à la casse
+$ grep -v chaîne fichier # recherche inversée : tout sauf chaîne
+$ grep -e chaîne -e truc fichier # recherche multiple
+$ grep -w chaîne fichier # recherche le mot exact (chaîne, et pas chaînette)
+$ grep -x chaîne fichier # recherche toute une ligne exacte
+
+
+	Shell Scripting :
+_________________________
+
+
+Conseils pour bien démarrer un script bash :
+
+
+#!/bin/bash
+
+
+# Pour déboguer, le script s'arrêtera dès qu'une commande échoue :
+set -o errexit 
+set -e
+
+# le script s'arrêtera s'il trouve une variable inutilisée :
+set -o nounset
+set -u
+
+# Commencez par poser vos variables et vos fonctions !
+# N'utilisez plus les guillemets inversées !
+user=`echo “$UID”`      # BAD
+user=$(echo “$UID”)    # GOOD
+
+# Placez en lecture seule les variables 'sensibles' :
+readonly passwd_file=”/etc/passwd”
+
+# UTILISEZ DES COMMENTAIRES DANS VOS SCRIPTS !!!
+
+
+# Déclarez vos variables et vos fonctions EN DÉBUT DE SCRIPT !
+
+
+# Utilisez les doubles guillemets pour référencer les variables :
+
+echo "Names without double quotes" 
+echo
+names="Copyright Guillaume Delanoy"
+for name in $names; do
+        echo "$name"
+done
+echo
+
+echo "Names with double quotes" 
+echo
+for name in "$names"; do
+        echo "$name"
+done
+
+# Utilisez des fonctions dans vos scripts.
+
+# Utilisez des MAJUSCULES pour les variables d'environnement,
+# et des minuscules pour les variables personnalisées.
+
+
+# TOUJOURS DÉBOGUER AU FUR ET À MESURE !!
+
+
+# Utilisez bash -x mon_script.sh pour tester le script et localiser ses erreurs :
+
+Correction de syntaxe bash :
+http://www.shellcheck.net/
+(existe aussi en .deb, .rpm ...)
+
+
+https://www.tecmint.com/trace-shell-script-execution-in-linux/
+
+
+	(conseil) Une fonction pour bien démarrer ses scripts shell :
+
+
+shscr(){
+        echo "#!/bin/bash" > ${1}
+        echo "######################################" >> ${1} 
+        echo "# Nom du script : $(basename $1)" >> ${1}
+        echo "# Utilité: ce script sert à faire pousser des fleurs" >> ${1}
+        echo "# Usage: ... (le cas échéant)" >> ${1}
+        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com" >> ${1}
+        echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
+        echo "######################################" >> ${1}
+        echo "#" >> ${1}
+        echo "set -o errexit" >> ${1}
+        echo "set -o nounset" >> ${1}
+        echo "#" >> ${1}
+        echo "# VARIABLES :" >> ${1}
+        echo "#" >> ${1}
+        echo '#Set Colors ' >> ${1}
+        echo '# ' >> ${1}
+        echo 'bold=$(tput bold) ' >> ${1}
+        echo 'underline=$(tput sgr 0 1) ' >> ${1}
+        echo 'reset=$(tput sgr0) ' >> ${1}
+        echo 'purple=$(tput setaf 171) ' >> ${1}
+        echo 'red=$(tput setaf 1) ' >> ${1}
+        echo 'green=$(tput setaf 76) ' >> ${1}
+        echo 'tan=$(tput setaf 3) ' >> ${1}
+        echo 'blue=$(tput setaf 38) ' >> ${1}
+        echo '# ' >> ${1}
+ 	echo '# Headers and  Logging ' >> ${1}
+        echo '# ' >> ${1}
+        echo 'e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"  ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_arrow() { printf "➜ $@\n" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_success() { printf "${green}✔ %s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_error() { printf "${red}✖ %s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_warning() { printf "${tan}➜ %s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_underline() { printf "${underline}${bold}%s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_bold() { printf "${bold}%s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo 'e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@" ' >> ${1}
+        echo '} ' >> ${1}
+        echo "#" >> ${1}
+        echo "# FONCTIONS :" >> ${1}
+        echo "#" >> ${1}
+        echo "stamp(){ 'date "+%A_%d/%m/%Y_%Hh%M"' }" >> ${1}
+        echo "tps=$(date +%F)" >> ${1}
+        echo "now=$(date +%T)" >> ${1}
+        echo "source /etc/skel/.scripts/functions.sh" >> ${1}
+        echo "#" >> ${1}
+        echo "#" >> ${1}
+        echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
+        echo "#" >> ${1}
+	echo "" >> ${1}
+        echo "e_header $(basename ${1})" >> ${1}
+        echo "" >> ${1}
+        echo "" >> ${1}
+        chmod 750 ${1}
+        vim ${1}
+
+
+
+
+	Corrigé de l'exercice 3 :
+_________________________________
+
+
+	1:
+
+echo $(date +%T %D)
+
+
+	2:
+
+
+tail -n 26 /usr/share/vim/vim74/tutor/tutor | tac | rev | egrep -v '^$' | cat -n | sort
+
+	3:
+
+tail -n 26 /usr/share/vim/vim74/tutor/tutor | tac | rev | egrep -v '^$' | cat -n | sort | wc -l
+
+	4 :
+
+	VAR=$(groups | tr ' ' ';')
+	echo $VAR.
+
+mieux que :
+
+groups | cut -d ' ' -f 1-3 | tr ' \n' ';.' | sed 's/.$/.\n/g'
+
+
+	5 :
+
+echo $* | tr ' ' '\n' | sort | tr '\n' ' ' | sed 's/ $/\n/'
+
+	6:
+
+ ps axo user | sort | uniq
+
+mieux que :
+
+ps aux | grep -v 'USER' | cut -d ' ' -f 1 | sort | uniq
+
+
+
+
+
+	VIM :
+
+Commenter X lignes d'un seul coup :
+
+
+https://stackoverflow.com/questions/1676632/whats-a-quick-way-to-comment-uncomment-lines-in-vim/1676690
+
+
+https://vim-adventures.com/
+
+
+https://neovim.io/doc/user/vim_diff.html
+https://damien.pobel.fr/post/vim-neovim/
+
+http://www.thegeekstuff.com/2009/03/8-essential-vim-editor-navigation-fundamentals/
+https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+https://github.com/powerline/powerline   !!! Pour un vim plus beau !!!
+
+
+https://dev.to/jovica/3-little-known-but-useful-vim-tips-1pbg
+
+
+Plugin SSHFS pour Vscode / Vscodium :
+
+https://code.visualstudio.com/remote-tutorials/ssh/getting-started
+
+
+https://github.com/alebcay/awesome-shell
+
+https://github.com/dylanaraps/pure-bash-bible
+
+
+https://github.com/alebcay/awesome-shell
+
+
+https://github.com/riobard/bash-powerline
+
+Pour zsh :
+
+https://github.com/denysdovhan/spaceship-prompt
+
+
+
+
+
+
+Corrigé d'exercice IF :
+
+
+
+
+#!/bin/bash
+
+echo "Saisissez votre note :"
+read note
+
+if [ $note -gt 20 ]
+then
+    	echo "Impossible"
+elif [ $note -ge 16 ]
+then
+    	echo "Tres bonne note"
+elif [ $note -ge 14 ]
+then
+    	echo "Bonne note"
+elif [ $note -ge 12 ]
+then
+    	echo "Assez bien"
+elif [ $note -ge 10 ]
+then
+    	echo "Moyenne note"
+elif [ $note -lt 10 ]
+then
+    	echo "Insuffisant"
+fi
+
+
+
+	CASE :
+
+
+
+
+
+
+
+echo -n "es-tu d'accord avec ça ? [oui ou non]: "
+read yno
+case $yno in
+
+        [oO] | [Oo][Uu][Ii] )
+                echo "OK"
+                ;;
+
+        [nN] | [n|N][O|o][n|N] )
+                echo "Pas d'accord; tu sors !";
+                exit 1
+                ;;
+        *) echo "Saisie invalide"
+            ;;
+esac
+
+
+Nota Bene :
+
+shopt -s nocasematch permet de simplifier les différents choix sans avoir à préciser les majuscules / minuscules !
+
+
+
+
+Exercice sur CASE :
+
+Créez un script case1.sh
+Usage : case1.sh nombre_entier (int)
+
+Le script  affiche "Mauvais" si int est entre 0 et 4,
+ "Passable" entre 5 et 9,
+ "Bien" entre 10 et 14,
+ "Très bien" entre 15 et 19,
+ "Parfait" si int vaut 20,
+  et "WTF?!" autrement.
+
+Vous ne pouvez pas utiliser de if.
+
+
+	Corrigé (version de Quentin) :
+
+
+
+#!/bin/bash
+
+case $1 in
+	"20")
+	echo "Bien joué! Ta note est parfaite!"
+        ;;
+	"15"|"16"|"17"|"18"|"19")
+        echo "Pas mal! Très bien même!"
+        ;;
+	"14"|"13"|"12"|"11"|"10")
+        echo "C'est pas mal, continue comme ça"
+        ;;
+	"5"|"6"|"7"|"8"|"9")
+        echo "C'est pas fameux"
+        ;;
+	"0"|"1"|"2"|"3"|"4")
+        echo "On va pas se mentir, c'est mauvais"
+        ;;
+	*)
+	echo "Wesh, t'es serieux?"
+        ;;
+esac
+
+
+
+
+
+
+
+
+#!/bin/bash
+case $1 in
+        [0-4])
+                echo "Mauvais"
+                ;;
+        [5-9])
+                echo "Passable"
+                ;;
+        [10-14])
+                echo "Bien"
+                ;;
+        [15-19])
+                echo "Très bien"
+                ;;
+        20)
+                echo "Parfait"
+                ;;
+        *)
+                echo "WTF ??"
+                ;;
+esac
+
+
+
+
+	FOR :
+________________
+
+La boucle for permet de traiter une liste de valeurs indiquée à droite du mot clé in.
+A chaque tour de boucle, la variable var est initialisée avec une des valeurs de la liste.
+Elles sont traitées dans l'ordre de leur énumération.
+
+Liste de valeurs citée directement
+
+
+for var in valeur1 valeur2 valeur3 ... valeurn
+do
+     commande
+done
+
+
+
+
+
+
+Liste de valeurs contenue dans une variable
+
+
+for var in $variable
+do
+     commande
+done
+
+
+
+
+
+
+Liste de valeurs générée par substitution de commande
+
+for var in `commande`
+do
+     commande
+done
+
+
+
+
+
+
+
+Liste de valeurs générée par substitution de caractères de génération de noms de fichiers
+
+for var in *.ext
+do
+     commande
+done
+
+
+
+
+
+
+
+
+
+
+
+Liste par défaut : Arguments de la ligne de commande
+
+for var
+do
+     commande
+done
+
+
+
+
+for var in $*
+do
+     commande
+done
+
+
+
+
+Avec incrémentation d'une variable
+
+
+
+
+for (( var=valeurMin; var<=valeurMax; var++ ))
+do
+     commande
+done
+
+
+
+
+
+
+
+Exercice :
+
+
+Dans votre répertoire home (ou autre), faites une boucle qui pour tous mes fichiers en .sh
+fasse
+- un chmod 750
+- un chown formation:adm
+- le recopie dans /tmp/scripts
+
+
+Corrigé ( selon Jeremy ):
+
+#!/bin/bash
+
+for sh in Téléchargements/exercice
+do
+        chmod 750 *.sh
+        echo "Chmod terminé !"
+        sudo chown formation:users *.sh
+        echo "chown terminé !"
+        mkdir /tmp/scripts
+        echo "répertoire créé ou déjà existant"
+        cp *.sh /tmp/scripts
+        echo "copie terminée"
+done
+     
+
+Exemple de Quentin :
+
+#!/bin/bash
+for i in *
+	do if [[ $i == *.sh ]]
+                then chmod 750 $i
+                chown formation $i
+        echo "$i est devenu executable"
+        fi
+done
+
+
+
+
+Selon Guillaume:
+
+
+for i in *.sh
+do
+	chmod 750 $i
+	chown formation:adm $i
+	cp $i /tmp/scripts
+done
+
+
+
+
+
+
+	STRUCTURES DE CONTRÔLES :
+_________________________________
+
+
+	Exemples de CASE :
+__________________________
+
+case $variable in
+
+	modele1) commande
+		 ...
+		 ...
+
+	;;
+	modele2) commande
+		 ...
+		 ...
+		 ...
+	;;
+	tutrlutu) commande
+		 ...
+		 ...
+		 ...
+	;;
+	tue) commande
+		 ...
+		 ...
+		 ...
+	;;
+
+	*) exit
+	;;
+
+esac
+
+
+commande 
+
+
+AUTRE EXEMPLE STANDARD :
+
+
+
+case $variable in
+     pattern-1)      
+          commands
+          ;;
+     pattern-2)      
+          commands
+          ;;
+     pattern-3|pattern-4|pattern-5)
+          commands
+          ;; 
+     pattern-N)
+          commands
+          ;;
+     *)
+          commands
+          ;;
+esac
+
+
+
+
+
+EXEMPLE : DEMANDER CONFIRMATION À L'UTILISATEUR :
+
+#!/bin/bash
+
+echo -n "Do you agree with this? [yes or no]: "
+read yno
+case $yno in
+
+        [yY] | [yY][Ee][Ss] )
+                echo "Agreed"
+                ;;
+
+        [nN] | [n|N][O|o] )
+                echo "Not agreed, you can't proceed the installation";
+                exit 1
+                ;;
+        *) echo "Invalid input"
+            ;;
+esac
+
+
+
+
+
+
+EXEMPLE 2  : DÉMARRER OU STOPPER UNE APPLICATION :
+
+
+
+#!/bin/bash
+
+case "$1" in
+	'start')
+	echo "Starting application"
+	/usr/bin/startpc
+	;;
+
+	'stop')
+	echo "Stopping application"
+	/usr/bin/stoppc
+	;;
+
+	'restart')
+	echo "Usage: $0 [start|stop]"
+	;;
+
+	*)
+	echo "Usage: $0 [start|stop]"
+	exit 42	
+	;;
+esac
+
+
+
+
+EXEMPLE 3 : EXTRACTION DE TOUS TYPES D'ARCHIVES :
+
+      case $1 in
+          *.tar.bz2)
+   tar xvjf $1
+    ;;
+          *.tar.gz)
+    tar xvzf $1
+    ;;
+          *.bz2)
+       bunzip2 $1
+     ;;
+          *.rar)
+       rar x $1 
+      ;;
+          *.gz)
+        gunzip $1
+      ;;
+          *.tar)
+       tar xvf $1
+     ;;
+          *.tbz2)
+      tar xvjf $1
+    ;;
+          *.tgz)
+       tar xvzf $1
+    ;;
+          *.zip)
+       unzip $1
+       ;;
+          *.Z)
+         uncompress $1
+	;;
+          *.7z)
+        7z x $1 
+       ;;
+          *)
+           echo "don't know how to extract '$1'..." ;;
+      esac
+
+
+
+
+
+	LA BOUCLE FOR :
+_______________________
+
+
+
+Liste de valeurs citée directement :
+
+for var in VAL1 VAL2 VAL3 ... VALn
+	do
+		commande
+		...
+		...
+	done
+
+
+Liste de valeurs générée par substitution de variable :
+
+for var in $variable
+	do
+		commande
+		...
+		...
+	done
+
+
+
+Liste de valeurs générée par substitution de commande :
+
+for var in $( ma commande de ouf )
+	do
+		commande
+		...
+		...
+	done
+
+
+
+
+
+
+
+	Boucle while :
+______________________
+
+
+TANT QUE une condition est vraie, on reste dans la boucle.
+
+
+Exemple :
+
+
+#!/bin/bash
+x=1
+while [ $x -le 5 ]
+do
+  echo "Welcome $x times"
+  x=$(( $x + 1 ))
+done
+
+
+
+Exemple infini :
+
+while
+do
+  echo "Press <CTRL+C> to exit."
+  sleep 1
+done
+
+
+Exemple - lire un fichier ligne par ligne :
+
+#!/bin/bash
+read -p "Donne moi le fichier à lire avec son chemin complet STP :" file
+
+while read -r line
+do
+  	echo $line
+	sleep 1
+done < "$file"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	LES EXPRESSIONS RÉGULIÈRES :
+____________________________________
+
+Vous disposez :
+- des expressions régulières basiques.
+- des expressions régulières étendues.
+
+LEs erb sont utilisées dans :
+
+- grep
+- expr ou bc
+- sed
+- vi / vim / nvim
+
+
+Les erE sont utilisables dans grep avec l'option grep -E , et dans awk.
+
+
+
+Exemples d'erb :
+
+^	--> début de ligne
+
+$	--> fin de ligne
+
+[ ]	--> définit une séquence de caractères, comme par ex. : [A-Za-z0-9_]
+
+[^ ]	--> chercher tous les caractères SAUF ceux mentionnés entre crochets
+
+* 	--> Zéro, un ou plus d'un caractère
+
++	--> un ou plus d'un caractère
+
+?	--> 0 ou un caractère
+
+{n}	--> chercher 'n' fois les caractères qui précèdent
+
+{n,}	--> chercher 'n' fois ou plus de n fois les caractères qui précèdent
+
+{n m}	--> chercher un nombre de caractères situé entre n fois et m fois
+
+{,m}	--> chercher un caractère 'm' fois ou moins de 'm' fois 
+
+\ 	--> échapper un caractère spécial
+
+.	--> utilisé pour "matcher" tout caractère qui survient lors d'une recherche par chaîne
+
+Par exemple, si on cherche toutes les occurences de a et d séparés par UN (et un seul) caractère, on dira :
+
+$ grep "a.d" mon_fichier
+
+\<	--> Début d'un mot, précédé d'un blanc. Caractères qui font partie d'un mot : [A-Za-z0-9_]
+
+\>	--> Fin d'un mot, suivi d'un blanc.
+
+
+	Recherche par classe de caractères POSIX :
+__________________________________________________
+
+
+[[:alpha:]] 	n'importe quelle lettre
+
+[[:digit:]] 	n'importe quel chiffre
+
+[[:xdigit:]] 	caractères hexadécimaux
+
+[[:alnum:]] 	n'importe quelle lettre ou chiffre
+
+[[:space:]] 	n'importe quel espace blanc
+
+[[:punct:]] 	n'importe quel signe de ponctuation
+
+[[:lower:]] 	n'importe quelle lettre en minuscule
+
+[[:upper:]] 	n'importe quelle lettre capitale
+
+[[:blank:]] 	espace ou tabulation
+
+[[:graph:]] 	caractères affichables et imprimables
+
+[[:cntrl:]] 	caractères d'échappement
+
+[[:print:]] 	caractères imprimables exceptés ceux de contrôle 
+
+
+	Recherche par expression rationnelle UNICODE :
+
+\A 	Début de chaine
+
+\b 	Caractère de début ou fin de mot
+
+\d 	Chiffre
+
+\D 	Non chiffre
+
+\s 	Caractères espace
+
+\S 	Non caractères espace
+
+\w 	Lettre, chiffre ou underscore
+
+\W 	Caractère qui n'est pas lettre, chiffre ou underscore
+
+\X 	Caractère Unicode
+
+\z 	Fin de chaine 
+
+
+Pour vous aider :
+
+https://regex101.com/
+
+
+Exemples :
+
+http://www.quennec.fr/book/export/html/414
+
+http://www.linux-france.org/article/web/egraffin/regexp.php
+
+http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_04_01.html
+
+
+
+
+https://www.lucaswillems.com/fr/articles/25/tutoriel-pour-maitriser-les-expressions-regulieres
+
+
+
+
+
+
+
+
+
+# Quelques fonctions sympa : 
+
+# VU SUR https://news.ycombinator.com/item?id=14769384  :
+ # Encrypt a file
+  function encrypt() { openssl enc -aes-256-cbc -salt -a -in $1 -out $2 ; }
+
+  # Decrypt a file
+  function decrypt() { openssl enc -aes-256-cbc -d -a -in $1 -out $2 ; }
+
+  # Fetch weather forecast
+  function weather() { curl "http://wttr.in/$1"; }
+
+  # Convert input text into a QR code
+  function qrify() { curl "http://qrenco.de/$1"; }
+
+  # Fetch information about a stock
+  function stock() { curl -s "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=KPCCCRJVMOGN9L6T" | awk '/\. / {$1=""; gsub("\"|,",""); print $0}'; }
+
+  # Conversion rate between currencies
+  function currency { curl -s "http://api.fixer.io/latest?base=$1&symbols=$2" | grep -Eo "[0-9]*[.][0-9]*"; }
+
+  # Fetch movie info
+  function movie { curl -s "http://www.omdbapi.com/?t=${1/ /+}&apikey=946f500a" | jq ". | {Title, Year, Ratings:[.Ratings[1].Source, .Ratings[1].Value ], Rated, Genre, Director, Actors, Plot}" | awk -F "\"" '/:|%|Tomato/ {print $2 $3 $4}' | sed '/: \[/d' | perl  -pe 's/,\n/: /'; }
+
+  # Fetch cheatsheet
+  function cheat() { curl "http://cheat.sh/$1"; }
+
+  # Fetches DNS nameserver ???
+  function dns_nameserver() { cat /etc/resolv.conf | grep -i ^nameserver | cut -d ' ' -f2; }
+
+  # Fetches WAN ip address ???
+  function wan_search() { dig +short myip.opendns.com @resolver1.opendns.com ; }
+
+  # Show actual destination of a tinyurl. Eg: untiny "tinyurl.com/savepii"
+  function untiny() { curl -s "http://x.datasig.io/short?url=http://$1" | awk -F '"' '/d
+
+	FIND :
+______________
+
+
+exemple :
+
+ find /var/www -type f -exec chmod 644 {} \;
+ find /var/www -type d -exec chmod 755 {} \;
+
+http://www.thegeekstuff.com/2009/06/15-practical-unix-linux-find-command-examples-part-2/
+
+
+
+	SED :
+_____________
+
+http://www.grymoire.com/Unix/sed.html
+
+https://fr.wikipedia.org/wiki/Stream_Editor
+http://tondeur.herve.free.fr/docs/cours-sed.pdf
+http://okki666.free.fr/docmaster/articles/linux130.html
+
+
+
+#!/bin/bash
+for file in *.txt
+do
+  echo "Traitement de $file ..."
+  sed -i -e "s/chaine1/chaine2/g" "$file"
+done 
+
+
+
+Exercice SED :
+
+
+Soit un fichier dates_cours.txt :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unix
+28-30 janvier
+17-19 juin
+18-20 novembre
+
+Shell
+23 mars
+12 juillet
+7 septembre
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Générez à partir de ce fichier un fichier de type xml nommé dates_cours.xml avec sed,
+pour y faire figurer une balise <date> au début de chaque ligne
+comprenant une date, et une balise </date> à la fin de celles-ci.
+
+
+Corrigé :
+
+ sed 's/^[0-9].*$/&lt;date>&lt;\/date>/' dates_cours.txt > dates_cours.xml
+
+
+
+
+
+
+	AWK :
+_____________
+
+
+Exercice :
+
+1. faire afficher les noms des fichiers du répertoire /etc sur une seule colonne.
+
+
+ file *| grep text | awk '{print $1}' | sed 's/:$//'
+ ls /etc/ | awk '{print $1}'
+
+
+2. A partir du fichier php.ini (fourni)
+Faire afficher les lignes qui ne commencent pas par ; et qui se terminent par On ou Off
+
+
+awk '/^[^;].*(On|Off)$/' php.ini
+
+
+
+
+AWK :
+
+https://likegeeks.com/awk-command/
+
+
+http://www.ai.univ-paris8.fr/~fb/Cours/Exposes0405-1/awk.pdf
+http://tondeur.herve.free.fr/docs/awk.pdf
+http://connect.ed-diamond.com/GNU-Linux-Magazine/GLMF-131/AWK-le-langage-script-de-reference-pour-le-traitement-de-fichiers
+http://lea-linux.org/documentations/Dev-awk
+https://www.developpez.net/forums/d245076/general-developpement/programmation-systeme/linux/fonction-awk/
+http://www.quennec.fr/trucs-astuces/syst%C3%A8mes/gnulinux/programmation-shell-sous-gnulinux/le-langage-de-programmation-awk/principe/structure-dun-script-awk
+http://www.linuxfocus.org/Francais/September1999/article103.html
+http://www.bruno-garcia.net/www/Unix/Docs/awk.html
+https://www.shellunix.com/awk.html
+http://kirste.userpage.fu-berlin.de/chemnet/use/info/gawk/gawk_12.html
+http://www.info.univ-angers.fr/~gh/tuteurs/xmpawk.htm
+
+https://www.shellunix.com/awk.html
+https://wiki.deimos.fr/Sed_%26_Awk_:_Quelques_exemples_de_ces_merveilles (sed + awk)
+https://linuxconfig.org/learning-linux-comman
+
+
+
+
+
+
+	LIENS :
+_______________
+
+
+Tmux Cheat Sheet :
+
+https://tmuxcheatsheet.com/
+
+Screen Cheat Sheet :
+
+https://gist.github.com/jctosta/af918e1618682638aa82
+
+
+Byobu Cheat Sheet :
+https://gist.github.com/jctosta/af918e1618682638aa82
+
+
+
+Astuces en bash :
+https://www.jujens.eu/posts/2014/Sep/07/diverses-astuces-shell/
+
+
+http://www.softpanorama.org/Scripting/Shellorama/bash_tips_and_tricks.shtml  !!!
+
+git clone https://github.com/alexanderepstein/Bash-Snippets
+
+
+
+http://hipersayanx.blogspot.com/2012/12/object-oriented-programming-in-bash.html
+https://www.gnu.org/software/bash/manual/bashref.html
+http://www.tuteurs.ens.fr/unix/shell/script.html
+
+https://linuxacademy.com/blog/linux/tutorial-the-best-tips-tricks-for-bash-explained/
+https://www.tecmint.com/useful-tips-for-writing-bash-scripts-in-linux/
+
+https://www.gnu.org/software/bash/manual/bashref.html
+
+http://www.tuteurs.ens.fr/unix/shell/script.html#s2_2
+
+
+https://linuxacademy.com/blog/linux/tutorial-the-best-tips-tricks-for-bash-explained/
+https://www.tecmint.com/useful-tips-for-writing-bash-scripts-in-linux/
+http://www.linuxjournal.com/article/7385 !!
+http://blog.wescale.fr/2016/04/07/bash-pro-tips/ !!
+https://www.linux.com/learn/bash-tips-linux-sysadmins
+http://www.softpanorama.org/Scripting/Shellorama/bash_tips_and_tricks.shtml  !!!
+https://github.com/epety/100-shell-script-examples
+https://github.com/awesome-lists/awesome-bash
+http://wiki.bash-hackers.org/doku.php
+http://www.linuxlinks.com/Software/Utilities/Scripts/index.shtml
+https://news.ycombinator.com/item?id=14769384
+https://natelandau.com/bash-scripting-utilities/  !!
+
+https://www.reddit.com/r/bashtricks/
+https://jvns.ca/blog/2017/03/26/bash-quirks/
+https://en.wikibooks.org/wiki/Bash_Shell_Scripting
+
+https://github.com/alexanderepstein/Bash-Snippets
+https://github.com/   --> Rechercher oh-my-bash (+ oh-my-fish / oh-my-zsh )
+
+
+Redirection :
+http://wiki.bash-hackers.org/howto/redirection_tutorial
+http://wiki.bash-hackers.org/syntax/redirection
+
+Select : 
+http://askubuntu.com/questions/1705/how-can-i-create-a-select-menu-in-a-shell-script
+
+While :
+https://www.cyberciti.biz/faq/bash-while-loop/
+
+Grep ( + exercices) :
+http://www.tuteurs.ens.fr/unix/exercices/solutions/grep-sol.html
+
+
+stdin, stdout, stderr :
+http://wiki.bash-hackers.org/howto/redirection_tutorial
+
+
+Expressions régulières :
+http://www.quennec.fr/book/export/html/414
+http://www.linux-france.org/article/web/egraffin/regexp.php
+http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_04_01.html
+
+Métacaractères :
+http://www.bloguelinux.ca/ligne-de-commande-linux-101-2-bash-metacaractere/
+http://www.lifl.fr/~marquet/cnl/pdc/tpiu-002.html
+
+
+
+
+VIM :
+http://www.thegeekstuff.com/2009/03/8-essential-vim-editor-navigation-fundamentals/
+
+https://neovim.io/doc/user/vim_diff.html
+https://damien.pobel.fr/post/vim-neovim/
+
+http://www.thegeekstuff.com/2009/03/8-essential-vim-editor-navigation-fundamentals/
+https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+https://github.com/powerline/powerline   !!! Pour un vim plus beau !!!
+
+https://vim-adventures.com/ !!!!!!!!!!
+
+
+Exemple de macro vim (Commenter n lignes d'un seul coup) :
+
+1    Press Esc to enter 'command mode'
+2    Use Ctrl+V to enter visual block mode
+3    Move Up/Downto select the columns of text in the lines you want to comment.
+4    Then hit Shift+i and type the text you want to insert (#).
+5    Then hit Esc, wait 1 second and the inserted text will appear on every line.
+
+
+
+
+
+
+
+	EN APPARTÉ :
+____________________
+
+
+
+	FZF !!!
+
+https://github.com/junegunn/fzf#installation
+
+	RIPGREP !!
+
+
+$ curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.1/ripgrep_11.0.1_amd64.deb
+$ sudo dpkg -i ripgrep_11.0.1_amd64.deb
+
+
+
+#
+# FZF : The Fuzzy Finder :
+#
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#
+# Des fonctions qui vont bien pour fzf :
+#
+export FZF_DEFAULT_OPTS='--height 30% --layout=reverse --preview --exact --border'
+alias joue='mpv $(fzf)'
+
+look()
+	{
+fzf --exact --preview-window down:2 --preview '[[ $(file --mime {}) =~ binary ]] &&
+                 echo {} is a binary file ||
+                 (bat --style=numbers --color=always {} ||
+                  highlight -O ansi -l {} ||
+                  coderay {} ||
+                  rougify {} ||
+                  cat {}) 2> /dev/null | head -500'
+	}
+
+
+fkill() {
+    local pid 
+    if [ "$UID" != "0" ]; then
+        pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+    else
+        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+    fi  
+
+    if [ "x$pid" != "x" ]
+    then
+        echo $pid | xargs kill -${1:-9}
+    fi  
+}
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exact --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# fh - repeat history
+runcmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, <>' ; }
+fh() {
+  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
+}
+
+
+# fcd : cd with a menu :
+
+function fcd() {     if [[ "$#" != 0 ]]; then         builtin cd "$@";         return;     fi;     while true; do         local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;');         local dir="$(printf '%s\n' "${lsd[@]}" |
+            fzf --reverse --preview '
+                __cd_nxt="$(echo {})";
+                __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+                echo $__cd_path;
+                echo;
+                ls -p --color=always "${__cd_path}";
+        ')";         [[ ${#dir} != 0 ]] || return 0;         builtin cd "$dir" &> /dev/null;     done; }
+
+
+
+
+
+Dans byobu (cool !), à aliaser  :
+
+tmux list-windows -F "#I:#W" | fzf-tmux | cut -d ":" -f 1 | xargs tmux select-window -t
+
+
+
+
+
+
+
+
+
+
+
+

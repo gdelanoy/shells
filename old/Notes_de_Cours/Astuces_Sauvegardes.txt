@@ -1,0 +1,74 @@
+
+
+	Sauvegardes :
+_____________________
+
+# quelques exemples à adapter :
+
+
+# Sauvegarde incrémentielle :
+
+rsync -uravH /etc/* /mnt/sauvegardes/systeme/etc/
+
+# Incrémentielle avec des exclusions :
+
+cd /mnt/sauvegardesformation/
+rsync -vurz --exclude-from '/mnt/sauvegardes/exclusions.txt' /home/* /mnt/sauvegardes/homes/
+
+
+~~~~~~~~~~~~~~~~ exclusions.txt : ~~~~~~~~~~~~~~~~~
+/sys
+/run
+/proc
+/var/lib/apt/cache
+core
+/home/*/.cache
+/home/*/*VirtualBox*
+/home/*/*.dropbox*
+/home/*/*Téléchargements
+/home/*/*ownloads
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+# SAUVEGARDE DIFFÉRENTIELLE :
+
+
+[ -d /tmp/etc ] && rm -fR /tmp/etc
+mkdir /tmp/etc
+find /etc/ -mtime -1 -exec cp "{}" /tmp/etc/ \;
+cd /tmp/etc
+tar cvpf - ./* | gzip -9 > /mnt/donnees/sauvegardes/systeme/archives/etc_1mois/etc-`date +%F`.tar.gz 
+
+# LOGGER UNE SAUVEGARDE :
+
+tar -zcpvf /mnt/sauvegardes/etc-$(hostname)-$(date +%F).tar.gz /etc/  > /var/log/backup/etc-`date +%F`.log
+
+
+# SAUVEGARDER UNE BDD SQL :
+
+mysqldump -u root -pXXXXXXXXXX --all-databases --single-transaction > /mnt/sauvegardes/sql/MySQLdump-`date +%F`.sql
+
+# N.B. : Pour les réimporter, il faudra faire ça : mysql -u root -p < MySQLdump-kivabien.sql
+
+
+# Paquets (sur une redhat)
+
+rpm -qa > liste-paquets-$(hostname)-$(date +%F).txt
+
+
+# paquets (sur une Debian)
+
+
+dpkg --get-selections > liste-paquets-$(hostname)-$(date +%F).txt
+
+
+
+
+
+
+
+
+
+
