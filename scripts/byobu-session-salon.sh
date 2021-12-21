@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# Avant tout, réveiller le NAS Synology s'il est passé 11 heures :
+zobi=$(date +%H)
+ [[ $zobi -gt 11 ]] && wakeonlan 00:11:32:31:0A:54
+
+# Puis on construit la session Byobu :
+
 if [ -z "$(byobu list-sessions | grep $USER)" ]
  then
  cd ~
@@ -9,6 +16,31 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'gotop' 'C-m'
  byobu-tmux send-keys -t 1 'glances' 'C-m'
 
+# Une autre :
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'NMON'
+ byobu-tmux send-keys 'nmon' 'C-m'
+sleep 1
+ byobu-tmux send-keys 'n'
+
+ byobu-tmux send-keys 'm'
+
+ byobu-tmux send-keys 'r'
+
+ byobu-tmux send-keys 'U'
+
+ byobu-tmux send-keys 'j'
+
+ # Encore une :
+
+ byobu-tmux new-window
+ byobu-tmux rename-window 'LOGS'
+ byobu split-window -v
+ byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
+ byobu-tmux send-keys -t 1 'C-m'
+ byobu-tmux send-keys -t 0 'whowatch' 'C-m'
+
 # Tiens, une autre :
 
  byobu-tmux new-window
@@ -16,25 +48,11 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 0 'ranger' 'C-m'
  byobu-tmux send-keys -t 1 'br' 'C-m'
 
-# Et une autre :
-
- byobu-tmux new-window
- byobu-tmux rename-window 'Logs'
- byobu split-window -v
- # byobu-tmux send-keys -t 1 'sudo su' 'C-m'
- byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
- byobu-tmux send-keys -t 1 'C-m'
-# byobu-tmux send-keys -t 0 'sudo su' 'C-m'
- byobu-tmux send-keys -t 0 'whowatch' 'C-m'
- # byobu-tmux send-keys -t 0 'C-m'
-
  # Une nouvelle fenêtre pour vim avec son explorateur ...
 
  byobu-tmux new-window
  byobu-tmux rename-window 'VIM'
  byobu-tmux send-keys 'vim' 'C-m'
- sleep 1
- byobu-tmux send-keys 'C-a' 'C-m'
 
 # On crée une autre fenêtre ( Un shell zsh, un autre en fish )...
 

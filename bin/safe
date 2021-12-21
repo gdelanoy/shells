@@ -11,5 +11,12 @@ encfs /home/guillaume/Dropbox/Safe/ /home/guillaume/safe-in-cloud/ \
         [Nn]* ) echo "OK. bye."; df -h | grep safe | lolcat ; exit;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
-#  df -h | grep safe | lolcat
- done
+
+    read -p "Pendant qu'on y est, tu veux aussi ouvrir le NAS Syno ? " yn
+    case $yn in
+        [YyOo]* ) /home/guillaume/.shells/bin/sursyno 2>/dev/null ; break;;
+        [Nn]* ) echo "Bon bin c'est tout alors... atchaô."; df -h | grep safe | lolcat ; exit;;
+        * ) echo "Réponds par oui ou par non s'il te plaît...";;
+    esac
+
+done
