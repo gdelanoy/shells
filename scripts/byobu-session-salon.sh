@@ -23,13 +23,9 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys 'nmon' 'C-m'
 sleep 1
  byobu-tmux send-keys 'n'
-
  byobu-tmux send-keys 'm'
-
  byobu-tmux send-keys 'r'
-
  byobu-tmux send-keys 'U'
-
  byobu-tmux send-keys 'j'
 
  # Encore une :
@@ -37,9 +33,12 @@ sleep 1
  byobu-tmux new-window
  byobu-tmux rename-window 'LOGS'
  byobu split-window -v
- byobu-tmux send-keys -t 1 'lnav /var/log/ /var/log/*/' 'C-m'
- byobu-tmux send-keys -t 1 'C-m'
- byobu-tmux send-keys -t 0 'whowatch' 'C-m'
+ byobu split-window -v
+ byobu-tmux send-keys -t 1 'whowatch' 'C-m'
+ byobu-tmux send-keys -t 2 'lnav /var/log/ /var/log/*/' 'C-m'
+ byobu-tmux send-keys -t 2 'C-m'
+ byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
+ byobu-tmux send-keys -t 0 'nethogs' 'C-m'
 
 # Tiens, une autre :
 
@@ -75,12 +74,9 @@ sleep 1
  byobu-tmux send-keys -t 0 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'figlet $(hostname) | lolcat' 'C-m'
-# byobu-tmux send-keys -t 0 '( ( ping -c1 syno && clear;sh syno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'espanso restart' 'C-m'
-# byobu-tmux send-keys -t 1 'xinput --set-button-map 10 3 2 1' 'C-m'
  byobu-tmux send-keys -t 1 '[ -d /home/guillaume/safe-in-cloud/yoga ] || safe' 'C-m'
- # byobu-tmux send-keys -t 0 '( ( ping -c1 syno && clear;sursyno ) || echo "Le NAS Synology est injoignable." )' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Quatre'
@@ -94,7 +90,6 @@ sleep 1
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 1 'find Temp/ -iname "*.*" -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 1 'mpv ²'
-
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Cinq'
