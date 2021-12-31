@@ -14,11 +14,14 @@ sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/
 #
 sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
 #
-# sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other
-#
-# sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/usbshare1 /mnt/syno/tizzbird -o allow_other 2>/dev/null # films
-
-df -h | grep syno | lolcat
+df -h | grep syno | lolcat && while true
+ do
+    read -p "Veux-tu aussi ouvrir le partage des sauvegardes ? " yn
+    case $yn in
+        [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 \ 
+		guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
+		df -h | grep sauvegarde | lolcat ; break;;
+        [Nn]* ) echo "OK. bye."; df -h | grep syno | lolcat ; exit;;
+        * ) echo "Réponds par oui ou par non s'il te plaît...";;
+    esac
 exit
-
-

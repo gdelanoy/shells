@@ -20,19 +20,19 @@ echo "0.0.0.0   www.reddit.com              # Noirlistez-moi !!!"   >> /etc/host
         sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i terminal "Le filtrage Web est activé 🤓" "\nSouviens-toi que tu ne fais pas ça pour te fliquer\n toi-même, mais pour t inciter à tirer le meilleur parti de ton temps.\nCourage et bonne humeur !"
 fi
 
-ps -aux | grep firefox >/dev/null
-if [ $? -eq 0 ]
-then
-        pkill firefox
-        wait
-        xhost 127.0.0.1
-        sudo -u guillaume -H firefox &
-        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i terminal "Redémarrage du navigateur 💥" "\nFirefox redémarre pour tenir compte des nouvelles règles de filtrage ..."
-else
+# ps -aux | grep firefox >/dev/null
+# if [ $? -eq 0 ]
+# then
+#        pkill firefox
+#        wait
+#        xhost 127.0.0.1
+#        sudo -u guillaume -H firefox &
+#        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i terminal "Redémarrage du navigateur 💥" "\nFirefox redémarre pour tenir compte des nouvelles règles de filtrage ..."
+# else
 
 
 # To adapt this script change my name to your username in the above line, as well as UID (1000 here) !
 
-exit
-fi
+# exit
+# fi
 

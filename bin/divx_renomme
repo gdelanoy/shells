@@ -3,6 +3,243 @@
 # Renommer en masse des DivX avec des noms àlc :
 #
 
+rename 's/\[.*\]//' *.mkv
+rename 's/\[.*\]//' *.avi
+
+rename 's/\ /_/g' *.mkv
+rename 's/\ /_/g' *.avi
+
+rename 's/\./_/g' *mkv
+rename 's/\./_/g' *avi
+
+rename 's/\__/_/g' *mkv
+rename 's/\__/_/g' *avi
+rename 's/\__/_/g' *mkv
+rename 's/\__/_/g' *avi
+
+rename 's/\-mkv$/\.mkv/' *mkv
+rename 's/\-avi$/\.avi/' *avi
+
+rename 's/^\_//' *.mkv
+rename 's/^\_//' *.avi
+
+rename 's/_\./\./g' *.mkv
+rename 's/_\./\./'g *.avi
+
+rename 's/\._/\./g' *.mkv
+rename 's/\._/\./'g *.avi
+
+rename 's/\_mkv$/\.mkv/' *mkv
+rename 's/\_avi$/\.avi/' *avi
+
+rename 's/\.20[0-9][0-9]//' *mkv
+rename 's/\.20[0-9][0-9]//' *avi
+
+rename 's/french//i' *mkv
+rename 's/french//i' *avi
+
+rename 's/\.TRUE//i' *mkv
+rename 's/\.TRUE//i' *avi
+
+rename 's/TRUE//' *mkv
+rename 's/TRUE//' *avi
+
+rename 's/EXTREME\.//' *.mkv
+rename 's/EXTREME\.//' *.avi
+
+rename 's/\.bdrip//i' *.mkv
+rename 's/\.bdrip//i' *.avi
+rename 's/bdrip//i' *.mkv
+rename 's/bdrip//i' *.avi
+
+rename 's/\.xvid-//i' *.mkv
+rename 's/\.xvid-//i' *.avi
+rename 's/xvid-//i' *.mkv
+rename 's/xvid-//i' *.avi
+rename 's/xvid//i' *.mkv
+rename 's/xvid//i' *.avi
+
+rename 's/\.hdrip//i' *.mkv
+rename 's/\.hdrip//i' *.avi
+rename 's/hdrip//i' *.mkv
+rename 's/hdrip//i' *.avi
+
+rename 's/\.WEBRiP//i' *.mkv
+rename 's/\.WEBRiP//i' *.avi
+rename 's/WEBRiP//i' *.mkv
+rename 's/WEBRiP//i' *.avi
+
+rename 's/\.DVDRIP//i' *.mkv
+rename 's/\.DVDRIP//i' *.avi
+rename 's/DVDRIP//i' *.mkv
+rename 's/DVDRIP//i' *.avi
+
+rename 's/PREUMS//i' *.mkv
+rename 's/PREUMS//i' *.avi
+
+rename 's/CZ530//i' *.mkv
+rename 's/CZ530//i' *.avi
+
+rename 's/DUB//' *.mkv
+rename 's/DUB//' *.avi
+
+rename 's/HDTS//i' *.mkv
+rename 's/HDTS//i' *.avi
+
+rename 's/BluRay//i' *.mkv
+rename 's/BluRay//i' *.avi
+
+rename 's/360p//i' *.mkv
+rename 's/360p//i' *.avi
+
+rename 's/480p//i' *.mkv
+rename 's/480p//i' *.avi
+
+rename 's/720p//i' *.mkv
+rename 's/720p//i' *.avi
+
+rename 's/1080p//i' *.mkv
+rename 's/1080p//i' *.avi
+
+rename 's/x264//i' *.mkv
+rename 's/x264//i' *.avi
+
+rename 's/AC3//' *.mkv
+rename 's/AC3//' *.avi
+
+rename 's/\__/_/g' *mkv
+rename 's/\__/_/g' *avi
+rename 's/\__/_/g' *mkv
+rename 's/\__/_/g' *avi
+
+rename 's/-_//' *.mkv
+rename 's/-_//' *.avi
+rename 's/_-//' *.mkv
+rename 's/_-//' *.avi
+
+rename 's/^\_//' *.mkv
+rename 's/^\_//' *.avi
+
+
+
+rename 's/\[.*\]//' *.webm
+rename 's/\[.*\]//' *.mp4
+
+rename 's/\ /_/g' *.webm
+rename 's/\ /_/g' *.mp4
+
+rename 's/\./_/g' *webm
+rename 's/\./_/g' *mp4
+
+rename 's/\__/_/g' *webm
+rename 's/\__/_/g' *mp4
+rename 's/\__/_/g' *webm
+rename 's/\__/_/g' *mp4
+
+rename 's/\-webm$/\.webm/' *webm
+rename 's/\-mp4$/\.mp4/' *mp4
+
+rename 's/^\_//' *.webm
+rename 's/^\_//' *.mp4
+
+rename 's/_\./\./g' *.webm
+rename 's/_\./\./'g *.mp4
+
+rename 's/\._/\./g' *.webm
+rename 's/\._/\./'g *.mp4
+
+rename 's/\_webm$/\.webm/' *webm
+rename 's/\_mp4$/\.mp4/' *mp4
+
+rename 's/\.20[0-9][0-9]//' *webm
+rename 's/\.20[0-9][0-9]//' *mp4
+
+rename 's/french//i' *webm
+rename 's/french//i' *mp4
+
+rename 's/\.TRUE//i' *webm
+rename 's/\.TRUE//i' *mp4
+
+rename 's/TRUE//' *webm
+rename 's/TRUE//' *mp4
+
+rename 's/EXTREME\.//' *.webm
+rename 's/EXTREME\.//' *.mp4
+
+rename 's/\.bdrip//i' *.webm
+rename 's/\.bdrip//i' *.mp4
+rename 's/bdrip//i' *.webm
+rename 's/bdrip//i' *.mp4
+
+rename 's/\.xvid-//i' *.webm
+rename 's/\.xvid-//i' *.mp4
+rename 's/xvid-//i' *.webm
+rename 's/xvid-//i' *.mp4
+rename 's/xvid//i' *.webm
+rename 's/xvid//i' *.mp4
+
+rename 's/\.hdrip//i' *.webm
+rename 's/\.hdrip//i' *.mp4
+rename 's/hdrip//i' *.webm
+rename 's/hdrip//i' *.mp4
+
+rename 's/\.WEBRiP//i' *.webm
+rename 's/\.WEBRiP//i' *.mp4
+rename 's/WEBRiP//i' *.webm
+rename 's/WEBRiP//i' *.mp4
+
+rename 's/\.DVDRIP//i' *.webm
+rename 's/\.DVDRIP//i' *.mp4
+rename 's/DVDRIP//i' *.webm
+rename 's/DVDRIP//i' *.mp4
+
+rename 's/PREUMS//i' *.webm
+rename 's/PREUMS//i' *.mp4
+
+rename 's/CZ530//i' *.webm
+rename 's/CZ530//i' *.mp4
+
+rename 's/DUB//' *.webm
+rename 's/DUB//' *.mp4
+
+rename 's/HDTS//i' *.webm
+rename 's/HDTS//i' *.mp4
+
+rename 's/BluRay//i' *.webm
+rename 's/BluRay//i' *.mp4
+
+rename 's/360p//i' *.webm
+rename 's/360p//i' *.mp4
+
+rename 's/480p//i' *.webm
+rename 's/480p//i' *.mp4
+
+rename 's/720p//i' *.webm
+rename 's/720p//i' *.mp4
+
+rename 's/1080p//i' *.webm
+rename 's/1080p//i' *.mp4
+
+rename 's/x264//i' *.webm
+rename 's/x264//i' *.mp4
+
+rename 's/AC3//' *.webm
+rename 's/AC3//' *.mp4
+
+rename 's/\__/_/g' *webm
+rename 's/\__/_/g' *mp4
+rename 's/\__/_/g' *webm
+rename 's/\__/_/g' *mp4
+
+rename 's/-_//' *.webm
+rename 's/-_//' *.mp4
+rename 's/_-//' *.webm
+rename 's/_-//' *.mp4
+
+rename 's/^\_//' *.webm
+rename 's/^\_//' *.mp4
+
+
 rename 's/\ /_/g' *.avi
 rename 's/www//g' *.avi
 rename 's/Torrent//g' *.avi
@@ -209,6 +446,4 @@ rename 's/\.\././g' *.webm
 rename 's/\.\././g' *.webm
 rename 's/\.\././g' *.webm
 rename 's/\.\././g' *.webm
-
-
 

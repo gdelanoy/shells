@@ -419,6 +419,11 @@ espeak -v mb-de2 "$*" --stdout | play - tempo 1.1 bend 0.1,-500,0.5 chorus 1 1.5
 cd -
 	}
 
+
+function cdls {
+    builtin cd "$@" && ls -lhGgo --group-directories-first
+    }
+
 ###############
 #  Les alias :
 ###############

@@ -38,6 +38,7 @@ sleep 1
  byobu-tmux send-keys -t 2 'lnav /var/log/ /var/log/*/' 'C-m'
  byobu-tmux send-keys -t 2 'C-m'
  byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
+ sleep 1
  byobu-tmux send-keys -t 0 'nethogs' 'C-m'
 
 # Tiens, une autre :
@@ -83,6 +84,16 @@ sleep 1
  byobu split-window -v
  byobu-tmux send-keys -t 0 'cd ~/Téléchargements' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.deb DEB/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.jpg IMG/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.jpeg IMG/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.gif IMG/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.png IMG/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.iso ISO/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.pdf PDF/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.zip *.tgz *.tar.gz ZIP/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.tgz ZIP/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.tar.gz ZIP/' 'C-m'
  byobu-tmux send-keys -t 0 'find . \( -iname "*.mkv" -o -iname "*.avi"  -o -iname "*.mp4" \) -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
