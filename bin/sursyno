@@ -6,6 +6,9 @@
 
 #!/bin/bash
 
+wakeonlan 00:11:32:31:0A:54
+
+
 sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
 #
 sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
@@ -14,14 +17,13 @@ sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/
 #
 sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
 #
-df -h | grep syno | lolcat && while true
- do
+# df -h | grep syno | lolcat && while true
     read -p "Veux-tu aussi ouvrir le partage des sauvegardes ? " yn
     case $yn in
-        [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 \ 
-		guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
+        [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
 		df -h | grep sauvegarde | lolcat ; break;;
         [Nn]* ) echo "OK. bye."; df -h | grep syno | lolcat ; exit;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
 exit
+

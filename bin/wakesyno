@@ -1,12 +1,10 @@
 #!/bin/bash
 #####################################################
-# Nom du script : grosse.sh
-# Utilité: Ce script sert à écouter la grosse radio.
-# Il enregistre dans le même temps un fichier mp3 dans /tmp .
-# De cdtte façon, si un morce au me plait, je n'ai qu'à ouvrir ce mp3 dans Audacity, et le découper ;-)
+# Nom du script : wakesyno
+# Utilité: Ce script sert à faire pousser des fleurs
 # Usage: ... (le cas échéant)
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
-# License: Ce script est sous license anticapitalliste.
+# License: Ce script est sous license anticapitaliste.
 # Veuillez consulter https://anticapitalist.software
 # ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)
 # Copyright © [year] [copyright holders]
@@ -39,17 +37,9 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #
-# Créé le: samedi_12/09/2020 à 22h11
+# Créé le: dimanche_23/01/2022 à 21h30
 #####################################################
 #
-rm -f /tmp/la-grosse-radio-*.txt
-trap "echo; ls -lah /tmp/la-grosse*mp3 |lolcat" EXIT
 
-mpv https://hd.lagrosseradio.info/lagrosseradio-rock-192.mp3 --record-file=/tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).mp3 2>/dev/null | tee /tmp/la-grosse-radio-$(date +%d-%B-%Y---%H_h-%M_m).txt
-
-ZOBI(){
-        grep title /tmp/la-grosse-radio-*.txt | grep -v "\-\-" | cut -d: -f2 | lolcat -a
-        }
-ZOBI
-exit 0
+wakeonlan 00:11:32:31:0A:54
 

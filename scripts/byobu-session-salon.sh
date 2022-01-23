@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Avant tout, réveiller le NAS Synology s'il est passé 11 heures :
-zobi=$(date +%H)
- [[ $zobi -gt 11 ]] && wakeonlan 00:11:32:31:0A:54
+# zobi=$(date +%H)
+#  [[ $zobi -gt 11 ]] && wakeonlan 00:11:32:31:0A:54
 
 # Puis on construit la session Byobu :
 
@@ -125,7 +125,7 @@ sleep 1
  byobu-tmux rename-window 'Sept'
  byobu split-window -h
  byobu-tmux send-keys -t 0 'bat ~/.zshrc --theme Dracula --line-range 259:' 'C-m'
- byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml --line-range 189:' 'C-m'
+ byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml --line-range 198:' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'
