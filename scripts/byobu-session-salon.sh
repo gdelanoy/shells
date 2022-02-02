@@ -64,14 +64,17 @@ sleep 1
  byobu-tmux send-keys -t 0 'fish' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'll' 'C-m'
+ byobu-tmux send-keys -t 0 'ls' 'C-m'
 
  # Create another window
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Deux'
  byobu split-window -v
- byobu-tmux send-keys -t 0 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
+# byobu-tmux send-keys -t 0 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
+ byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
+ byobu-tmux send-keys -t 0 'sleep 1' 'C-m'
+ byobu-tmux send-keys -t 0 'su - aureo' 'C-m'
  byobu-tmux send-keys -t 0 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'figlet $(hostname) | lolcat' 'C-m'
@@ -130,7 +133,7 @@ sleep 1
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'
  byobu-tmux send-keys 'bofh' 'C-m'
- byobu-tmux send-keys 'blackr' 'C-m'
+# byobu-tmux send-keys 'blackr' 'C-m'
 
  # It's OK. If that session isn't already running, fire it :
 
