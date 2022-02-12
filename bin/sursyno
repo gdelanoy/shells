@@ -1,29 +1,72 @@
 #!/bin/bash
-# sshfs guillaume@syno:/sauvegardes /mnt/syno/sauvegardes
-# sshfs guillaume@syno:/MesDocs /mnt/syno/MesDocs
-# sshfs guillaume@syno:/musique /mnt/syno/musique
-# sshfs guillaume@syno:/IT /mnt/syno/IT
-
-#!/bin/bash
-
-wakeonlan 00:11:32:31:0A:54
-
-
-sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+#####################################################
+# Nom du script : synotruc
+# Utilité: Ce script sert à faire pousser des fleurs
+# Usage: ... (le cas échéant)
+# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
+# License: Ce script est sous license anticapitaliste.
+# Veuillez consulter https://anticapitalist.software
+# ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)
+# Copyright © [year] [copyright holders]
+# This is anti-capitalist software, released for free use by individuals and organizations
+# that do not operate by capitalist principles.
+# Permission is hereby granted, free of charge, to any person or organization (the User)
+# obtaining a copy of this software and associated documentation files (the Software), to use, copy,
+# modify, merge, distribute, and/or sell copies of the Software, subject to the following conditions:
 #
-sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+# 1. The above copyright notice and this permission notice shall be included in all copies or
+# modified versions of the Software.
 #
-sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+# 2. The User is one of the following:
+# a. An individual person, laboring for themselves
+# b. A non-profit organization
+# c. An educational institution
+# d. An organization that seeks shared profit for all of its members, and allows non-members
+# to set the cost of their labor
 #
-sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
+# 3. If the User is an organization with owners, then all owners are workers and all workers
+# are owners with equal equity and/or equal vote.
 #
-# df -h | grep syno | lolcat && while true
-    read -p "Veux-tu aussi ouvrir le partage des sauvegardes ? " yn
+# 4. If the User is an organization, then the User is not law enforcement or military,
+# or working for or under either.
+#
+# THE SOFTWARE IS PROVIDED AS IS, WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+# AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+# OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+#
+# Créé le: samedi_12/02/2022 à 18h48
+#####################################################
+#
+synolecteurs(){
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
+
+    df -h | grep syno | lolcat
+
+    read -p "Veux-tu aussi ouvrir le partage des sauvegardes ¿ " yn
+
     case $yn in
-        [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
-		df -h | grep sauvegarde | lolcat ; break;;
-        [Nn]* ) echo "OK. bye."; df -h | grep syno | lolcat ; exit;;
-        * ) echo "Réponds par oui ou par non s'il te plaît...";;
+            [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
+                      df -h | grep sauvegarde | lolcat ;;
+            [Nn]* ) echo "OK. bye."; df -h | grep sauvegardes | lolcat ; exit;;
+                * ) echo "Réponds par oui ou par non s'il te plait...";;
     esac
-exit
+}
+
+synodort(){
+wakeonlan 00:11:32:31:0A:54
+echo "On dirait que syno est arrêté, je vais te le réveiller moi 💤 ... (2min.) ... 💤"
+
+for i in [1..150]; do
+echo "💤 ..."
+sleep 1
+done
+}
+
+ping -c3 syno >/dev/null 2>/dev/null && synolecteurs || synodort; synolecteurs
 
