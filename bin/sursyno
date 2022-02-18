@@ -61,12 +61,28 @@ synolecteurs(){
 synodort(){
 wakeonlan 00:11:32:31:0A:54
 echo "On dirait que syno est arrêté, je vais te le réveiller moi 💤 ... (2min.) ... 💤"
-
-for i in [1..150]; do
-echo "💤 ..."
+for i in {1..150}; do
+printf '...💤%.0s' {1..$i}
+echo ""
 sleep 1
 done
-}
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
+clear
+    df -h | grep syno | lolcat
 
-ping -c3 syno >/dev/null 2>/dev/null && synolecteurs || synodort; synolecteurs
+    read -p "Veux-tu aussi ouvrir le partage des sauvegardes ¿ " yn
 
+    case $yn in
+            [YyOo]* ) sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/sauvegardes /mnt/syno/sauvegardes -o allow_other 2>/dev/null ;\
+                      df -h | grep sauvegarde | lolcat ;;
+            [Nn]* ) echo "OK. bye."; df -h | grep sauvegardes | lolcat ; exit;;
+                * ) echo "Réponds par oui ou par non s'il te plait...";;
+
+            }
+
+
+
+ping -c3 syno >/dev/null 2>/dev/null && synolecteurs || synodort

@@ -1,0 +1,3 @@
+#!/bin/bash
+zobi="$(which "$1")"
+vim $zobi

@@ -221,7 +221,7 @@ export HISTCONTROL="ignoreboth"
 # then
 #  if [ -r $HOME/.shells/dircolors ]
 #  then
-    eval "`dircolors $HOME/.shells/dircolors`"
+#    eval "`dircolors $HOME/.shells/dircolors`"
 #  elif [ -r /etc/dir_colors ]
 #  then
 #    eval "`dircolors /etc/dir_colors`"
@@ -230,7 +230,7 @@ export HISTCONTROL="ignoreboth"
 
 # Des couleurs :
 #
-
+source $HOME/.shells/scripts/lscolors.sh
 # source /home/guillaume/.shells/scripts/couleurs.shell
 
 ###########################
@@ -423,6 +423,10 @@ cd -
 function cdls {
     builtin cd "$@" && ls -lhGgo --group-directories-first
     }
+
+
+noter() { vim + "$(date +"%d-%m-%y %H:%M" | while read d t ; do f=$HOME/Documents/Ecrire/bribes/$d ; ( echo; echo $t ; echo ) >> "$f" ; echo "$f"; done; )" ; }
+
 
 ###############
 #  Les alias :

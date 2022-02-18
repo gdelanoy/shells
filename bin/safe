@@ -10,9 +10,9 @@ read -p "Veux-tu aussi ouvrir ta tirelire ? " yn
         [Nn]* ) echo "OK. bye."; df -h | grep safe | lolcat; exit 0 ;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
-read -p "Hey Pendant que tu y est, tu veux aussi ouvrir les partages sur Syno ? " yn
+read -p "Pendant que tu y est, tu veux aussi ouvrir les partages sur Syno ? " yn
     case $yn in
-        [YyOo]* ) /home/guillaume/.shells/bin/sursyno 2>/dev/null ;;
+        [YyOo]* ) command /home/guillaume/.shells/bin/sursyno 2>/dev/null ;;
         [Nn]* ) echo "Bon bin c'est tout alors... atchaô."; ;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
 esac
