@@ -60,6 +60,7 @@ sleep 1
  byobu-tmux rename-window 'Shells'
  byobu split-window -v
  byobu-tmux send-keys -t 1 'bash' 'C-m'
+ byobu-tmux send-keys -t 1 'cd .bin' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'fish' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'

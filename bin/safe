@@ -10,11 +10,35 @@ read -p "Veux-tu aussi ouvrir ta tirelire ? " yn
         [Nn]* ) echo "OK. bye."; df -h | grep safe | lolcat; exit 0 ;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
-read -p "Pendant que tu y est, tu veux aussi ouvrir les partages sur Syno ? " yn
-    case $yn in
-        [YyOo]* ) command /home/guillaume/.shells/bin/sursyno 2>/dev/null ;;
-        [Nn]* ) echo "Bon bin c'est tout alors... atchaô."; ;;
-        * ) echo "Réponds par oui ou par non s'il te plaît...";;
-esac
+echo "Pendant que tu y est, tu veux aussi ouvrir les partages sur Syno ? "
+read syn0
+#
+synolecteurs(){
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
 
+# echo $syn0 |grep -i {y,e,s,o,oui} && synolecteurs || echo "OK. bye."
+
+
+synodort(){
+wakeonlan 00:11:32:31:0A:54
+echo "On dirait que syno est arrêté, je vais te le réveiller moi 💤 ... (2min.) ... 💤"
+for i in {1..150}; do
+printf '...💤%.0s' {1..$i}
+echo ""
+sleep 1
+done
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/MesDocs /mnt/syno/MesDocs -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/musique /mnt/syno/musique -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/IT /mnt/syno/IT -o allow_other
+    sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 guillaume@syno:/offsite /mnt/syno/offsite -o allow_other
+clear
+    df -h | grep syno | lolcat
+    }
+
+echo $syn0 > /dev/null |grep -i {y,e,s,o,oui} && (synolecteurs || synodort) || echo "OK. bye."
+
+# aping -c3 syno >/dev/null 2>/dev/null && synolecteurs || synodort
 
