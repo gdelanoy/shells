@@ -39,7 +39,7 @@ sleep 1
  byobu-tmux send-keys -t 2 'C-m'
  byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
  sleep 1
- byobu-tmux send-keys -t 0 'nethogs' 'C-m'
+ byobu-tmux send-keys -t 0 'nethogs -a enp5s0' 'C-m'
 
 # Tiens, une autre :
 
@@ -66,6 +66,7 @@ sleep 1
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'ls' 'C-m'
+ byobu-tmux send-keys -t 0 'du -m .' 'C-m'
 
  # Create another window
 

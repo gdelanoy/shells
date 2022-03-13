@@ -28,3 +28,4 @@ umask 022
 
 # De la couleur pour grep
 export GREP_OPTIONS='--color=auto'
+. "$HOME/.cargo/env"

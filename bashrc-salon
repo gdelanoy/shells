@@ -489,3 +489,4 @@ alias br='br --sizes -dp'
 alias hh=hstr                    # hh to be alias for hstr
 export HSTR_CONFIG=hicolor       # get more colors
 
+. "$HOME/.cargo/env"
