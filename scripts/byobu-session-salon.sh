@@ -36,7 +36,7 @@ sleep 1
  byobu split-window -v
  byobu-tmux send-keys -t 1 'whowatch' 'C-m'
  byobu-tmux send-keys -t 2 'lnav /var/log/ /var/log/*/' 'C-m'
- byobu-tmux send-keys -t 2 'C-m'
+#  byobu-tmux send-keys -t 2 'C-m'
  byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 0 'nethogs -a enp5s0' 'C-m'
@@ -66,7 +66,7 @@ sleep 1
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
  byobu-tmux send-keys -t 0 'ls' 'C-m'
- byobu-tmux send-keys -t 0 'du -m .' 'C-m'
+ byobu-tmux send-keys -t 0 'du -m .|tail -n 1' 'C-m'
 
  # Create another window
 
@@ -120,7 +120,7 @@ sleep 1
  byobu-tmux send-keys -t 0 'grosse'
  byobu-tmux send-keys -t 2 'TERM=rxvt-unicode-256color' 'C-m'
  byobu-tmux send-keys -t 2 'cava' 'C-m'
- byobu-tmux send-keys -t 3 'alsamixer' 'C-m'
+ byobu-tmux send-keys -t 3 'pulsemixer' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Six'

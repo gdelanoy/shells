@@ -11,11 +11,13 @@ read -p "Veux-tu aussi ouvrir ta tirelire ? " yn
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
 
-echo $? | grep 0 2&1>/dev/null || exit 0
+(echo $? | grep "0") >/dev/null 2>&1 || exit 0
+
+echo ""
 
 read -p "Tiens pendant qu'on y est, tu veux aussi ouvrir les partages sur Syno ? " yn
     case $yn in
-        [YyOo]* ) /home/guillaume/.shells/bin/sursyno 2>/dev/null ;;
+        [YyOo]* ) /home/guillaume/.shells/bin/sursyno >/dev/null 2>&1 ;;
         [Nn]* ) echo "OK. bye."; df -h | grep safe | lolcat; exit 0 ;;
         * ) echo "Réponds par oui ou par non s'il te plaît...";;
     esac
