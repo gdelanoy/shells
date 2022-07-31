@@ -46,5 +46,7 @@ mkdir -p ~/Téléchargements/temp-$(date +%F)
 cd ~/Téléchargements/temp-$(date +%F)
 yt-dlp -f best --geo-bypass --no-warnings --progress --write-auto-subs --sub-langs "en,fr" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
 rename 's/\ /_/g' *.webm
-ls -la *.webm
+rename 's/\ /_/g' *.mp4
+rename 's/\ /_/g' *.vtt
+ls -la
 
