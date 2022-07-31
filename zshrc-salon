@@ -130,11 +130,11 @@ export LANG=fr_FR.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-export EDITOR='vim'
+export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
-export PAGER='most'
+export PAGER='bat'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -149,7 +149,7 @@ export PAGER='most'
 #
 SPACESHIP_PROMPT_ORDER=(
   time          # Time stamps section
-  battery       # Battery level and status
+# battery       # Battery level and status
   user          # Username section
   host          # Hostname section
   git           # Git section (git_branch + git_status)
@@ -245,7 +245,7 @@ alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 # Des alias spéciaux qui associent une extension à une appli:
 
-alias -s {txt,yml,yaml,conf,md,sh,list}="vim"
+alias -s {txt,yml,yaml,conf,md,list}="nvim"
 alias -s html="firefox"
 alias -s org="firefox"
 
@@ -257,26 +257,22 @@ alias -s org="firefox"
 # $ grep alias ~/.zsh/* C
 # 443
 
-alias -g C='| wc -l'
-alias -g CA="2>&1 | cat -A"
+alias -g PWL='| wc -l'
+alias -g PCA="2>&1 | cat -A"
 alias -g DN="/dev/null"
 alias -g NE="2> /dev/null"
-alias -g EG='|& egrep'
-alias -g EH='|& head'
-alias -g EL='|& less'
-alias -g ET='|& tail'
-alias -g FT='|& tail -f'
-alias -g H='| head'
-alias -g M='| most'
-alias -g RNS='| sort -nr'
-alias -g S='| sort'
-alias -g X='| xargs'
-alias -g X0G='| xargs -0 egrep'
-alias -g X0='| xargs -0'
-alias -g NF='*(.om[1])' # newest file
-alias -g G='| grep -'
-alias -g L='| less'
-alias -g W=' | wc -l'   # wc
+alias -g PG='|& egrep'
+alias -g PH='|& head'
+alias -g PL='|& less'
+alias -g PB='|& bat'
+alias -g PTF='|& tail -f'
+alias -g PM='| most'
+alias -g PSNR='| sort -nr'
+alias -g PS='| sort'
+alias -g PX='| xargs'
+alias -g PX0G='| xargs -0 egrep'
+alias -g PX0='| xargs -0'
+# alias -g L='| less'
 alias -g ND='*(/om[1])' # newest directory
 alias -g NF='*(.om[1])' # newest file
 
@@ -306,14 +302,14 @@ setopt list_packed
 ##############
 # Fonctions :
 ##############
-mkcd() {
-mkdir -p -v "$1" &&  cd "$1"
-}
-
+# mkcd() {
+# mkdir -p -v "$1" &&  cd "$1"
+# }
+# alias mkcd="mkdir -p -v $@ && cd $@"
 # Trouver des fichiers :
-alias ff='find / -type f -name $1'
+alias ff='find . -type f -name $1 2>/dev/null'
 # alias fd='find / -type d -name $1'
-alias ffi='sudo find / -iname $1'
+alias ffi='find ./ -iname $1 2>/dev/null'
 
 # Gestion des processus :
 myps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
@@ -592,6 +588,8 @@ alias box='box=$(yad --title=Voyager --window-icon="/usr/share/xfce4/voyager/p1.
 # Youtube-dl avec les bonnes options :
 alias youtube-dl="youtube-dl -f 'bestaudio[ext=m4a]'"
 
+alias _²_="rename 's/\ /_/g' $1"
+
 ################
 # à peaufiner :
 ################
@@ -764,3 +762,9 @@ alias son="pulseaudio -k && pulseaudio -D"
 alias hh=hstr                    # hh to be alias for hstr
 export HSTR_CONFIG=hicolor       # get more colors
 #
+
+PATH="$HOME/.local/bin:$PATH"
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

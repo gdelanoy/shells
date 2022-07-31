@@ -52,7 +52,7 @@ sleep 1
 
  byobu-tmux new-window
  byobu-tmux rename-window 'VIM'
- byobu-tmux send-keys 'vim' 'C-m'
+ byobu-tmux send-keys 'nvim' 'C-m'
 
 # On crée une autre fenêtre ( Un shell zsh, un autre en fish )...
 
@@ -129,8 +129,8 @@ sleep 1
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'
  byobu split-window -h
- byobu-tmux send-keys -t 0 'bat ~/.zshrc --theme Dracula --line-range 259:' 'C-m'
- byobu-tmux send-keys -t 1 'bat ~/.config/espanso/default.yml --line-range 198:' 'C-m'
+ byobu-tmux send-keys -t 0 'nvim +259 ~/.zshrc' 'C-m'
+ byobu-tmux send-keys -t 1 'vim +112 ~/.config/espanso/default.yml' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'

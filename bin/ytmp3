@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir /tmp/truc
+cd /tmp/truc
+
+youtube-dl "${@}"
+rename 's/\ /_/g' "${@}"
+any2mp3 "*_*" && rm -fv "*.m4a"
+mv -vf "*.mp3" ~/Musique/Divers/
+cd -
+

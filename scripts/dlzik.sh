@@ -1,7 +1,7 @@
 #!/bin/bash
 #####################################################
-# Nom du script : m4a2mp3.sh
-# Utilité: Ce script sert à convertir des fichiers m4a en fichiers mp3 (si si !)
+# Nom du script : dlzik.sh
+# Utilité: Ce script sert à faire pousser des fleurs
 # Usage: ... (le cas échéant)
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # License: Ce script est sous license anticapitaliste.
@@ -37,13 +37,14 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #
-# Créé le: samedi_31/10/2020 à 13h36
+# Créé le: dimanche_31/07/2022 à 18h07
 #####################################################
 #
 
-find . -name '*.m4a' -print0 | while read -d '' -r file; do
-  ffmpeg -i "$file" -n -acodec libmp3lame -ab 128k "${file%.m4a}.mp3" < /dev/null
-  done
 
-
+mkdir -p ~/Téléchargements/temp-$(date +%F)
+cd ~/Téléchargements/temp-$(date +%F)
+yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(artist)s - %(title)s" --replace-in-metadata "title,uploader" "[ ]" "_" --replace-in-metadata "title,uploader" "[ ]" "_" --progress ${@}
+rename 's/\ /_/g' *.mp3
+ls -la *.mp3
 
