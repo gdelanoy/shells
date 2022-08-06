@@ -1,7 +1,7 @@
 #!/bin/bash
 #####################################################
-# Nom du script : dlzik.sh
-# Utilité: Ce script sert à faire pousser des fleurs
+# Nom du script : dlfilm.sh
+# Utilité: Ce script sert à télécharger des films sur youtube avec des options optimisées.
 # Usage: ... (le cas échéant)
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # License: Ce script est sous license anticapitaliste.
@@ -42,11 +42,14 @@
 #
 
 
-mkdir -p ~/Téléchargements/temp-$(date +%F)
-cd ~/Téléchargements/temp-$(date +%F)
+mkdir -p /mnt/donnees/downloads/dlfilm-$(date +%F)
+cd /mnt/donnees/downloads/dlfilm-$(date +%F)
 yt-dlp -f best --geo-bypass --no-warnings --progress --write-auto-subs --sub-langs "en,fr" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
-rename 's/\ /_/g' *.webm
-rename 's/\ /_/g' *.mp4
-rename 's/\ /_/g' *.vtt
+rename 's/\ /_/g' *.*
+rename 's/\[.*\]//' *.*
+rename 's/\(.*\)//' *.*
+rename 's/^_//' *.*
+rename 's/^_//' *.*
+pwd
 ls -la
 

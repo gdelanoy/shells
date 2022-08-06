@@ -42,9 +42,17 @@
 #
 
 
-mkdir -p ~/Téléchargements/temp-$(date +%F)
-cd ~/Téléchargements/temp-$(date +%F)
+mkdir -p /home/guillaume/Téléchargements/dlzik-$(date +%F)
+cd /home/guillaume/Téléchargements/dlzik-$(date +%F)
 yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(artist)s - %(title)s" --replace-in-metadata "title,uploader" "[ ]" "_" --replace-in-metadata "title,uploader" "[ ]" "_" --progress ${@}
 rename 's/\ /_/g' *.mp3
+rename 's/\[.*\]//' *.mp3
+rename 's/^_//' *.mp3
+rename 's/^_//' *.mp3
+rename 's/^_//' *.mp3
+rename 's/\._/\./' *.mp3
+rename 's/\._/\./' *.mp3
+rename 's/\._/\./' *.mp3
+rename 's/\(.*\)//' *.mp3
 ls -la *.mp3
 
