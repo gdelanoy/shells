@@ -3,7 +3,7 @@
 grep -q Noirlistez /etc/hosts
 if [ $? -eq 0 ]
 then
-        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i terminal "Filtrage Web déjà activé 🤪" "\nIl semble que le filtrage par adresses soit déjà en cours sur ton système ..."
+        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i netsurf "Filtrage Web déjà activé 🤪" "\nIl semble que le filtrage par adresses soit déjà en cours sur ton système ..."
         exit 1
 else
 echo "0.0.0.0   www.twitter.com             # Noirlistez-moi !!!"   >> /etc/hosts
@@ -17,7 +17,7 @@ echo "0.0.0.0   www.reddit.com              # Noirlistez-moi !!!"   >> /etc/host
 
 # echo "Access to brainspace-wasting sites is restricted BY NOW so that you can get a life. Use Focuswriter instead ..." | wall
 
-        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i terminal "Le filtrage Web est activé 🤓" "\nSouviens-toi que tu ne fais pas ça pour te fliquer\n toi-même, mais pour t inciter à tirer le meilleur parti de ton temps.\nCourage et bonne humeur !"
+        sudo -u guillaume DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 90000 -i netsurf "Le filtrage Web est activé 🤓" "\nSouviens-toi que tu ne fais pas ça pour te fliquer\n toi-même, mais pour t inciter à tirer le meilleur parti de ton temps.\nCourage et bonne humeur !"
 fi
 
 # ps -aux | grep firefox >/dev/null

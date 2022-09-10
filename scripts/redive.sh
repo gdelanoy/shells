@@ -1,7 +1,7 @@
 #!/bin/bash
 #####################################################
-# Nom du script : dlfilm.sh
-# Utilité: Ce script sert à télécharger des films sur youtube avec des options optimisées.
+# Nom du script : redive.sh
+# Utilité: Ce script sert à faire pousser des fleurs
 # Usage: ... (le cas échéant)
 # Auteur: Guillaume Delanoy <gdelanoy@gmail.com>
 # License: Ce script est sous license anticapitaliste.
@@ -37,19 +37,9 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #
-# Créé le: dimanche_31/07/2022 à 18h07
+# Créé le: jeudi_01/09/2022 à 19h42
 #####################################################
 #
 
-
-mkdir -p /donneez/downloadz/dlfilm-$(date +%F)
-cd /donneez/downloadz/dlfilm-$(date +%F)
-yt-dlp -f best --geo-bypass --no-warnings --progress --write-auto-subs --sub-langs "en,fr" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
-rename 's/\ /_/g' *.*
-rename 's/\[.*\]//' *.*
-rename 's/\(.*\)//' *.*
-rename 's/^_//' *.*
-rename 's/^_//' *.*
-pwd
-ls -la
+curl --silent -I -L ${@} | grep -i location
 
