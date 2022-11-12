@@ -8,7 +8,7 @@
 #Sauvegarde :
 
 # rsync -vurz --delete --exclude 'Temp' /mnt/donnees/films/ /media/guillaume/TizzBird/films/ && echo "Sauvegarde de mes films réalisée" | logger
-rsync -vurz --delete /mnt/donnees/films/ /media/guillaume/TizzBird/films/ && echo "Sauvegarde de mes films réalisée" | logger
+rsync -vurz --exclude 'Temp' /mnt/donnees/filmz/ /media/guillaume/TizzBird/films/ && echo "Sauvegarde de mes films réalisée" | logger
 # rsync -vurz --delete /mnt/donnees/films/ /mnt/syno/tizzbird/films/ && echo "Sauvegarde de mes films réalisée" | logger
 
 exit 0
