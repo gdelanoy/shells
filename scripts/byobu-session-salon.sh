@@ -21,7 +21,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'NMON'
  byobu-tmux send-keys 'nmon' 'C-m'
-sleep 1
+ sleep 1
  byobu-tmux send-keys 'n'
  byobu-tmux send-keys 'm'
  byobu-tmux send-keys 'r'
@@ -36,7 +36,6 @@ sleep 1
  byobu split-window -v
  byobu-tmux send-keys -t 1 'whowatch' 'C-m'
  byobu-tmux send-keys -t 2 'lnav /var/log/ /var/log/*/' 'C-m'
-#  byobu-tmux send-keys -t 2 'C-m'
  byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
  sleep 1
  byobu-tmux send-keys -t 0 'nethogs -a enp5s0' 'C-m'
@@ -94,12 +93,13 @@ sleep 1
  byobu-tmux send-keys -t 0 'mv -vf *.jpeg IMG/' 'C-m'
  byobu-tmux send-keys -t 0 'mv -vf *.gif IMG/' 'C-m'
  byobu-tmux send-keys -t 0 'mv -vf *.png IMG/' 'C-m'
- byobu-tmux send-keys -t 0 'mv -vf *.iso ISO/ | while read OUTPUT; do msg "$OUTPUT"; done' 'C-m'
- byobu-tmux send-keys -t 0 'mv -vf *.pdf *.epub PDF/' 'C-m'
- byobu-tmux send-keys -t 0 'mv -vf *.zip *.tgz *.tar.gz ZIP/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.iso ISO/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.pdf PDF/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.epub PDF/' 'C-m'
+ byobu-tmux send-keys -t 0 'mv -vf *.zip ZIP/' 'C-m'
  byobu-tmux send-keys -t 0 'mv -vf *.tgz ZIP/' 'C-m'
  byobu-tmux send-keys -t 0 'mv -vf *.tar.gz ZIP/' 'C-m'
- byobu-tmux send-keys -t 0 'find . \( -iname "*.mkv" -o -iname "*.avi"  -o -iname "*.mp4" \) -print -exec mv {} ~/Vidéos/Temp/ \\; | while read OUTPUT; do msg "$OUTPUT"; done' 'C-m'
+ byobu-tmux send-keys -t 0 'find . \( -iname "*.mkv" -o -iname "*.avi"  -o -iname "*.mp4" \) -print -exec mv {} ~/Vidéos/Temp/ \\;' 'C-m'
  byobu-tmux send-keys -t 0 'find . -ctime -31 | sort | lolcat' 'C-m'
  byobu-tmux send-keys -t 0 'find . -iname "*'
  byobu-tmux send-keys -t 1 'cd ~/Vidéos' 'C-m'
