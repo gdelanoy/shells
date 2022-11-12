@@ -15,13 +15,11 @@ export PATH PS1
 
 # FZF :
 export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
-export FZF_DEFAULT_OPTS="--height 20% --layout=reverse --multi --preview --exact --prompt='¯\_(ツ)_/¯ ' --margin=0,20%"
-export FZF_CTRL_T_OPTS="--prompt='¯\_(ツ)_/¯ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --exact --multi --select-1 --exit-0"
-export FZF_CTRL_R_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-export FZF_ALT_C_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --exact --preview 'tree -C {} | head -200'"
+export FZF_DEFAULT_OPTS="--height 20% --layout=reverse --multi --preview --prompt='¯\_(ツ)_/¯ ' --margin=0,20%"
+export FZF_CTRL_T_OPTS="--prompt='¯\_(ツ)_/¯ ' --preview-window=hidden --margin=0,20% --height 20% --layout=reverse --multi --select-1 --exit-0"
+export FZF_CTRL_R_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+export FZF_ALT_C_OPTS="--prompt='¯\_(ツ)_/¯ ' --margin=0,20% --height 30% --layout=reverse --preview 'tree -C {} | head -200'"
 export FZF_COMPLETION_TRIGGER='²'
-
-
 
 # Mon prompt est complexe, je le définis dans des fichiers à part :
 PS1=$(cat ~/.ps1.txt)
