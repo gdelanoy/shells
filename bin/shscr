@@ -13,67 +13,49 @@
 # LE SCRIPT PROPREMENT DIT :
 #
 
-        echo "#!/bin/bash" > ${1}
-        echo "#####################################################" >> ${1}
+        echo '#!/bin/bash' > ${1}
+        echo '#####################################################' >> ${1}
         echo "# Nom du script : $(basename $1)" >> ${1}
-        echo "# Utilité: Ce script sert à faire pousser des fleurs" >> ${1}
-        echo "# Usage: ... (le cas échéant)" >> ${1}
-        echo "# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>" >> ${1}
-        echo "# License: Ce script est sous license anticapitaliste." >> ${1}
-        echo "# Veuillez consulter https://anticapitalist.software" >> ${1}
-        echo "# ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)" >> ${1}
-        echo "# Copyright © [year] [copyright holders]" >> ${1}
-        echo "# This is anti-capitalist software, released for free use by individuals and organizations" >> ${1}
-        echo "# that do not operate by capitalist principles." >> ${1}
-        echo "# Permission is hereby granted, free of charge, to any person or organization (the "User")" >> ${1}
-        echo "# obtaining a copy of this software and associated documentation files (the "Software"), to use, copy," >> ${1}
-        echo "# modify, merge, distribute, and/or sell copies of the Software, subject to the following conditions:" >> ${1}
-        echo "# " >> ${1}
-        echo "# 1. The above copyright notice and this permission notice shall be included in all copies or" >> ${1}
-        echo "# modified versions of the Software." >> ${1}
-        echo "# " >> ${1}
-        echo "# 2. The User is one of the following:" >> ${1}
-        echo "# a. An individual person, laboring for themselves" >> ${1}
-        echo "# b. A non-profit organization" >> ${1}
-        echo "# c. An educational institution" >> ${1}
-        echo "# d. An organization that seeks shared profit for all of its members, and allows non-members" >> ${1}
-        echo "# to set the cost of their labor" >> ${1}
-        echo "# " >> ${1}
-        echo "# 3. If the User is an organization with owners, then all owners are workers and all workers" >> ${1}
-        echo "# are owners with equal equity and/or equal vote." >> ${1}
-        echo "# " >> ${1}
-        echo "# 4. If the User is an organization, then the User is not law enforcement or military," >> ${1}
-        echo "# or working for or under either." >> ${1}
-        echo "# " >> ${1}
-        echo "# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND," >> ${1}
-        echo "# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE" >> ${1}
-        echo "# AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" >> ${1}
-        echo "# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF" >> ${1}
-        echo "# OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." >> ${1}
-        echo "# " >> ${1}
-        echo "# " >> ${1}
+        echo '# Utilité: Ce script sert à faire pousser des fleurs' >> ${1}
+        echo '# Usage: ... (le cas échéant)' >> ${1}
+        echo '# Auteur: Guillaume Delanoy <gdelanoy@gmail.com>' >> ${1}
+        echo '# License: Ce script est sous license anticapitalliste.' >> ${1}
+        echo '# Veuillez consulter https://anticapitalist.software' >> ${1}
+        echo '# ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)' >> ${1}
+        echo '#' >> ${1}
         echo "# Créé le: $( date "+%A_%d/%m/%Y à %Hh%M")" >> ${1}
-        echo "#####################################################" >> ${1}
+        echo '#####################################################' >> ${1}
+        echo '#' >> ${1}
+        echo 'set -o errexit' >> ${1}
+        echo 'set -o nounset' >> ${1}
+        echo '#' >> ${1}
+        echo '# VARIABLES :' >> ${1}
+        echo '#' >> ${1}
+        echo 'PATH="/$HOME/.local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/bin/X11:/usr/local/sbin:/usr/local/bin"' >> ${1}
         echo "#" >> ${1}
-        echo "set -o errexit" >> ${1}
-        echo "set -o nounset" >> ${1}
-        echo "#" >> ${1}
-        echo "# VARIABLES :" >> ${1}
-        echo "#" >> ${1}
-        echo '#Des Couleurs :' >> ${1}
-        echo '# ' >> ${1}
-        echo 'source /home/$USER/.shells/scripts/couleurs.shell' >> ${1}
-        echo "#" >> ${1}
-        echo "# FONCTIONS :" >> ${1}
-        echo "#" >> ${1}
-        echo "# source /home/$USER/.shells/scripts/functions.shell" >> ${1}
-        echo "#" >> ${1}
-        echo "# LE SCRIPT PROPREMENT DIT : " >> ${1}
-        echo "#" >> ${1}
-        echo "" >> ${1}
-        echo "clear" >> ${1}
-        echo "e_header $(basename ${1})" >> ${1}
-        echo "" >> ${1}
+        echo '# Des Couleurs :' >> ${1}
+
+        echo 'mecho() {' >> ${1}
+        echo '  colors=(black red green yellow blue purple cyan white)' >> ${1}
+        echo '  effects=(reset bold dim italic underline blink rblink reverse)' >> ${1}
+        echo '  M=$1; M=${M//\[\/\]/\[reset\]}' >> ${1}
+        echo '    for i in "${!colors[@]}"; do' >> ${1}
+        echo '                M=${M//\[${colors[$i]}\]/\\033[0;3${i}m}' >> ${1}
+        echo '                M=${M//\[bg_${colors[$i]}\]/\\033[4${i}m}' >> ${1}
+        echo '                M=${M//\[${effects[$i]}\]/\\033[${i}m}' >> ${1}
+        echo '    done' >> ${1}
+        echo '    printf "$M\n"' >> ${1}}
+        echo '        }' >> ${1}}
+
+        echo '# Exemple : mecho "A [red]rose[/] is a [bg_red]rose[/] is a [red][bold][bg_yellow]rose[/]"' >> ${1}
+
+        echo '# FONCTIONS :' >> ${1}
+        echo '#' >> ${1}
+        echo 'LOGGER(){ (printf " $(date "+%a %d %B %T") - $USER : "; echo ${@}) >> $HOME/.local/var/log/syslog }' >> ${1}
+        echo '# Exemple d un usage possible :' >> ${1}
+        echo '# LOGGER Sauvegarde effectuée.' >> ${1}
+        echo '#' >> ${1}
+        echo '###################################################' >> ${1}
         echo "" >> ${1}
         chmod 750 ${1}
         vim ${1}

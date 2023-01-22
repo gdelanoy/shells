@@ -42,14 +42,16 @@
 #
 
 
-mkdir -p /donneez/downloadz/dlfilm-$(date +%F)
-cd /donneez/downloadz/dlfilm-$(date +%F)
-yt-dlp -f best --geo-bypass --no-warnings --progress --write-auto-subs --sub-langs "en,fr" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
+mkdir -p $HOME/Vidéos/Temp/dlfilm-$(date +%F)
+cd $HOME/Vidéos/Temp/dlfilm-$(date +%F)
+yt-dlp -f best --geo-bypass --no-warnings --write-auto-subs --sub-langs "en,fr" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
 rename 's/\ /_/g' *.*
 rename 's/\[.*\]//' *.*
 rename 's/\(.*\)//' *.*
 rename 's/^_//' *.*
 rename 's/^_//' *.*
+rename 's/_\./\./' *.*
+rename 's/_\./\./' *.*
 pwd
 ls -la
 
