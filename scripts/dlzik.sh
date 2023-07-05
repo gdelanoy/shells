@@ -44,7 +44,9 @@
 
 mkdir -p $HOME/Musique/Divers/Temp/dlzik-$(date +%F)
 cd $HOME/Musique/Divers/Temp/dlzik-$(date +%F)
-yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(artist)s - %(title)s" --replace-in-metadata "title,uploader" "[ ]" "_" --replace-in-metadata "title,uploader" "[ ]" "_" ${@}
+# yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(artist)s - %(title)s" ${@}
+# yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(artist)s - %(title)s" ${@}
+yt-dlp --extract-audio --audio-format mp3 --audio-quality 0 --parse-metadata "title:%(title)s - title:%(artist)s" ${@}
 rename 's/\ /_/g' *.mp3
 rename 's/\[.*\]//' *.mp3
 rename 's/^_//' *.mp3
@@ -56,6 +58,8 @@ rename 's/\._/\./' *.mp3
 rename 's/\(.*\)//' *.mp3
 rename 's/_\./\./' *.mp3
 rename 's/_\./\./' *.mp3
+rename 's/\_\-\_/\~\^\~/' *.mp3
+rename "s/\'//g" *.mp3
 pwd
 ls -la *.mp3
 

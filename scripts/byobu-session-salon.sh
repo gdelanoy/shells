@@ -12,7 +12,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-session -d -s $USER # Crée une nouvelle session détachée
  byobu-tmux rename-window -t $USER:0 'Load' # Byobu se lance avec une seule fenêtre, on va la renommer.
  byobu split-window -v
- # byobu-tmux send-keys -t 0 'bashtop' 'C-m'
  byobu-tmux send-keys -t 0 'gotop' 'C-m'
  byobu-tmux send-keys -t 1 'glances' 'C-m'
 
@@ -61,6 +60,7 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux send-keys -t 1 'bash' 'C-m'
  byobu-tmux send-keys -t 1 'cd .bin' 'C-m'
  byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'gclo '
  byobu-tmux send-keys -t 0 'fish' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/.bin' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
@@ -72,7 +72,6 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu-tmux new-window
  byobu-tmux rename-window 'Deux'
  byobu split-window -v
-# byobu-tmux send-keys -t 0 'ping -c1 serveur && ssh serveur || ping -c1 portable && ssh portable || ping -c1 chambre && ssh chambre || ssh -X aureo@localhost' 'C-m'
  byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
  byobu-tmux send-keys -t 0 'sleep 1' 'C-m'
  byobu-tmux send-keys -t 0 'su - aureo' 'C-m'
@@ -112,25 +111,33 @@ if [ -z "$(byobu list-sessions | grep $USER)" ]
  byobu split-window -v
  byobu split-window -v
  byobu split-window -v
- byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
- byobu-tmux send-keys -t 1 'clear' 'C-m'
- byobu-tmux send-keys -t 1 'joue' 'C-m'
  byobu-tmux send-keys -t 0 'cd ~/Musique' 'C-m'
  byobu-tmux send-keys -t 0 'clear' 'C-m'
- byobu-tmux send-keys -t 0 'grosse'
+ byobu-tmux send-keys -t 0 'joue' 'C-m'
+ byobu-tmux send-keys -t 1 'cd ~/Musique' 'C-m'
+ byobu-tmux send-keys -t 1 'clear' 'C-m'
+ byobu-tmux send-keys -t 1 'grosse'
  byobu-tmux send-keys -t 2 'TERM=rxvt-unicode-256color' 'C-m'
  byobu-tmux send-keys -t 2 'cava' 'C-m'
  byobu-tmux send-keys -t 3 'pulsemixer' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Six'
- byobu-tmux send-keys 'su - testeur' 'C-m'
+ byobu split-window -v
+ byobu-tmux send-keys -t 0 'sudo su -' 'C-m'
+ byobu-tmux send-keys -t 1 'sudo su -' 'C-m'
+ sleep 3
+ byobu-tmux send-keys -t 0 'su - testeur' 'C-m'
+ byobu-tmux send-keys -t 1 'su - testeur' 'C-m'
+sleep 2
+ byobu-tmux send-keys -t 0 'cd ansible && ansible -m ping localhost' 'C-m'
+ byobu-tmux send-keys -t 1 'cd ansible && tree ' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'Sept'
  byobu split-window -h
- byobu-tmux send-keys -t 0 'nvim +259 ~/.zshrc' 'C-m'
- byobu-tmux send-keys -t 1 'vim +112 ~/.config/espanso/default.yml' 'C-m'
+ byobu-tmux send-keys -t 0 'nvim +289 ~/.zshrc' 'C-m'
+ byobu-tmux send-keys -t 1 'vim +217 ~/.config/espanso/default.yml' 'C-m'
 
  byobu-tmux new-window
  byobu-tmux rename-window 'huit'
