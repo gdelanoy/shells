@@ -496,7 +496,7 @@ alias tux='xpenguins -n 50 --all'
 alias meteo='curl http://wttr.in/Loos'
 alias rouletterusse='[ $[ $RANDOM % 6 ] == 0 ] && echo "T es mort !" || echo "Tu vis."'
 alias son="pulseaudio -k && pulseaudio -D"
-# alias plonk="pkill plank && nohup plank & ; rm -f nohup.out"
+alias plonk="pkill plank && nohup plank & ; rm -f nohup.out"
 alias msg="sudo -u $USER DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 30000 -i terminal ${@}"
 
 # Administration :
